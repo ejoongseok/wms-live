@@ -1,5 +1,6 @@
 package com.ejoongseok.wmslive.product.domain;
 
+import lombok.Getter;
 import org.springframework.util.Assert;
 
 public class Product {
@@ -14,7 +15,7 @@ public class Product {
     private final TemperatureZone temperatureZone;
     private final Long weightInGrams;
     private final ProductSize productSize;
-    @lombok.Getter
+    @Getter
     private Long id;
 
     public Product(
