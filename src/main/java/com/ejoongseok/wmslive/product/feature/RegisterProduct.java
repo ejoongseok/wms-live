@@ -1,5 +1,10 @@
 package com.ejoongseok.wmslive.product.feature;
 
+import com.ejoongseok.wmslive.product.domain.Category;
+import com.ejoongseok.wmslive.product.domain.Product;
+import com.ejoongseok.wmslive.product.domain.ProductRepository;
+import com.ejoongseok.wmslive.product.domain.ProductSize;
+import com.ejoongseok.wmslive.product.domain.TemperatureZone;
 import org.springframework.util.Assert;
 
 public class RegisterProduct {

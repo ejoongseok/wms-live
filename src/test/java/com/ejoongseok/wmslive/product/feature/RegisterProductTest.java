@@ -1,5 +1,8 @@
 package com.ejoongseok.wmslive.product.feature;
 
+import com.ejoongseok.wmslive.product.domain.Category;
+import com.ejoongseok.wmslive.product.domain.ProductRepository;
+import com.ejoongseok.wmslive.product.domain.TemperatureZone;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

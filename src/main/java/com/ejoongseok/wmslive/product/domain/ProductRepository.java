@@ -1,4 +1,4 @@
-package com.ejoongseok.wmslive.product.feature;
+package com.ejoongseok.wmslive.product.domain;
 
 import java.util.ArrayList;
 import java.util.HashMap;
