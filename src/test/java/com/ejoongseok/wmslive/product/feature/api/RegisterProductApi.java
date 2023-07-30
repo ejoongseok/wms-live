@@ -1,5 +1,6 @@
 package com.ejoongseok.wmslive.product.feature.api;
 
+import com.ejoongseok.wmslive.common.Scenario;
 import com.ejoongseok.wmslive.product.domain.Category;
 import com.ejoongseok.wmslive.product.domain.TemperatureZone;
 import com.ejoongseok.wmslive.product.feature.RegisterProduct;
@@ -81,7 +82,7 @@ public class RegisterProductApi {
         return this;
     }
 
-    public void request() {
+    public Scenario request() {
         final RegisterProduct.Request request = new RegisterProduct.Request(
                 name,
                 code,
@@ -104,5 +105,6 @@ public class RegisterProductApi {
                 .post("/products")
                 .then().log().all()
                 .statusCode(HttpStatus.CREATED.value());
+        return new Scenario();
     }
 }
