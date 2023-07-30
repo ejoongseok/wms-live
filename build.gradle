@@ -25,10 +25,15 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    // SQL Logger
+    implementation 'p6spy:p6spy:3.9.1'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.h2database:h2'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    // API 테스트용 라이브러리
+    testImplementation 'io.rest-assured:rest-assured:5.3.1'
+
 }
 
 tasks.named('test') {
