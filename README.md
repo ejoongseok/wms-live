@@ -8,6 +8,7 @@
 ## 기획
 - 구글 docs: https://docs.google.com/document/d/1Dy9G2pN-4M11OE3dQxyK_en9DE7rjsNTDO5RtSyTF80/edit?usp=sharing
 - 구글 슬라이드: https://docs.google.com/presentation/d/14DmwOsJWyc5aY3ZDht3602IgHdcXZYJIKQJz44u13o4/edit?usp=sharing
+- p6spy: https://docs.google.com/document/d/14WxDv-E5dwpiPXsD9QjLpiqRir_t-xxWXse8EtDTT2M/edit?usp=sharing
 
 ## 요구사항
 
