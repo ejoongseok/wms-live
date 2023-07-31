@@ -6,15 +6,15 @@ import org.springframework.util.Assert;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Getter
 public class Inbound {
+    private Long id;
     private final String title;
     private final String description;
     private final LocalDateTime orderRequestedAt;
     private final LocalDateTime estimatedArrivalAt;
     private final List<InboundItem> inboundItems;
 
-    @Getter
-    private Long id;
 
     public Inbound(
             final String title,
