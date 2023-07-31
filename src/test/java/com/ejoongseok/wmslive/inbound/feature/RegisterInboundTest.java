@@ -1,20 +1,18 @@
 package com.ejoongseok.wmslive.inbound.feature;
 
 import com.ejoongseok.wmslive.inbound.domain.InboundRepository;
-import com.ejoongseok.wmslive.product.domain.Category;
-import com.ejoongseok.wmslive.product.domain.Product;
 import com.ejoongseok.wmslive.product.domain.ProductRepository;
-import com.ejoongseok.wmslive.product.domain.ProductSize;
-import com.ejoongseok.wmslive.product.domain.TemperatureZone;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+
+import static com.ejoongseok.wmslive.product.fixture.ProductFixture.aProduct;
+import static org.mockito.ArgumentMatchers.anyLong;
 
 class RegisterInboundTest {
 
@@ -32,26 +30,9 @@ class RegisterInboundTest {
     @Test
     @DisplayName("입고를 등록한다.")
     void registerInbound() {
-        final Product product = new Product(
-                "name",
-                "code",
-                "description",
-                "brand",
-                "maker",
-                "origin",
-                Category.ELECTRONICS,
-                TemperatureZone.ROOM_TEMPERATURE,
-                1000L,
-                new ProductSize(
-                        100L,
-                        100L,
-                        100L
-                )
+        Mockito.when(productRepository.findById(anyLong()))
+                .thenReturn(Optional.of(aProduct().build()));
 
-
-        );
-        Mockito.when(productRepository.findById(ArgumentMatchers.anyLong()))
-                .thenReturn(Optional.of(product));
         final LocalDateTime orderRequestedAt = LocalDateTime.now();
         final LocalDateTime estimatedArrivalAt = LocalDateTime.now().plusDays(1);
         final Long productNo = 1L;
