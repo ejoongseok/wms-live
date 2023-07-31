@@ -9,7 +9,6 @@ import org.mockito.Mockito;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import static com.ejoongseok.wmslive.product.fixture.ProductFixture.aProduct;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -30,8 +29,8 @@ class RegisterInboundTest {
     @Test
     @DisplayName("입고를 등록한다.")
     void registerInbound() {
-        Mockito.when(productRepository.findById(anyLong()))
-                .thenReturn(Optional.of(aProduct().build()));
+        Mockito.when(productRepository.getBy(anyLong()))
+                .thenReturn(aProduct().build());
 
         final LocalDateTime orderRequestedAt = LocalDateTime.now();
         final LocalDateTime estimatedArrivalAt = LocalDateTime.now().plusDays(1);
