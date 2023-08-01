@@ -1,8 +1,11 @@
 package com.ejoongseok.wmslive.inbound.domain;
 
+import com.google.common.annotations.VisibleForTesting;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -10,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 import org.springframework.util.Assert;
@@ -42,6 +46,11 @@ public class Inbound {
     private LocalDateTime estimatedArrivalAt;
     @OneToMany(mappedBy = "inbound", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private final List<InboundItem> inboundItems = new ArrayList<>();
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    @Comment("입고진행상태")
+    @Getter
+    private InboundStatus status = InboundStatus.REQUESTED;
 
 
     public Inbound(
@@ -66,6 +75,20 @@ public class Inbound {
         }
     }
 
+    @VisibleForTesting
+    Inbound(
+            final Long inboundNo,
+            final String title,
+            final String description,
+            final LocalDateTime orderRequestedAt,
+            final LocalDateTime estimatedArrivalAt,
+            final List<InboundItem> inboundItems,
+            final InboundStatus status) {
+        this(title, description, orderRequestedAt, estimatedArrivalAt, inboundItems);
+        this.inboundNo = inboundNo;
+        this.status = status;
+    }
+
     private void validateConstructor(
             final String title,
             final String description,
@@ -79,4 +102,14 @@ public class Inbound {
         Assert.notEmpty(inboundItems, "입고 품목은 필수입니다.");
     }
 
+    public void confirmed() {
+        validateConfirmStatus();
+        status = InboundStatus.CONFIRMED;
+    }
+
+    private void validateConfirmStatus() {
+        if (InboundStatus.REQUESTED != status) {
+            throw new IllegalStateException("입고 요청 상태가 아닙니다.");
+        }
+    }
 }

@@ -25,6 +25,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    // VisibleForTesting용
+    implementation 'com.google.guava:guava:32.1.1-jre'
+
     // SQL Logger
     implementation 'p6spy:p6spy:3.9.1'
     compileOnly 'org.projectlombok:lombok'
