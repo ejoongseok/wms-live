@@ -3,6 +3,8 @@ package com.ejoongseok.wmslive.inbound.domain;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -10,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 import org.springframework.util.Assert;
@@ -42,6 +45,11 @@ public class Inbound {
     private LocalDateTime estimatedArrivalAt;
     @OneToMany(mappedBy = "inbound", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private final List<InboundItem> inboundItems = new ArrayList<>();
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    @Comment("입고진행상태")
+    @Getter(AccessLevel.PROTECTED)
+    private InboundStatus status = InboundStatus.REQUESTED;
 
 
     public Inbound(
@@ -79,4 +87,10 @@ public class Inbound {
         Assert.notEmpty(inboundItems, "입고 품목은 필수입니다.");
     }
 
+    public void confirmed() {
+        if (InboundStatus.REQUESTED != status) {
+            throw new IllegalStateException("입고 요청 상태가 아닙니다.");
+        }
+        status = InboundStatus.CONFIRMED;
+    }
 }
