@@ -38,19 +38,4 @@ class ConfirmInboundTest {
         assertThat(inbound.getStatus()).isEqualTo(InboundStatus.CONFIRMED);
     }
 
-    private class ConfirmInbound {
-
-        private final InboundRepository inboundRepository;
-
-        private ConfirmInbound(final InboundRepository inboundRepository) {
-            this.inboundRepository = inboundRepository;
-        }
-
-        public void request(final Long inboundNo) {
-            final Inbound inbound = inboundRepository.getBy(inboundNo);
-
-            inbound.confirmed();
-        }
-
-    }
 }
