@@ -1,40 +1,40 @@
 package com.ejoongseok.wmslive.inbound.feature;
 
+import com.ejoongseok.wmslive.common.ApiTest;
+import com.ejoongseok.wmslive.common.Scenario;
 import com.ejoongseok.wmslive.inbound.domain.Inbound;
 import com.ejoongseok.wmslive.inbound.domain.InboundRepository;
 import com.ejoongseok.wmslive.inbound.domain.InboundStatus;
-import org.junit.jupiter.api.BeforeEach;
+import io.restassured.RestAssured;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 
-import static com.ejoongseok.wmslive.inbound.domain.InboundFixture.anInbound;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ConfirmInboundTest {
+class ConfirmInboundTest extends ApiTest {
 
-    private ConfirmInbound confirmInbound;
+    @Autowired
     private InboundRepository inboundRepository;
-
-    @BeforeEach
-    void setUp() {
-        inboundRepository = Mockito.mock(InboundRepository.class);
-        confirmInbound = new ConfirmInbound(inboundRepository);
-    }
 
     @Test
     @DisplayName("입고를 승인한다.")
     void confirmInbound() {
         //given
+        Scenario
+                .registerProduct().request()
+                .registerInbound().request();
         final Long inboundNo = 1L;
-        final Inbound inbound = anInbound().build();
-        Mockito.when(inboundRepository.getBy(inboundNo))
-                .thenReturn(inbound);
 
         //when
-        confirmInbound.request(inboundNo);
+        RestAssured.given().log().all()
+                .when()
+                .post("/inbounds/{inboundNo}/confirm", inboundNo)
+                .then().log().all()
+                .statusCode(HttpStatus.OK.value());
 
-        //then
+        final Inbound inbound = inboundRepository.getBy(inboundNo);
         assertThat(inbound.getStatus()).isEqualTo(InboundStatus.CONFIRMED);
     }
 
