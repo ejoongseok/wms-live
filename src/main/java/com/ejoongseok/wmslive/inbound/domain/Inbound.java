@@ -1,5 +1,6 @@
 package com.ejoongseok.wmslive.inbound.domain;
 
+import com.google.common.annotations.VisibleForTesting;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -72,6 +73,18 @@ public class Inbound {
             this.inboundItems.add(inboundItem);
             inboundItem.assignInbound(this);
         }
+    }
+
+    @VisibleForTesting
+    Inbound(
+            final Long inboundNo,
+            final String title,
+            final String description,
+            final LocalDateTime orderRequestedAt,
+            final LocalDateTime estimatedArrivalAt,
+            final List<InboundItem> inboundItems) {
+        this(title, description, orderRequestedAt, estimatedArrivalAt, inboundItems);
+        this.inboundNo = inboundNo;
     }
 
     private void validateConstructor(
