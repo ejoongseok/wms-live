@@ -2,6 +2,7 @@ package com.ejoongseok.wmslive.common;
 
 import com.ejoongseok.wmslive.inbound.feature.api.ConfirmInboundApi;
 import com.ejoongseok.wmslive.inbound.feature.api.RegisterInboundApi;
+import com.ejoongseok.wmslive.inbound.feature.api.RejectInboundApi;
 import com.ejoongseok.wmslive.product.feature.api.RegisterProductApi;
 
 public class Scenario {
@@ -15,5 +16,9 @@ public class Scenario {
 
     public ConfirmInboundApi confirmInbound() {
         return new ConfirmInboundApi();
+    }
+
+    public RejectInboundApi rejectInbound() {
+        return new RejectInboundApi();
     }
 }
