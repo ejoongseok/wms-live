@@ -16,6 +16,15 @@ import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
 
+/**
+ * 본 프로젝트는 입고(Inbound) 상품(InboundItem) 중 유통기한이 같은 상품들의 논리적인 집합을 LPN이라고 정의한다.
+ * 단, 같은 상품의 같은 유통기한을 가진 상품이 여러번 들어오더라도 입고(InboundId)및 입고상품(InboundItemId)이 다르면 LPN이 다르다.
+ * Inbound(1) -> InboundItem(n) -> LPN(n)
+ * A입고의 입고상품에 유통기한만 다른 상품이 2개 들어온 경우
+ * 입고상품에 대한 LPN은 2개가 된다.
+ * 전산상 입고를 등록할때는 입고상품의 유통기한을 입력하지 않는다.(발주를 넣은 입고상품에 유통기한이 같은지 다른지 알 수 없기 때문이다.)
+ * 유통기한을 확인하는건 실물 상품을 입고하고 분류할 때이다.
+ */
 @Entity
 @Table(name = "lpn")
 @Comment("LPN")
