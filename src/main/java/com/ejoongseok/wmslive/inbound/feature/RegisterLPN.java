@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDateTime;
 
 @RestController
-class RegisterLPN {
+public class RegisterLPN {
     private final InboundRepository inboundRepository;
     private final LPNRepository lPNRepository;
 
