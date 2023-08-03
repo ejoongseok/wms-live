@@ -83,30 +83,34 @@ class InboundTest {
     @Test
     @DisplayName("LPN을 등록한다. - [실패] 입고 확정 상태가 아닌 경우 예외가 발생한다.")
     void fail_invalid_status_registerLPN() {
-        //given
-        final Inbound inbound = anInbound().build();
+        assertFailLPNRegister(
+                anInbound().build(),
+                LocalDateTime.now().plusDays(1),
+                IllegalStateException.class,
+                "입고 확정 상태가 아닙니다.");
+    }
+
+    private void assertFailLPNRegister(
+            final Inbound inbound,
+            final LocalDateTime expirationAt,
+            final Class<?> exceptionClass,
+            final String errorMessage) {
         final Long inboundItemNo = 1L;
         final String lpnBarcode = "LPN-0001";
-        final LocalDateTime expirationAt = LocalDateTime.now().plusDays(1);
 
         assertThatThrownBy(() -> {
             inbound.registerLPN(inboundItemNo, lpnBarcode, expirationAt);
-        }).isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("입고 확정 상태가 아닙니다.");
+        }).isInstanceOf(exceptionClass)
+                .hasMessageContaining(errorMessage);
     }
 
     @Test
     @DisplayName("LPN을 등록한다. - [실패] 유통기한이 현재 시간보다 이전인 경우 예외가 발생한다.")
     void fail_expire_registerLPN() {
-        //given
-        final Inbound inbound = anInboundWithConfirmed().build();
-        final Long inboundItemNo = 1L;
-        final String lpnBarcode = "LPN-0001";
-        final LocalDateTime expirationAt = LocalDateTime.now();
-
-        assertThatThrownBy(() -> {
-            inbound.registerLPN(inboundItemNo, lpnBarcode, expirationAt);
-        }).isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("유통기한은 현재 시간보다 이전일 수 없습니다.");
+        assertFailLPNRegister(
+                anInboundWithConfirmed().build(),
+                LocalDateTime.now(),
+                IllegalArgumentException.class,
+                "유통기한은 현재 시간보다 이전일 수 없습니다.");
     }
 }
