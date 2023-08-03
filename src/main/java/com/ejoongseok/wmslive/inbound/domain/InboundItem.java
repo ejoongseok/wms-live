@@ -28,8 +28,6 @@ import java.util.List;
 @Comment("입고 상품")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class InboundItem {
-    @OneToMany(mappedBy = "inboundItem", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private final List<LPN> lpnList = new ArrayList<>();
     @Comment("상품")
     @JoinColumn(name = "product_no", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
@@ -53,6 +51,9 @@ public class InboundItem {
     @Column(name = "inbound_item_no")
     @Getter(AccessLevel.PROTECTED)
     private Long inboundItemNo;
+    @OneToMany(mappedBy = "inboundItem", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @Getter(AccessLevel.PROTECTED)
+    private final List<LPN> lpnList = new ArrayList<>();
 
     public InboundItem(
             final Product product,
@@ -126,4 +127,5 @@ public class InboundItem {
     public List<LPN> testingGetLpnList() {
         return lpnList;
     }
+
 }

@@ -17,6 +17,6 @@ public interface InboundRepository extends JpaRepository<Inbound, Long> {
     default Inbound getByInboundItemNo(final Long inboundItemNo) {
         return findByInboundItemNo(inboundItemNo)
                 .orElseThrow(() -> new IllegalArgumentException(
-                        "해당 입고 상품이 존재하지 않습니다. %d".formatted(inboundItemNo));
+                        "해당 입고 상품이 존재하지 않습니다. %d".formatted(inboundItemNo)));
     }
 }
