@@ -6,6 +6,7 @@ import com.ejoongseok.wmslive.location.domain.Location;
 import com.ejoongseok.wmslive.location.domain.LocationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 @Component
@@ -14,6 +15,7 @@ class AssignLocationLPN {
     private final LocationRepository locationRepository;
     private final LPNRepository lpnRepository;
 
+    @Transactional
     public void request(final Request request) {
         final Location location = locationRepository.getByLocationBarcode(request.locationBarcode);
         final LPN lpn = lpnRepository.getByLPNBarcode(request.lpnBarcode);
