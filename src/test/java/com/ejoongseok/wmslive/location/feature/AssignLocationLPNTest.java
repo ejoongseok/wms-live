@@ -5,7 +5,6 @@ import com.ejoongseok.wmslive.common.Scenario;
 import com.ejoongseok.wmslive.location.domain.Location;
 import com.ejoongseok.wmslive.location.domain.LocationLPN;
 import com.ejoongseok.wmslive.location.domain.LocationRepository;
-import com.ejoongseok.wmslive.location.feature.api.AssignLocationLPNApi;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,8 +38,9 @@ class AssignLocationLPNTest extends ApiTest {
     @Transactional
     void assignLocationLPN() {
         //given
-        final String locationBarcode = AssignLocationLPNApi.assignLocationLPN();
+        Scenario.assignLocationLPN().request();
         //then
+        final String locationBarcode = "A-1-1";
         final Location location = locationRepository.getByLocationBarcode(locationBarcode);
         final List<LocationLPN> locationLPNList = location.getLocationLPNList();
         final LocationLPN locationLPN = locationLPNList.get(0);
