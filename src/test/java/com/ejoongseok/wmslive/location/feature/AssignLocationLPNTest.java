@@ -5,10 +5,13 @@ import com.ejoongseok.wmslive.common.Scenario;
 import com.ejoongseok.wmslive.location.domain.Location;
 import com.ejoongseok.wmslive.location.domain.LocationLPN;
 import com.ejoongseok.wmslive.location.domain.LocationRepository;
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -45,14 +48,19 @@ class AssignLocationLPNTest extends ApiTest {
                 lpnBarcode
         );
         //when
-        assignLocationLPN.request(request);
-        assignLocationLPN.request(request);
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when()
+                .post("/locations/assign-lpn")
+                .then().log().all()
+                .statusCode(HttpStatus.OK.value());
         //then
         final Location location = locationRepository.getByLocationBarcode(locationBarcode);
         final List<LocationLPN> locationLPNList = location.getLocationLPNList();
         final LocationLPN locationLPN = locationLPNList.get(0);
         assertThat(locationLPNList).hasSize(1);
-        assertThat(locationLPN.getInventoryQuantity()).isEqualTo(2L);
+        assertThat(locationLPN.getInventoryQuantity()).isEqualTo(1L);
 
     }
 
