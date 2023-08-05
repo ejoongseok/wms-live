@@ -5,17 +5,23 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.Assert;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class RegisterLocationTest {
 
 
     private RegisterLocation registerLocation;
+    private LocationRepository locationRepository;
 
     @BeforeEach
     void setUp() {
-        registerLocation = new RegisterLocation();
+        locationRepository = new LocationRepository();
+        registerLocation = new RegisterLocation(locationRepository);
     }
 
     @Test
@@ -33,7 +39,7 @@ class RegisterLocationTest {
 
         registerLocation.request(request);
 
-        //then 로케이션 등록 요청이 완료되었다.
+        assertThat(locationRepository.finaAll()).hasSize(1);
     }
 
     enum StorageType {
@@ -81,10 +87,15 @@ class RegisterLocationTest {
             this.locationNo = locationNo;
         }
 
+
     }
 
     private class RegisterLocation {
-        private LocationRepository locationRepository;
+        private final LocationRepository locationRepository;
+
+        private RegisterLocation(final LocationRepository locationRepository) {
+            this.locationRepository = locationRepository;
+        }
 
         public void request(final Request request) {
             final Location location = request.toDomain();
@@ -121,6 +132,10 @@ class RegisterLocationTest {
             location.assignNo(sequence);
             sequence++;
             locations.put(location.getLocationNo(), location);
+        }
+
+        public List<Location> finaAll() {
+            return new ArrayList<>(locations.values());
         }
     }
 }
