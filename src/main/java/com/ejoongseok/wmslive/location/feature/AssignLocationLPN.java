@@ -4,11 +4,15 @@ import com.ejoongseok.wmslive.inbound.domain.LPN;
 import com.ejoongseok.wmslive.inbound.domain.LPNRepository;
 import com.ejoongseok.wmslive.location.domain.Location;
 import com.ejoongseok.wmslive.location.domain.LocationRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
+@Component
+@RequiredArgsConstructor
 class AssignLocationLPN {
-    private LocationRepository locationRepository;
-    private LPNRepository lpnRepository;
+    private final LocationRepository locationRepository;
+    private final LPNRepository lpnRepository;
 
     public void request(final Request request) {
         final Location location = locationRepository.getByLocationBarcode(request.locationBarcode);

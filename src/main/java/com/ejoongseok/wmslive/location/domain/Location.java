@@ -1,6 +1,7 @@
 package com.ejoongseok.wmslive.location.domain;
 
 import com.ejoongseok.wmslive.inbound.domain.LPN;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -8,6 +9,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -41,6 +43,7 @@ public class Location {
     @Column(name = "usage_purpose", nullable = false)
     @Comment("보관 목적")
     private UsagePurpose usagePurpose;
+    @OneToMany(mappedBy = "location", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<LocationLPN> locationLPNList = new ArrayList<>();
 
     public Location(
