@@ -21,4 +21,7 @@ public class LocationLPN {
         inventoryQuantity++;
     }
 
+    boolean matchLpnToLocation(final LPN lpn) {
+        return this.lpn.equals(lpn);
+    }
 }

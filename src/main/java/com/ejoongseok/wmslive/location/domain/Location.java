@@ -65,14 +65,11 @@ public class Location {
         Assert.notNull(lpn, "LPN은 필수입니다.");
 
         locationLPNList.stream()
-                .filter(locationLPN -> matchLpnToLocation(lpn, locationLPN))
+                .filter(locationLPN -> locationLPN.matchLpnToLocation(lpn))
                 .findFirst()
                 .ifPresentOrElse(
                         LocationLPN::increaseQuantity,
                         () -> locationLPNList.add(new LocationLPN(this, lpn)));
     }
 
-    private boolean matchLpnToLocation(final LPN lpn, final LocationLPN locationLPN) {
-        return locationLPN.getLpn().equals(lpn);
-    }
 }
