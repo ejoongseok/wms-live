@@ -5,6 +5,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.Assert;
 
+import java.util.HashMap;
+import java.util.Map;
+
 class RegisterLocationTest {
 
 
@@ -55,6 +58,8 @@ class RegisterLocationTest {
         private final String locationBarcode;
         private final StorageType storageType;
         private final UsagePurpose usagePurpose;
+        @lombok.Getter
+        private Long locationNo;
 
         public Location(
                 final String locationBarcode,
@@ -71,11 +76,20 @@ class RegisterLocationTest {
             Assert.notNull(storageType, "보관 타입은 필수입니다.");
             Assert.notNull(usagePurpose, "보관 목적은 필수입니다.");
         }
+
+        public void assignNo(final Long locationNo) {
+            this.locationNo = locationNo;
+        }
+
     }
 
     private class RegisterLocation {
+        private LocationRepository locationRepository;
+
         public void request(final Request request) {
             final Location location = request.toDomain();
+
+            locationRepository.save(location);
         }
 
         public record Request(
@@ -96,6 +110,17 @@ class RegisterLocationTest {
                         usagePurpose
                 );
             }
+        }
+    }
+
+    private class LocationRepository {
+        private final Map<Long, Location> locations = new HashMap<>();
+        private Long sequence = 1L;
+
+        public void save(final Location location) {
+            location.assignNo(sequence);
+            sequence++;
+            locations.put(location.getLocationNo(), location);
         }
     }
 }
