@@ -16,9 +16,12 @@ class AssignLocationLPNTest {
     @Test
     @DisplayName("로케이션에 LPN을 할당한다.")
     void assignLocationLPN() {
-
+        assignLocationLPN.request();
     }
 
     private class AssignLocationLPN {
+        public void request() {
+
+        }
     }
 }
