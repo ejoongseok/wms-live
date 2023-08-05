@@ -18,9 +18,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 class AssignLocationLPNTest extends ApiTest {
 
     @Autowired
-    private AssignLocationLPN assignLocationLPN;
-
-    @Autowired
     private LocationRepository locationRepository;
 
     @BeforeEach
