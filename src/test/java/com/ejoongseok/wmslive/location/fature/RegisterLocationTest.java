@@ -1,5 +1,8 @@
 package com.ejoongseok.wmslive.location.fature;
 
+import com.ejoongseok.wmslive.location.domain.LocationRepository;
+import com.ejoongseok.wmslive.location.domain.StorageType;
+import com.ejoongseok.wmslive.location.domain.UsagePurpose;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

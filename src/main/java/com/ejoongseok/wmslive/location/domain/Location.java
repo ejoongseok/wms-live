@@ -1,8 +1,8 @@
-package com.ejoongseok.wmslive.location.fature;
+package com.ejoongseok.wmslive.location.domain;
 
 import org.springframework.util.Assert;
 
-class Location {
+public class Location {
     private final String locationBarcode;
     private final StorageType storageType;
     private final UsagePurpose usagePurpose;

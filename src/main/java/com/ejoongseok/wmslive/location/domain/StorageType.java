@@ -1,6 +1,6 @@
-package com.ejoongseok.wmslive.location.fature;
+package com.ejoongseok.wmslive.location.domain;
 
-enum StorageType {
+public enum StorageType {
     TOTE("토트 바구니");
     private final String description;
 

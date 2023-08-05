@@ -1,5 +1,9 @@
 package com.ejoongseok.wmslive.location.fature;
 
+import com.ejoongseok.wmslive.location.domain.Location;
+import com.ejoongseok.wmslive.location.domain.LocationRepository;
+import com.ejoongseok.wmslive.location.domain.StorageType;
+import com.ejoongseok.wmslive.location.domain.UsagePurpose;
 import org.springframework.util.Assert;
 
 class RegisterLocation {

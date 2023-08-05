@@ -1,6 +1,6 @@
-package com.ejoongseok.wmslive.location.fature;
+package com.ejoongseok.wmslive.location.domain;
 
-enum UsagePurpose {
+public enum UsagePurpose {
     MOVE("이동 목적");
     private final String description;
 

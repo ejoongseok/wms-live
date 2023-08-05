@@ -1,11 +1,11 @@
-package com.ejoongseok.wmslive.location.fature;
+package com.ejoongseok.wmslive.location.domain;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-class LocationRepository {
+public class LocationRepository {
     private final Map<Long, Location> locations = new HashMap<>();
     private Long sequence = 1L;
 
