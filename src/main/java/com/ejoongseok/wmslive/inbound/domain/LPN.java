@@ -10,6 +10,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 import org.springframework.util.Assert;
@@ -29,6 +30,7 @@ import java.time.LocalDateTime;
 @Table(name = "lpn")
 @Comment("LPN")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EqualsAndHashCode(of = "lpnBarcode", callSuper = false)
 public class LPN {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
