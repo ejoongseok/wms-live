@@ -1,6 +1,7 @@
 package com.ejoongseok.wmslive.location.feature;
 
 import com.ejoongseok.wmslive.common.ApiTest;
+import com.ejoongseok.wmslive.common.Scenario;
 import com.ejoongseok.wmslive.location.domain.LocationRepository;
 import com.ejoongseok.wmslive.location.domain.StorageType;
 import com.ejoongseok.wmslive.location.domain.UsagePurpose;
@@ -21,6 +22,9 @@ class RegisterLocationTest extends ApiTest {
     @Test
     @DisplayName("로케이션을 등록한다.")
     void registerLocation() {
+        Scenario
+                .registerLocation().request();
+
         final String locationBarcode = "A-1-1";
         final StorageType storageType = StorageType.TOTE;
         final UsagePurpose usagePurpose = UsagePurpose.MOVE;
