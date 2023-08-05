@@ -17,8 +17,35 @@ class RegisterLocationTest {
     @Test
     @DisplayName("로케이션을 등록한다.")
     void registerLocation() {
-        final RegisterLocation.Request request = new RegisterLocation.Request();
+        final String locationBarcode = "A-1-1";
+        final StorageType storageType = StorageType.TOTE;
+        final UsagePurpose usagePurpose = UsagePurpose.MOVE;
+
+        final RegisterLocation.Request request = new RegisterLocation.Request(
+                locationBarcode,
+                storageType,
+                usagePurpose
+        );
+
         registerLocation.request(request);
+    }
+
+    enum StorageType {
+        TOTE("토트 바구니");
+        private final String description;
+
+        StorageType(final String description) {
+            this.description = description;
+        }
+    }
+
+    enum UsagePurpose {
+        MOVE("이동 목적");
+        private final String description;
+
+        UsagePurpose(final String description) {
+            this.description = description;
+        }
     }
 
     private class RegisterLocation {
@@ -26,7 +53,10 @@ class RegisterLocationTest {
 
         }
 
-        public record Request() {
+        public record Request(
+                String locationBarcode,
+                StorageType storageType,
+                UsagePurpose usagePurpose) {
         }
     }
 }
