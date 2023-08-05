@@ -20,7 +20,7 @@ class RegisterLocationTest extends ApiTest {
         Scenario
                 .registerLocation().request();
 
-        assertThat(locationRepository.finaAll()).hasSize(1);
+        assertThat(locationRepository.findAll()).hasSize(1);
     }
 
 }
