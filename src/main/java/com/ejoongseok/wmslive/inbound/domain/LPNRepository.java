@@ -10,6 +10,8 @@ public interface LPNRepository extends JpaRepository<LPN, Long> {
     Optional<LPN> findByLPNBarcode(String lpnBarcode);
 
     default LPN getByLPNBarcode(final String lpnBarcode) {
-        return findByLPNBarcode(lpnBarcode).orElseThrow();
+        return findByLPNBarcode(lpnBarcode).orElseThrow(() ->
+                new IllegalArgumentException(
+                        "해당 LPN을 찾을 수 없습니다.%s".formatted(lpnBarcode)));
     }
 }
