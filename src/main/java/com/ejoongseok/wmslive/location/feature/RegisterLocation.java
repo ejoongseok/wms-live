@@ -1,4 +1,4 @@
-package com.ejoongseok.wmslive.location.fature;
+package com.ejoongseok.wmslive.location.feature;
 
 import com.ejoongseok.wmslive.location.domain.Location;
 import com.ejoongseok.wmslive.location.domain.LocationRepository;
