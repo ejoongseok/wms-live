@@ -16,7 +16,12 @@ class AssignLocationLPNTest {
     @Test
     @DisplayName("로케이션에 LPN을 할당한다.")
     void assignLocationLPN() {
-        final AssignLocationLPN.Request request = new AssignLocationLPN.Request();
+        final String locationBarcode = "A-1-1";
+        final String lpnBarcode = "LPN-1";
+        final AssignLocationLPN.Request request = new AssignLocationLPN.Request(
+                locationBarcode,
+                lpnBarcode
+        );
         assignLocationLPN.request(request);
     }
 
@@ -25,7 +30,7 @@ class AssignLocationLPNTest {
 
         }
 
-        public record Request() {
+        public record Request(String locationBarcode, String lpnBarcode) {
         }
     }
 }
