@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-class RegisterLocation {
+public class RegisterLocation {
     private final LocationRepository locationRepository;
 
     @PostMapping("/locations")
