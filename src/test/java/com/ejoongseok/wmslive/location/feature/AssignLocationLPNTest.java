@@ -37,16 +37,19 @@ class AssignLocationLPNTest extends ApiTest {
     @DisplayName("로케이션에 LPN을 할당한다.")
     @Transactional
     void assignLocationLPN() {
-        //given
-        Scenario.assignLocationLPN().request();
-        //then
+        Scenario
+                .assignLocationLPN().request();
+
+        assertAssignLocationLPN();
+    }
+
+    private void assertAssignLocationLPN() {
         final String locationBarcode = "A-1-1";
         final Location location = locationRepository.getByLocationBarcode(locationBarcode);
         final List<LocationLPN> locationLPNList = location.getLocationLPNList();
         final LocationLPN locationLPN = locationLPNList.get(0);
         assertThat(locationLPNList).hasSize(1);
         assertThat(locationLPN.getInventoryQuantity()).isEqualTo(1L);
-
     }
 
 }
