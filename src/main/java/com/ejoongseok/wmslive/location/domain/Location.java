@@ -64,9 +64,11 @@ public class Location {
     public void assignLPN(final LPN lpn) {
         Assert.notNull(lpn, "LPN은 필수입니다.");
 
-        //1. 로케이션 LPN 목록에 등록하려는 LPN이 없으면 새로 등록한다.
-        //   새로등록한 로케이션 LPN은 재고가 1이다.
-        //2. 로케이션 LPN 목록에 등록하려는 LPN이 존재하면 재고를 1 증가시킨다.
-//        locationLPNList
+        locationLPNList.stream()
+                .filter(locationLPN -> locationLPN.getLpn().equals(lpn))
+                .findFirst()
+                .ifPresentOrElse(
+                        LocationLPN::increaseQuantity,
+                        () -> locationLPNList.add(new LocationLPN(this, lpn)));
     }
 }
