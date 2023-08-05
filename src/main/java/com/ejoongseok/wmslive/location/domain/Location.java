@@ -47,7 +47,10 @@ public class Location {
         this.usagePurpose = usagePurpose;
     }
 
-    private void validateConstructor(final String locationBarcode, final StorageType storageType, final UsagePurpose usagePurpose) {
+    private void validateConstructor(
+            final String locationBarcode,
+            final StorageType storageType,
+            final UsagePurpose usagePurpose) {
         Assert.hasText(locationBarcode, "로케이션 바코드는 필수입니다.");
         Assert.notNull(storageType, "보관 타입은 필수입니다.");
         Assert.notNull(usagePurpose, "보관 목적은 필수입니다.");
