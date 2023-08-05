@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.ejoongseok.wmslive.inbound.domain.LPNFixture.anLPN;
 import static com.ejoongseok.wmslive.location.domain.LocationFixture.aLocation;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class LocationTest {
 
@@ -17,6 +18,7 @@ class LocationTest {
 
         location.assignLPN(lpn);
 
-        //TODO locaiton에 locationLPN 목록이 비어있지 않은지 확인한다. 추가된 로케이션 LPN의 재고가 1이어야합니다.
+        assertThat(location.getLocationLPNList()).hasSize(1);
+        assertThat(location.getLocationLPNList().get(0).getInventoryQuantity()).isEqualTo(1L);
     }
 }
