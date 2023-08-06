@@ -5,13 +5,22 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.Assert;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 class RegisterPackagingMaterialTest {
 
     private RegisterPackagingMaterial registerPackagingMaterial;
+    private PackagingMaterialRepository packagingMaterialRepository;
 
     @BeforeEach
     void setUp() {
-        registerPackagingMaterial = new RegisterPackagingMaterial();
+        packagingMaterialRepository = new PackagingMaterialRepository();
+        registerPackagingMaterial = new RegisterPackagingMaterial(packagingMaterialRepository);
     }
 
     @Test
@@ -25,9 +34,12 @@ class RegisterPackagingMaterialTest {
         final Long outerLengthInMillimeters = 1000L;
         final Long weightInGrams = 100L;
         final Long maxWeightInGrams = 10000L;
+        final MaterialType materialType = MaterialType.CORRUGATED_BOX;
+        final String name = "name";
+        final String code = "code";
         final RegisterPackagingMaterial.Request request = new RegisterPackagingMaterial.Request(
-                "name",
-                "code",
+                name,
+                code,
                 innerWidthInMillimeters,
                 innerHeightInMillimeters,
                 innerLengthInMillimeters,
@@ -36,13 +48,13 @@ class RegisterPackagingMaterialTest {
                 outerLengthInMillimeters,
                 weightInGrams,
                 maxWeightInGrams,
-                MaterialType.CORRUGATED_BOX
+                materialType
         );
 
         registerPackagingMaterial.request(request);
 
         // TODO
-//        assertThat(packagingMaterialRepository.findAll()).hasSize(1);
+        assertThat(packagingMaterialRepository.findAll()).hasSize(1);
     }
 
     enum MaterialType {
@@ -126,6 +138,8 @@ class RegisterPackagingMaterialTest {
         private final Long weightInGrams;
         private final Long maxWeightInGrams;
         private final MaterialType materialType;
+        @lombok.Getter
+        private Long packagingMaterialNo;
 
         public PackagingMaterial(
                 final String name,
@@ -163,10 +177,19 @@ class RegisterPackagingMaterialTest {
             Assert.notNull(maxWeightInGrams, "최대 무게는 필수입니다.");
             Assert.notNull(materialType, "포장재 종류는 필수입니다.");
         }
+
+        public void assignNo(final Long packagingMaterialNo) {
+            this.packagingMaterialNo = packagingMaterialNo;
+        }
+
     }
 
     private class RegisterPackagingMaterial {
-        private PackagingMaterialRepository packagingMaterialRepository;
+        private final PackagingMaterialRepository packagingMaterialRepository;
+
+        private RegisterPackagingMaterial(final PackagingMaterialRepository packagingMaterialRepository) {
+            this.packagingMaterialRepository = packagingMaterialRepository;
+        }
 
         public void request(final Request request) {
             final PackagingMaterial packagingMaterial = request.toDomain();
@@ -247,8 +270,17 @@ class RegisterPackagingMaterialTest {
     }
 
     private class PackagingMaterialRepository {
-        public void save(final PackagingMaterial packagingMaterial) {
+        private final Map<Long, PackagingMaterial> packagingMaterialMap = new HashMap<>();
+        private Long sequence = 1L;
 
+        public void save(final PackagingMaterial packagingMaterial) {
+            packagingMaterial.assignNo(sequence);
+            sequence++;
+            packagingMaterialMap.put(packagingMaterial.getPackagingMaterialNo(), packagingMaterial);
+        }
+
+        public List<PackagingMaterial> findAll() {
+            return new ArrayList<>(packagingMaterialMap.values());
         }
     }
 }
