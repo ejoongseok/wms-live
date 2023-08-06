@@ -6,6 +6,7 @@ import com.ejoongseok.wmslive.inbound.feature.api.RegisterLPNApi;
 import com.ejoongseok.wmslive.inbound.feature.api.RejectInboundApi;
 import com.ejoongseok.wmslive.location.feature.api.AssignInventoryApi;
 import com.ejoongseok.wmslive.location.feature.api.RegisterLocationApi;
+import com.ejoongseok.wmslive.outbound.feature.api.RegisterPackagingMaterialApi;
 import com.ejoongseok.wmslive.product.feature.api.RegisterProductApi;
 
 public class Scenario {
@@ -35,5 +36,9 @@ public class Scenario {
 
     public static AssignInventoryApi assignInventory() {
         return new AssignInventoryApi();
+    }
+
+    public static RegisterPackagingMaterialApi registerPackagingMaterial() {
+        return new RegisterPackagingMaterialApi();
     }
 }
