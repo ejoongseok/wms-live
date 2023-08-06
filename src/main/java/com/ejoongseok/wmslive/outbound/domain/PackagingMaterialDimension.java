@@ -1,14 +1,33 @@
 package com.ejoongseok.wmslive.outbound.domain;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Comment;
 import org.springframework.util.Assert;
 
+@Embeddable
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PackagingMaterialDimension {
-    private final Long innerWidthInMillimeters;
-    private final Long innerHeightInMillimeters;
-    private final Long innerLengthInMillimeters;
-    private final Long outerWidthInMillimeters;
-    private final Long outerHeightInMillimeters;
-    private final Long outerLengthInMillimeters;
+    @Column(name = "inner_width", nullable = false)
+    @Comment("내부 폭 (mm)")
+    private Long innerWidthInMillimeters;
+    @Column(name = "inner_height", nullable = false)
+    @Comment("내부 높이 (mm)")
+    private Long innerHeightInMillimeters;
+    @Column(name = "inner_length", nullable = false)
+    @Comment("내부 길이 (mm)")
+    private Long innerLengthInMillimeters;
+    @Column(name = "outer_width", nullable = false)
+    @Comment("외부 폭 (mm)")
+    private Long outerWidthInMillimeters;
+    @Column(name = "outer_height", nullable = false)
+    @Comment("외부 높이 (mm)")
+    private Long outerHeightInMillimeters;
+    @Column(name = "outer_length", nullable = false)
+    @Comment("외부 길이 (mm)")
+    private Long outerLengthInMillimeters;
 
     public PackagingMaterialDimension(
             final Long innerWidthInMillimeters,
@@ -17,7 +36,7 @@ public class PackagingMaterialDimension {
             final Long outerWidthInMillimeters,
             final Long outerHeightInMillimeters,
             final Long outerLengthInMillimeters) {
-        validateConsturctor(
+        validateConstructor(
                 innerWidthInMillimeters,
                 innerHeightInMillimeters,
                 innerLengthInMillimeters,
@@ -32,7 +51,7 @@ public class PackagingMaterialDimension {
         this.outerLengthInMillimeters = outerLengthInMillimeters;
     }
 
-    private void validateConsturctor(
+    private void validateConstructor(
             final Long innerWidthInMillimeters,
             final Long innerHeightInMillimeters,
             final Long innerLengthInMillimeters,
