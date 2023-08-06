@@ -40,6 +40,9 @@ class RegisterPackagingMaterialTest {
         );
 
         registerPackagingMaterial.request(request);
+
+        // TODO
+//        assertThat(packagingMaterialRepository.findAll()).hasSize(1);
     }
 
     enum MaterialType {
@@ -53,6 +56,8 @@ class RegisterPackagingMaterialTest {
 
     private class RegisterPackagingMaterial {
         public void request(final Request request) {
+            final PackagingMaterial packagingMaterial = request.toDomain();
+
 
         }
 
@@ -105,6 +110,13 @@ class RegisterPackagingMaterialTest {
                 }
                 Assert.notNull(materialType, "포장재 종류는 필수입니다.");
             }
+
+            public PackagingMaterial toDomain() {
+                return new PackagingMaterial();
+            }
         }
+    }
+
+    private class PackagingMaterial {
     }
 }
