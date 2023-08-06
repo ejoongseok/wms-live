@@ -4,20 +4,26 @@ import com.ejoongseok.wmslive.outbound.domain.MaterialType;
 import com.ejoongseok.wmslive.outbound.domain.PackagingMaterial;
 import com.ejoongseok.wmslive.outbound.domain.PackagingMaterialDimension;
 import com.ejoongseok.wmslive.outbound.domain.PackagingMaterialRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
+@RestController
+@RequiredArgsConstructor
 class RegisterPackagingMaterial {
     private final PackagingMaterialRepository packagingMaterialRepository;
 
-    RegisterPackagingMaterial(final PackagingMaterialRepository packagingMaterialRepository) {
-        this.packagingMaterialRepository = packagingMaterialRepository;
-    }
 
-    public void request(final Request request) {
+    @PostMapping("/packaging-materials")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void request(@RequestBody final Request request) {
         final PackagingMaterial packagingMaterial = request.toDomain();
 
         packagingMaterialRepository.save(packagingMaterial);
-
     }
 
     public record Request(
