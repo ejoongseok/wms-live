@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-class RegisterPackagingMaterial {
+public class RegisterPackagingMaterial {
     private final PackagingMaterialRepository packagingMaterialRepository;
 
 
