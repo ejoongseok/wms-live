@@ -16,16 +16,16 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 
 @Entity
-@Table(name = "location_lpn")
+@Table(name = "inventory")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Comment("로케이션 LPN")
-public class LocationLPN {
+@Comment("재고")
+public class Inventory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "location_lpn_no")
-    @Comment("로케이션 LPN 번호")
-    private Long locationLPNNo;
+    @Column(name = "inventory_no")
+    @Comment("재고 번호")
+    private Long inventoryNo;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "location_no", nullable = false)
     @Comment("로케이션 번호")
@@ -40,7 +40,7 @@ public class LocationLPN {
     @Comment("재고 수량")
     private Long inventoryQuantity;
 
-    LocationLPN(final Location location, final LPN lpn) {
+    Inventory(final Location location, final LPN lpn) {
         this.location = location;
         this.lpn = lpn;
         inventoryQuantity = 1L;

@@ -18,7 +18,7 @@ class LocationTest {
         final Location location = aLocation().build();
         final LPN lpn = anLPN().build();
 
-        location.assignLPN(lpn);
+        location.assignInventory(lpn);
 
         assertAssignLPN(location, 1L);
     }
@@ -26,10 +26,10 @@ class LocationTest {
     private void assertAssignLPN(
             final Location location,
             final Long expectedInventoryQuantity) {
-        final List<LocationLPN> locationLPNList = location.getLocationLPNList();
-        final LocationLPN locationLPN = locationLPNList.get(0);
-        assertThat(locationLPNList).hasSize(1);
-        assertThat(locationLPN.getInventoryQuantity()).isEqualTo(expectedInventoryQuantity);
+        final List<Inventory> inventories = location.getInventories();
+        final Inventory inventory = inventories.get(0);
+        assertThat(inventories).hasSize(1);
+        assertThat(inventory.getInventoryQuantity()).isEqualTo(expectedInventoryQuantity);
     }
 
     @Test
@@ -39,8 +39,8 @@ class LocationTest {
         final LPN lpn = anLPN().build();
         final LPN lpn2 = anLPN().build();
 
-        location.assignLPN(lpn);
-        location.assignLPN(lpn2);
+        location.assignInventory(lpn);
+        location.assignInventory(lpn2);
 
         assertAssignLPN(location, 2L);
     }

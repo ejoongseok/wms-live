@@ -14,17 +14,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class AssignLocationLPN {
+public class AssignInventory {
     private final LocationRepository locationRepository;
     private final LPNRepository lpnRepository;
 
     @Transactional
-    @PostMapping("/locations/assign-lpn")
+    @PostMapping("/locations/assign-inventory")
     public void request(@RequestBody @Valid final Request request) {
         final Location location = locationRepository.getByLocationBarcode(request.locationBarcode);
         final LPN lpn = lpnRepository.getByLPNBarcode(request.lpnBarcode);
 
-        location.assignLPN(lpn);
+        location.assignInventory(lpn);
     }
 
     public record Request(
