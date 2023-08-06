@@ -1,8 +1,8 @@
-package com.ejoongseok.wmslive.outbound.feature;
+package com.ejoongseok.wmslive.outbound.domain;
 
 import org.springframework.util.Assert;
 
-class PackagingMaterialDimension {
+public class PackagingMaterialDimension {
     private final Long innerWidthInMillimeters;
     private final Long innerHeightInMillimeters;
     private final Long innerLengthInMillimeters;

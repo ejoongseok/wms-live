@@ -1,5 +1,7 @@
 package com.ejoongseok.wmslive.outbound.feature;
 
+import com.ejoongseok.wmslive.outbound.domain.MaterialType;
+import com.ejoongseok.wmslive.outbound.domain.PackagingMaterialRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

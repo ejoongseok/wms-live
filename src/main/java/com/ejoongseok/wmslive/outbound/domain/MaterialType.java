@@ -1,6 +1,6 @@
-package com.ejoongseok.wmslive.outbound.feature;
+package com.ejoongseok.wmslive.outbound.domain;
 
-enum MaterialType {
+public enum MaterialType {
     CORRUGATED_BOX("골판지 상자");
     private final String description;
 

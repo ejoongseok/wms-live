@@ -1,5 +1,9 @@
 package com.ejoongseok.wmslive.outbound.feature;
 
+import com.ejoongseok.wmslive.outbound.domain.MaterialType;
+import com.ejoongseok.wmslive.outbound.domain.PackagingMaterial;
+import com.ejoongseok.wmslive.outbound.domain.PackagingMaterialDimension;
+import com.ejoongseok.wmslive.outbound.domain.PackagingMaterialRepository;
 import org.springframework.util.Assert;
 
 class RegisterPackagingMaterial {

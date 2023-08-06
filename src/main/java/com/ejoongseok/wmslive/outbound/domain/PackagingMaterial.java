@@ -1,8 +1,8 @@
-package com.ejoongseok.wmslive.outbound.feature;
+package com.ejoongseok.wmslive.outbound.domain;
 
 import org.springframework.util.Assert;
 
-class PackagingMaterial {
+public class PackagingMaterial {
 
     private final String name;
     private final String code;
