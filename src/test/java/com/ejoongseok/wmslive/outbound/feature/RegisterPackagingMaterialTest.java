@@ -166,9 +166,12 @@ class RegisterPackagingMaterialTest {
     }
 
     private class RegisterPackagingMaterial {
+        private PackagingMaterialRepository packagingMaterialRepository;
+
         public void request(final Request request) {
             final PackagingMaterial packagingMaterial = request.toDomain();
 
+            packagingMaterialRepository.save(packagingMaterial);
 
         }
 
@@ -239,6 +242,12 @@ class RegisterPackagingMaterialTest {
                         materialType
                 );
             }
+
+        }
+    }
+
+    private class PackagingMaterialRepository {
+        public void save(final PackagingMaterial packagingMaterial) {
 
         }
     }
