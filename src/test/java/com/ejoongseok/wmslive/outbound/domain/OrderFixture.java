@@ -3,11 +3,14 @@ package com.ejoongseok.wmslive.outbound.domain;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.ejoongseok.wmslive.outbound.domain.OrderCustomerFixture.anOrderCustomer;
+import static com.ejoongseok.wmslive.outbound.domain.OrderProductFixture.anOrderProduct;
+
 public class OrderFixture {
     private Long orderNo = 1L;
-    private OrderCustomerFixture orderCustomerFixture = OrderCustomerFixture.anOrderCustomer();
+    private OrderCustomerFixture orderCustomerFixture = anOrderCustomer();
     private String deliveryRequirement = "배송 요구사항";
-    private List<OrderProductFixture> orderProductFixture = List.of(OrderProductFixture.anOrderProduct());
+    private List<OrderProductFixture> orderProductFixture = List.of(anOrderProduct());
 
     public static OrderFixture anOrder() {
         return new OrderFixture();

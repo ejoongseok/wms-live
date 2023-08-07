@@ -2,45 +2,45 @@ package com.ejoongseok.wmslive.outbound.domain;
 
 import static com.ejoongseok.wmslive.outbound.domain.PackagingMaterialDimensionFixture.aPackagingMaterialDimension;
 
-public class PackagingMaterialFIxture {
+public class PackagingMaterialFixture {
 
     private String name = "name";
     private String code = "code";
-    private PackagingMaterialDimensionFixture packagingMaterialDimensionFixture = aPackagingMaterialDimension();
+    private PackagingMaterialDimensionFixture dimension = aPackagingMaterialDimension();
     private Long weightInGrams = 100L;
     private Long maxWeightInGrams = 1000L;
     private MaterialType materialType = MaterialType.CORRUGATED_BOX;
 
-    public static PackagingMaterialFIxture aPackagingMaterial() {
-        return new PackagingMaterialFIxture();
+    public static PackagingMaterialFixture aPackagingMaterial() {
+        return new PackagingMaterialFixture();
     }
 
-    public PackagingMaterialFIxture name(final String name) {
+    public PackagingMaterialFixture name(final String name) {
         this.name = name;
         return this;
     }
 
-    public PackagingMaterialFIxture code(final String code) {
+    public PackagingMaterialFixture code(final String code) {
         this.code = code;
         return this;
     }
 
-    public PackagingMaterialFIxture dimension(final PackagingMaterialDimensionFixture packagingMaterialDimensionFixture) {
-        this.packagingMaterialDimensionFixture = packagingMaterialDimensionFixture;
+    public PackagingMaterialFixture dimension(final PackagingMaterialDimensionFixture packagingMaterialDimensionFixture) {
+        dimension = packagingMaterialDimensionFixture;
         return this;
     }
 
-    public PackagingMaterialFIxture weightInGrams(final Long weightInGrams) {
+    public PackagingMaterialFixture weightInGrams(final Long weightInGrams) {
         this.weightInGrams = weightInGrams;
         return this;
     }
 
-    public PackagingMaterialFIxture maxWeightInGrams(final Long maxWeightInGrams) {
+    public PackagingMaterialFixture maxWeightInGrams(final Long maxWeightInGrams) {
         this.maxWeightInGrams = maxWeightInGrams;
         return this;
     }
 
-    public PackagingMaterialFIxture materialType(final MaterialType materialType) {
+    public PackagingMaterialFixture materialType(final MaterialType materialType) {
         this.materialType = materialType;
         return this;
     }
@@ -49,7 +49,7 @@ public class PackagingMaterialFIxture {
         return new PackagingMaterial(
                 name,
                 code,
-                packagingMaterialDimensionFixture.build(),
+                dimension.build(),
                 weightInGrams,
                 maxWeightInGrams,
                 materialType

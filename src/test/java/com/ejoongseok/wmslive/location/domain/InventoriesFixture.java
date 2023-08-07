@@ -5,9 +5,11 @@ import com.ejoongseok.wmslive.outbound.feature.Inventories;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.ejoongseok.wmslive.location.domain.InventoryFixture.anInventory;
+
 public class InventoriesFixture {
     private Long orderQuantity = 1L;
-    private List<InventoryFixture> inventories = List.of(InventoryFixture.anInventory());
+    private List<InventoryFixture> inventories = List.of(anInventory());
 
     public static InventoriesFixture anInventories() {
         return new InventoriesFixture();

@@ -2,9 +2,11 @@ package com.ejoongseok.wmslive.outbound.domain;
 
 import com.ejoongseok.wmslive.product.fixture.ProductFixture;
 
+import static com.ejoongseok.wmslive.product.fixture.ProductFixture.aProduct;
+
 public class OrderProductFixture {
 
-    private ProductFixture productFixture = ProductFixture.aProduct();
+    private ProductFixture productFixture = aProduct();
     private Long orderQuantity = 1L;
     private Long unitPrice = 1500L;
 
