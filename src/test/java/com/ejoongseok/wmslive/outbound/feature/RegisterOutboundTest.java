@@ -1,39 +1,30 @@
 package com.ejoongseok.wmslive.outbound.feature;
 
-import com.ejoongseok.wmslive.outbound.domain.OrderRepository;
+import com.ejoongseok.wmslive.common.ApiTest;
+import com.ejoongseok.wmslive.common.Scenario;
 import com.ejoongseok.wmslive.outbound.domain.OutboundRepository;
-import com.ejoongseok.wmslive.product.domain.ProductRepository;
-import com.ejoongseok.wmslive.product.fixture.ProductFixture;
-import org.junit.jupiter.api.BeforeEach;
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 
 import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyLong;
 
-class RegisterOutboundTest {
+class RegisterOutboundTest extends ApiTest {
 
-    private RegisterOutbound registerOutbound;
-    private OrderRepository orderRepository;
+    @Autowired
     private OutboundRepository outboundRepository;
-    private ProductRepository productRepository;
 
-    @BeforeEach
-    void setUp() {
-        productRepository = Mockito.mock(ProductRepository.class);
-        orderRepository = new OrderRepository(productRepository);
-        outboundRepository = new OutboundRepository();
-        registerOutbound = new RegisterOutbound(orderRepository, outboundRepository);
-    }
 
     @Test
     @DisplayName("출고를 등록한다.")
     void registerOutbound() {
-        Mockito.when(productRepository.getBy(anyLong()))
-                .thenReturn(ProductFixture.aProduct().build());
+        Scenario.registerProduct().request();
+
         final Long orderNo = 1L;
         final Boolean isPriorityDelivery = false;
         final LocalDate desiredDeliveryAt = LocalDate.now();
@@ -42,7 +33,13 @@ class RegisterOutboundTest {
                 isPriorityDelivery,
                 desiredDeliveryAt
         );
-        registerOutbound.request(request);
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when()
+                .post("/outbounds")
+                .then().log().all()
+                .statusCode(HttpStatus.CREATED.value());
 
         //TODO 출고가 등록되었는지 확인.
         assertThat(outboundRepository.findAll()).hasSize(1);

@@ -1,9 +1,11 @@
 package com.ejoongseok.wmslive.outbound.domain;
 
 import com.ejoongseok.wmslive.product.domain.ProductRepository;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class OrderRepository {
     private final ProductRepository productRepository;
 

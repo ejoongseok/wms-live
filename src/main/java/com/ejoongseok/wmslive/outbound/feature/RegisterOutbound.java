@@ -5,21 +5,28 @@ import com.ejoongseok.wmslive.outbound.domain.OrderRepository;
 import com.ejoongseok.wmslive.outbound.domain.Outbound;
 import com.ejoongseok.wmslive.outbound.domain.OutboundProduct;
 import com.ejoongseok.wmslive.outbound.domain.OutboundRepository;
-import org.springframework.util.Assert;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 import java.util.List;
 
+@RestController
+@RequiredArgsConstructor
 class RegisterOutbound {
     private final OrderRepository orderRepository;
     private final OutboundRepository outboundRepository;
 
-    RegisterOutbound(final OrderRepository orderRepository, final OutboundRepository outboundRepository) {
-        this.orderRepository = orderRepository;
-        this.outboundRepository = outboundRepository;
-    }
 
-    public void request(final Request request) {
+    @PostMapping("/outbounds")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void request(@RequestBody @Valid final Request request) {
         //주문 정보를 가져오고.
         final Order order = orderRepository.getBy(request.orderNo);
 
@@ -48,14 +55,12 @@ class RegisterOutbound {
     }
 
     public record Request(
+            @NotNull(message = "주문번호는 필수입니다.")
             Long orderNo,
+            @NotNull(message = "우선출고여부는 필수입니다.")
             Boolean isPriorityDelivery,
+            @NotNull(message = "희망출고일은 필수입니다.")
             LocalDate desiredDeliveryAt) {
 
-        public Request {
-            Assert.notNull(orderNo, "주문번호는 필수입니다.");
-            Assert.notNull(isPriorityDelivery, "우선출고여부는 필수입니다.");
-            Assert.notNull(desiredDeliveryAt, "희망출고일은 필수입니다.");
-        }
     }
 }
