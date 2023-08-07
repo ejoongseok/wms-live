@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-class RegisterOutbound {
+public class RegisterOutbound {
     private final OrderRepository orderRepository;
     private final OutboundRepository outboundRepository;
 
