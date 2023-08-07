@@ -20,4 +20,12 @@ public class OrderProduct {
     public Long getProductNo() {
         return product.getProductNo();
     }
+
+    public Long getWeight() {
+        return product.getWeightInGrams() * orderQuantity;
+    }
+
+    public Long getVolume() {
+        return product.getVolume() * orderQuantity;
+    }
 }

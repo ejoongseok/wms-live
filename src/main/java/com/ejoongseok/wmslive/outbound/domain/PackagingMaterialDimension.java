@@ -83,4 +83,16 @@ public class PackagingMaterialDimension {
             throw new IllegalArgumentException("외부 길이는 1mm 이상이어야 합니다.");
         }
     }
+
+    public Boolean isAvailable(final Long totalVolume) {
+        return totalVolume <= getInnerVolume();
+    }
+
+    private Long getInnerVolume() {
+        return innerWidthInMillimeters * innerHeightInMillimeters * innerLengthInMillimeters;
+    }
+
+    public Long outerVolume() {
+        return outerWidthInMillimeters * outerHeightInMillimeters * outerLengthInMillimeters;
+    }
 }
