@@ -2,28 +2,42 @@ package com.ejoongseok.wmslive.outbound.feature;
 
 import com.ejoongseok.wmslive.product.domain.Product;
 import com.ejoongseok.wmslive.product.domain.ProductRepository;
+import com.ejoongseok.wmslive.product.fixture.ProductFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.util.Assert;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyLong;
+
 class RegisterOutboundTest {
 
     private RegisterOutbound registerOutbound;
+    private OrderRepository orderRepository;
+    private OutboundRepository outboundRepository;
+    private ProductRepository productRepository;
 
     @BeforeEach
     void setUp() {
-        registerOutbound = new RegisterOutbound();
+        productRepository = Mockito.mock(ProductRepository.class);
+        orderRepository = new OrderRepository(productRepository);
+        outboundRepository = new OutboundRepository();
+        registerOutbound = new RegisterOutbound(orderRepository, outboundRepository);
     }
 
     @Test
     @DisplayName("출고를 등록한다.")
     void registerOutbound() {
+        Mockito.when(productRepository.getBy(anyLong()))
+                .thenReturn(ProductFixture.aProduct().build());
         final Long orderNo = 1L;
         final Boolean isPriorityDelivery = false;
         final LocalDate desiredDeliveryAt = LocalDate.now();
@@ -35,11 +49,17 @@ class RegisterOutboundTest {
         registerOutbound.request(request);
 
         //TODO 출고가 등록되었는지 확인.
+        assertThat(outboundRepository.findAll()).hasSize(1);
     }
 
     private class RegisterOutbound {
-        private OrderRepository orderRepository;
-        private OutboundRepository outboundRepository;
+        private final OrderRepository orderRepository;
+        private final OutboundRepository outboundRepository;
+
+        private RegisterOutbound(final OrderRepository orderRepository, final OutboundRepository outboundRepository) {
+            this.orderRepository = orderRepository;
+            this.outboundRepository = outboundRepository;
+        }
 
         public void request(final Request request) {
             //주문 정보를 가져오고.
@@ -83,7 +103,11 @@ class RegisterOutboundTest {
     }
 
     private class OrderRepository {
-        private ProductRepository productRepository;
+        private final ProductRepository productRepository;
+
+        private OrderRepository(final ProductRepository productRepository) {
+            this.productRepository = productRepository;
+        }
 
         public Order getBy(final Long orderNo) {
             return new Order(
@@ -154,7 +178,6 @@ class RegisterOutboundTest {
             this.product = product;
             this.orderQuantity = orderQuantity;
             this.unitPrice = unitPrice;
-            throw new UnsupportedOperationException("Unsupported OrderProduct");
         }
     }
 
@@ -204,6 +227,7 @@ class RegisterOutboundTest {
             this.outboundNo = outboundNo;
         }
 
+
     }
 
     private class OutboundRepository {
@@ -214,6 +238,10 @@ class RegisterOutboundTest {
             outbound.assignNo(sequence);
             sequence++;
             outbounds.put(outbound.getOutboundNo(), outbound);
+        }
+
+        public List<Outbound> findAll() {
+            return new ArrayList<>(outbounds.values());
         }
     }
 }
