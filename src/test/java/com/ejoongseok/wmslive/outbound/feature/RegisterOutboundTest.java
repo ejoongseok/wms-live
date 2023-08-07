@@ -47,9 +47,12 @@ class RegisterOutboundTest {
             // 출고에 사용할 포장재를 선택해준다.
 
             // 출고를 생성하고.
-            for (final OrderProduct orderProduct : order.orderProducts) {
-                orderProduct
-            }
+            final List<OutboundProduct> outboundProducts = order.orderProducts.stream()
+                    .map(orderProduct -> new OutboundProduct(
+                            orderProduct.product,
+                            orderProduct.orderQuantity,
+                            orderProduct.unitPrice))
+                    .toList();
             //출고를 등록한다.
         }
 
@@ -139,6 +142,23 @@ class RegisterOutboundTest {
             this.orderQuantity = orderQuantity;
             this.unitPrice = unitPrice;
             throw new UnsupportedOperationException("Unsupported OrderProduct");
+        }
+    }
+
+    private class OutboundProduct {
+        private final Product product;
+        private final Long orderQuantity;
+        private final Long unitPrice;
+
+        public OutboundProduct(final Product product, final Long orderQuantity, final Long unitPrice) {
+            Assert.notNull(product, "상품은 필수입니다.");
+            Assert.notNull(orderQuantity, "주문수량은 필수입니다.");
+            if (1 > orderQuantity) throw new IllegalArgumentException("주문수량은 1개 이상이어야 합니다.");
+            Assert.notNull(unitPrice, "단가는 필수입니다.");
+            if (1 > unitPrice) throw new IllegalArgumentException("단가는 1원 이상이어야 합니다.");
+            this.product = product;
+            this.orderQuantity = orderQuantity;
+            this.unitPrice = unitPrice;
         }
     }
 }
