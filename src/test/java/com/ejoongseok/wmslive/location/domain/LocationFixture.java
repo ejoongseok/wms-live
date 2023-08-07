@@ -24,7 +24,7 @@ public class LocationFixture {
         return this;
     }
 
-    Location build() {
+    public Location build() {
         return new Location(
                 locationBarcode,
                 storageType,

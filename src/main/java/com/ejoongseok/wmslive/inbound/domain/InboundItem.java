@@ -128,4 +128,7 @@ public class InboundItem {
         return lpnList;
     }
 
+    public Long getProductNo() {
+        return product.getProductNo();
+    }
 }

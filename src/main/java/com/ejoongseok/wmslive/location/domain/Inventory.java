@@ -39,11 +39,15 @@ public class Inventory {
     @Column(name = "inventory_quantity", nullable = false)
     @Comment("재고 수량")
     private Long inventoryQuantity;
+    @Column(name = "product_no", nullable = false)
+    @Comment("상품 번호")
+    private Long productNo;
 
-    Inventory(final Location location, final LPN lpn) {
+    public Inventory(final Location location, final LPN lpn) {
         this.location = location;
         this.lpn = lpn;
         inventoryQuantity = 1L;
+        productNo = lpn.getProductNo();
     }
 
     void increaseQuantity() {
