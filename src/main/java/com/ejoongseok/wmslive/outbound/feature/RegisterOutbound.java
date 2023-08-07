@@ -32,26 +32,21 @@ public class RegisterOutbound {
     public void request(@RequestBody @Valid final Request request) {
         //주문 정보를 가져오고.
         final Order order = orderRepository.getBy(request.orderNo);
+        final List<Inventories> inventoriesList = inventoriesList(order.orderProducts());
 
-        // 주문정보에 맞는 상품의 재고가 충분한지 확인하고 충분하지 않으면 예외를 던진다.
-        validateInventory(order.orderProducts());
-        // 출고에 사용할 포장재를 선택해준다.
-
-        // 출고를 생성하고.
-
+        inventoriesList.forEach(Inventories::validateInventory);
         final Outbound outbound = createOutbound(request, order);
+
         //출고를 등록한다.
         outboundRepository.save(outbound);
     }
 
-    private void validateInventory(final List<OrderProduct> orderProducts) {
-        for (final OrderProduct orderProduct : orderProducts) {
-            // 해당 상품의 재고를 전부 가져온다.
-            final Inventories inventories = new Inventories(
-                    inventoryRepository.findByProductNo(orderProduct.getProductNo()),
-                    orderProduct.orderQuantity());
-            inventories.validateInventory();
-        }
+    private List<Inventories> inventoriesList(final List<OrderProduct> orderProducts) {
+        return orderProducts.stream()
+                .map(orderProduct -> new Inventories(
+                        inventoryRepository.findByProductNo(orderProduct.getProductNo()),
+                        orderProduct.orderQuantity())).
+                toList();
     }
 
     private Outbound createOutbound(final Request request, final Order order) {
