@@ -8,7 +8,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.util.Assert;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 class RegisterOutboundTest {
 
@@ -37,6 +39,7 @@ class RegisterOutboundTest {
 
     private class RegisterOutbound {
         private OrderRepository orderRepository;
+        private OutboundRepository outboundRepository;
 
         public void request(final Request request) {
             //주문 정보를 가져오고.
@@ -63,6 +66,7 @@ class RegisterOutboundTest {
                     request.desiredDeliveryAt
             );
             //출고를 등록한다.
+            outboundRepository.save(outbound);
         }
 
         public record Request(
@@ -178,6 +182,8 @@ class RegisterOutboundTest {
         private final List<OutboundProduct> outboundProducts;
         private final Boolean isPriorityDelivery;
         private final LocalDate desiredDeliveryAt;
+        @lombok.Getter
+        private Long outboundNo;
 
         public Outbound(final Long orderNo, final OrderCustomer orderCustomer, final String deliveryRequirements, final List<OutboundProduct> outboundProducts, final Boolean isPriorityDelivery, final LocalDate desiredDeliveryAt) {
             Assert.notNull(orderNo, "주문번호는 필수입니다.");
@@ -192,6 +198,22 @@ class RegisterOutboundTest {
             this.outboundProducts = outboundProducts;
             this.isPriorityDelivery = isPriorityDelivery;
             this.desiredDeliveryAt = desiredDeliveryAt;
+        }
+
+        public void assignNo(final Long outboundNo) {
+            this.outboundNo = outboundNo;
+        }
+
+    }
+
+    private class OutboundRepository {
+        private final Map<Long, Outbound> outbounds = new HashMap<>();
+        private Long sequence = 1L;
+
+        public void save(final Outbound outbound) {
+            outbound.assignNo(sequence);
+            sequence++;
+            outbounds.put(outbound.getOutboundNo(), outbound);
         }
     }
 }
