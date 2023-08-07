@@ -16,4 +16,8 @@ public class OrderProduct {
         this.orderQuantity = orderQuantity;
         this.unitPrice = unitPrice;
     }
+
+    public Long getProductNo() {
+        return product.getProductNo();
+    }
 }

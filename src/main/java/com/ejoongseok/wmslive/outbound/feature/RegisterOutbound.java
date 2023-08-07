@@ -1,5 +1,7 @@
 package com.ejoongseok.wmslive.outbound.feature;
 
+import com.ejoongseok.wmslive.location.domain.Inventory;
+import com.ejoongseok.wmslive.location.domain.InventoryRepository;
 import com.ejoongseok.wmslive.outbound.domain.Order;
 import com.ejoongseok.wmslive.outbound.domain.OrderProduct;
 import com.ejoongseok.wmslive.outbound.domain.OrderRepository;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -23,6 +26,7 @@ import java.util.List;
 public class RegisterOutbound {
     private final OrderRepository orderRepository;
     private final OutboundRepository outboundRepository;
+    private final InventoryRepository inventoryRepository;
 
 
     @PostMapping("/outbounds")
@@ -32,7 +36,12 @@ public class RegisterOutbound {
         final Order order = orderRepository.getBy(request.orderNo);
 
         // 주문정보에 맞는 상품의 재고가 충분한지 확인하고 충분하지 않으면 예외를 던진다.
+        for (final OrderProduct orderProduct : order.orderProducts()) {
+            // 해당 상품의 재고를 전부 가져온다.
+            final List<Inventory> inventories = inventoryRepository.findByProductNo(orderProduct.getProductNo());
 
+            validateInventory(inventories, orderProduct.orderQuantity());
+        }
         // 출고에 사용할 포장재를 선택해준다.
 
         // 출고를 생성하고.
@@ -40,6 +49,19 @@ public class RegisterOutbound {
         final Outbound outbound = createOutbound(request, order);
         //출고를 등록한다.
         outboundRepository.save(outbound);
+    }
+
+    void validateInventory(final List<Inventory> inventories, final Long orderQuantity) {
+        final long totalInventoryQuantity = inventories.stream()
+                .filter(i -> 0L < i.getInventoryQuantity())
+                .filter(i -> i.getLpn().getExpirationAt().isAfter(LocalDateTime.now()))
+                .mapToLong(Inventory::getInventoryQuantity)
+                .sum();
+        // 재고가 주문한 수량보다 적으면 예외를 던진다.
+        if (totalInventoryQuantity < orderQuantity) {
+            throw new IllegalArgumentException(
+                    "재고가 부족합니다. 재고 수량:%d, 주문 수량:%d".formatted(totalInventoryQuantity, orderQuantity));
+        }
     }
 
     private Outbound createOutbound(final Request request, final Order order) {
