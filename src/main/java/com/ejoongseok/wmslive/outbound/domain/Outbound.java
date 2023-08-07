@@ -19,13 +19,19 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 @Entity
 @Table(name = "outbound")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Outbound {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "outbound_no")
     @Comment("출고 번호")
+    private Long outboundNo;
+
+    @Comment("주문 번호")
+    @Column(name = "order_no")
     private Long orderNo;
     @Embedded
     private OrderCustomer orderCustomer;
@@ -40,10 +46,6 @@ public class Outbound {
     @Column(name = "desired_delivery_at", nullable = false)
     @Comment("희망 출고일")
     private LocalDate desiredDeliveryAt;
-    @Getter
-    @Column(name = "outbound_no")
-    @Comment("출고 번호")
-    private Long outboundNo;
 
     public Outbound(final Long orderNo, final OrderCustomer orderCustomer, final String deliveryRequirements, final List<OutboundProduct> outboundProducts, final Boolean isPriorityDelivery, final LocalDate desiredDeliveryAt) {
         Assert.notNull(orderNo, "주문번호는 필수입니다.");
