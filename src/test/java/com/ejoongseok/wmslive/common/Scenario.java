@@ -43,7 +43,7 @@ public class Scenario {
         return new RegisterPackagingMaterialApi();
     }
 
-    public RegisterOutboundApi registerOutbound() {
+    public static RegisterOutboundApi registerOutbound() {
         return new RegisterOutboundApi();
     }
 }

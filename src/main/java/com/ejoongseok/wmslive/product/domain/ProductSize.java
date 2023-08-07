@@ -50,4 +50,8 @@ public class ProductSize {
             throw new IllegalArgumentException("상품의 길이는 0보다 작을 수 없습니다.");
         }
     }
+
+    public Long getVolume() {
+        return widthInMillimeters * heightInMillimeters * lengthInMillimeters;
+    }
 }

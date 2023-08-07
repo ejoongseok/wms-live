@@ -24,4 +24,16 @@ public class Order {
         this.deliveryRequirements = deliveryRequirements;
         this.orderProducts = orderProducts;
     }
+
+    public Long totalWeight() {
+        return orderProducts.stream()
+                .mapToLong(OrderProduct::getWeight)
+                .sum();
+    }
+
+    public Long totalVolume() {
+        return orderProducts.stream()
+                .mapToLong(OrderProduct::getVolume)
+                .sum();
+    }
 }

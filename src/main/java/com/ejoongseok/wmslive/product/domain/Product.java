@@ -116,4 +116,7 @@ public class Product {
         Assert.notNull(productSize, "상품크기는 필수입니다.");
     }
 
+    public Long getVolume() {
+        return productSize.getVolume();
+    }
 }

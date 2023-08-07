@@ -4,9 +4,12 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
@@ -46,6 +49,9 @@ public class Outbound {
     @Column(name = "desired_delivery_at", nullable = false)
     @Comment("희망 출고일")
     private LocalDate desiredDeliveryAt;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "packaging_material_no")
+    private PackagingMaterial recommendedPackagingMaterial;
 
     public Outbound(
             final Long orderNo,
@@ -53,7 +59,9 @@ public class Outbound {
             final String deliveryRequirements,
             final List<OutboundProduct> outboundProducts,
             final Boolean isPriorityDelivery,
-            final LocalDate desiredDeliveryAt) {
+            final LocalDate desiredDeliveryAt,
+            final PackagingMaterial recommendedPackagingMaterial) {
+        this.recommendedPackagingMaterial = recommendedPackagingMaterial;
         validateConstructor(
                 orderNo,
                 orderCustomer,
