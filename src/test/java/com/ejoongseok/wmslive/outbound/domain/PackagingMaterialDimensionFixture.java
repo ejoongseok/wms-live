@@ -1,6 +1,4 @@
-package com.ejoongseok.wmslive.outbound.feature;
-
-import com.ejoongseok.wmslive.outbound.domain.PackagingMaterialDimension;
+package com.ejoongseok.wmslive.outbound.domain;
 
 public class PackagingMaterialDimensionFixture {
 

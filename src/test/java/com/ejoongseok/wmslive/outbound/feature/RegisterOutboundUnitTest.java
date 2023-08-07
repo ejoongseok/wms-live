@@ -1,23 +1,21 @@
 package com.ejoongseok.wmslive.outbound.feature;
 
-import com.ejoongseok.wmslive.inbound.domain.LPN;
-import com.ejoongseok.wmslive.location.domain.Inventory;
-import com.ejoongseok.wmslive.location.domain.Location;
-import com.ejoongseok.wmslive.outbound.domain.Order;
-import com.ejoongseok.wmslive.outbound.domain.PackagingMaterial;
+import com.ejoongseok.wmslive.outbound.domain.Outbound;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import static com.ejoongseok.wmslive.inbound.domain.LPNFixture.anLPN;
-import static com.ejoongseok.wmslive.location.domain.LocationFixture.aLocation;
+import static com.ejoongseok.wmslive.location.domain.InventoriesFixture.anInventories;
+import static com.ejoongseok.wmslive.location.domain.InventoryFixture.anInventory;
 import static com.ejoongseok.wmslive.outbound.domain.OrderFixture.anOrder;
-import static com.ejoongseok.wmslive.outbound.domain.OrderProductFixture.anOrderProduct;
-import static com.ejoongseok.wmslive.outbound.feature.PackagingMaterialFIxture.aPackagingMaterial;
+import static com.ejoongseok.wmslive.outbound.domain.PackagingMaterialDimensionFixture.aPackagingMaterialDimension;
+import static com.ejoongseok.wmslive.outbound.domain.PackagingMaterialFIxture.aPackagingMaterial;
+import static com.ejoongseok.wmslive.outbound.feature.PackagingMaterialsFixture.aPackagingMaterials;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -31,58 +29,82 @@ class RegisterOutboundUnitTest {
     }
 
     @Test
-    @DisplayName("주문한 상품을 포장할 수 있는 포장재를 찾는다.")
-    void findOptimalPackagingMaterial() {
-        final Order order = anOrder().build();
-        final PackagingMaterial packagingMaterial = aPackagingMaterial().build();
+    @DisplayName("출고를 생성한다.")
+    void createOutbound() {
+        final Outbound outbound = registerOutbound.createOutbound(
+                List.of(anInventories().build()),
+                aPackagingMaterials().build(),
+                anOrder().build(),
+                false,
+                LocalDate.now());
 
-        final Optional<PackagingMaterial> optimalPackagingMaterial = registerOutbound.findOptimalPackagingMaterial(order, List.of(packagingMaterial));
-
-        assertThat(optimalPackagingMaterial.isPresent()).isEqualTo(true);
+        assertThat(outbound).isNotNull();
     }
 
     @Test
-    @DisplayName("주문한 상품을 포장할 수 있는 포장재를 찾는다.")
-    void empty_findOptimalPackagingMaterial() {
-        final Order order = anOrder()
-                .orderProduct(anOrderProduct().orderQuantity(100L))
-                .build();
-        final PackagingMaterial packagingMaterial = aPackagingMaterial().build();
-
-        final Optional<PackagingMaterial> optimalPackagingMaterial = registerOutbound.findOptimalPackagingMaterial(order, List.of(packagingMaterial));
-
-        assertThat(optimalPackagingMaterial.isPresent()).isEqualTo(false);
-    }
-
-    @Test
-    @DisplayName("주문한 상품을 출고할 수 있는 재고가 있는지 확인한다.")
-    void validateInventory() {
-        final Inventory inventory = new Inventory(aLocation().build(), anLPN().build());
-
-        new Inventories(List.of(inventory), 1L).validateInventory();
-    }
-
-    @Test
-    @DisplayName("주문한 상품을 출고할 수 있는 재고가 있는지 확인한다.")
-    void fail_over_quantity_validateInventory() {
-        final Inventory inventory = new Inventory(aLocation().build(), anLPN().build());
+    @DisplayName("출고를 생성한다. - 출고 수량이 재고 수량보다 많을 경우 예외가 발생한다.")
+    void fail_over_quantity_createOutbound() {
 
         assertThatThrownBy(() -> {
-            new Inventories(List.of(inventory), 2L).validateInventory();
+            registerOutbound.createOutbound(
+                    List.of(anInventories().orderQuantity(2L).build()),
+                    aPackagingMaterials().build(),
+                    anOrder().build(),
+                    false,
+                    LocalDate.now());
         }).isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("재고가 부족합니다.");
     }
 
     @Test
-    @DisplayName("주문한 상품을 출고할 수 있는 재고가 있는지 확인한다.")
-    void expire_validateInventory() {
-        final Location location = aLocation().build();
-        final LPN expiredLPN = anLPN().expirationAt(LocalDateTime.now().minusDays(1)).build();
-        final Inventory inventory = new Inventory(location, expiredLPN);
+    @DisplayName("출고를 생성한다. - (유통기한이 지나서 재고가 부족)출고 수량이 재고 수량보다 많을 경우 예외가 발생한다.")
+    void expire_createOutbound() {
 
         assertThatThrownBy(() -> {
-            new Inventories(List.of(inventory), 1L).validateInventory();
+            registerOutbound.createOutbound(
+                    List.of(anInventories()
+                            .inventories(anInventory()
+                                    .lpn(anLPN().expirationAt(LocalDateTime.now().minusDays(1))))
+                            .build()),
+                    aPackagingMaterials().build(),
+                    anOrder().build(),
+                    false,
+                    LocalDate.now());
         }).isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("재고가 부족합니다.");
+    }
+
+    @Test
+    @DisplayName("출고를 생선한다. - 주문을 포장할 포장재를 찾을 수 없다. - 제한 무게를 초과")
+    void over_max_weight_createOutbound() {
+        final Outbound outbound = registerOutbound.createOutbound(
+                List.of(anInventories().build()),
+                aPackagingMaterials().packagingMaterials(
+                        aPackagingMaterial().maxWeightInGrams(1L)
+                ).build(),
+                anOrder().build(),
+                false,
+                LocalDate.now());
+
+        assertThat(outbound.getRecommendedPackagingMaterial()).isNull();
+    }
+
+    @Test
+    @DisplayName("출고를 생선한다. - 주문을 포장할 포장재를 찾을 수 없다. - 허용 가능한 부피 초과")
+    void over_volume_createOutbound() {
+        final Outbound outbound = registerOutbound.createOutbound(
+                List.of(anInventories().build()),
+                aPackagingMaterials().packagingMaterials(
+                        aPackagingMaterial().dimension(
+                                aPackagingMaterialDimension()
+                                        .innerHeightInMillimeters(1L)
+                                        .innerWidthInMillimeters(1L)
+                        )
+                ).build(),
+                anOrder().build(),
+                false,
+                LocalDate.now());
+
+        assertThat(outbound.getRecommendedPackagingMaterial()).isNull();
     }
 }

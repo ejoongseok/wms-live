@@ -1,9 +1,6 @@
-package com.ejoongseok.wmslive.outbound.feature;
+package com.ejoongseok.wmslive.outbound.domain;
 
-import com.ejoongseok.wmslive.outbound.domain.MaterialType;
-import com.ejoongseok.wmslive.outbound.domain.PackagingMaterial;
-
-import static com.ejoongseok.wmslive.outbound.feature.PackagingMaterialDimensionFixture.aPackagingMaterialDimension;
+import static com.ejoongseok.wmslive.outbound.domain.PackagingMaterialDimensionFixture.aPackagingMaterialDimension;
 
 public class PackagingMaterialFIxture {
 
@@ -28,7 +25,7 @@ public class PackagingMaterialFIxture {
         return this;
     }
 
-    public PackagingMaterialFIxture packagingMaterialDimensionFixture(final PackagingMaterialDimensionFixture packagingMaterialDimensionFixture) {
+    public PackagingMaterialFIxture dimension(final PackagingMaterialDimensionFixture packagingMaterialDimensionFixture) {
         this.packagingMaterialDimensionFixture = packagingMaterialDimensionFixture;
         return this;
     }
