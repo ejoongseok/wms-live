@@ -47,13 +47,20 @@ public class Outbound {
     @Comment("희망 출고일")
     private LocalDate desiredDeliveryAt;
 
-    public Outbound(final Long orderNo, final OrderCustomer orderCustomer, final String deliveryRequirements, final List<OutboundProduct> outboundProducts, final Boolean isPriorityDelivery, final LocalDate desiredDeliveryAt) {
-        Assert.notNull(orderNo, "주문번호는 필수입니다.");
-        Assert.notNull(orderCustomer, "주문고객은 필수입니다.");
-        Assert.notNull(deliveryRequirements, "배송요구사항은 필수입니다.");
-        Assert.notEmpty(outboundProducts, "출고상품은 필수입니다.");
-        Assert.notNull(isPriorityDelivery, "우선출고여부는 필수입니다.");
-        Assert.notNull(desiredDeliveryAt, "희망출고일은 필수입니다.");
+    public Outbound(
+            final Long orderNo,
+            final OrderCustomer orderCustomer,
+            final String deliveryRequirements,
+            final List<OutboundProduct> outboundProducts,
+            final Boolean isPriorityDelivery,
+            final LocalDate desiredDeliveryAt) {
+        validateConstructor(
+                orderNo,
+                orderCustomer,
+                deliveryRequirements,
+                outboundProducts,
+                isPriorityDelivery,
+                desiredDeliveryAt);
         this.orderNo = orderNo;
         this.orderCustomer = orderCustomer;
         this.deliveryRequirements = deliveryRequirements;
@@ -61,6 +68,15 @@ public class Outbound {
         this.desiredDeliveryAt = desiredDeliveryAt;
         this.outboundProducts = outboundProducts;
         outboundProducts.forEach(outboundProduct -> outboundProduct.assignOutbound(this));
+    }
+
+    private void validateConstructor(final Long orderNo, final OrderCustomer orderCustomer, final String deliveryRequirements, final List<OutboundProduct> outboundProducts, final Boolean isPriorityDelivery, final LocalDate desiredDeliveryAt) {
+        Assert.notNull(orderNo, "주문번호는 필수입니다.");
+        Assert.notNull(orderCustomer, "주문고객은 필수입니다.");
+        Assert.notNull(deliveryRequirements, "배송요구사항은 필수입니다.");
+        Assert.notEmpty(outboundProducts, "출고상품은 필수입니다.");
+        Assert.notNull(isPriorityDelivery, "우선출고여부는 필수입니다.");
+        Assert.notNull(desiredDeliveryAt, "희망출고일은 필수입니다.");
     }
 
     public void assignNo(final Long outboundNo) {

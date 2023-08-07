@@ -1,6 +1,7 @@
 package com.ejoongseok.wmslive.outbound.feature;
 
 import com.ejoongseok.wmslive.outbound.domain.Order;
+import com.ejoongseok.wmslive.outbound.domain.OrderProduct;
 import com.ejoongseok.wmslive.outbound.domain.OrderRepository;
 import com.ejoongseok.wmslive.outbound.domain.Outbound;
 import com.ejoongseok.wmslive.outbound.domain.OutboundProduct;
@@ -35,23 +36,35 @@ public class RegisterOutbound {
         // 출고에 사용할 포장재를 선택해준다.
 
         // 출고를 생성하고.
-        final List<OutboundProduct> outboundProducts = order.orderProducts().stream()
-                .map(orderProduct -> new OutboundProduct(
-                        orderProduct.product(),
-                        orderProduct.orderQuantity(),
-                        orderProduct.unitPrice()))
-                .toList();
 
-        final Outbound outbound = new Outbound(
+        final Outbound outbound = createOutbound(request, order);
+        //출고를 등록한다.
+        outboundRepository.save(outbound);
+    }
+
+    private Outbound createOutbound(final Request request, final Order order) {
+        return new Outbound(
                 order.orderNo(),
                 order.orderCustomer(),
                 order.deliveryRequirements(),
-                outboundProducts,
+                mapToOutboundProducts(order.orderProducts()),
                 request.isPriorityDelivery,
                 request.desiredDeliveryAt
         );
-        //출고를 등록한다.
-        outboundRepository.save(outbound);
+    }
+
+    private List<OutboundProduct> mapToOutboundProducts(
+            final List<OrderProduct> orderProducts) {
+        return orderProducts.stream()
+                .map(this::newOutboundProduct)
+                .toList();
+    }
+
+    private OutboundProduct newOutboundProduct(final OrderProduct orderProduct) {
+        return new OutboundProduct(
+                orderProduct.product(),
+                orderProduct.orderQuantity(),
+                orderProduct.unitPrice());
     }
 
     public record Request(
