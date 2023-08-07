@@ -1,12 +1,13 @@
 package com.ejoongseok.wmslive.outbound.feature;
 
+import com.ejoongseok.wmslive.product.domain.Product;
+import com.ejoongseok.wmslive.product.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.Assert;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 
 class RegisterOutboundTest {
@@ -38,7 +39,18 @@ class RegisterOutboundTest {
         private OrderRepository orderRepository;
 
         public void request(final Request request) {
-            orderRepository.getBy(request.orderNo);
+            //주문 정보를 가져오고.
+            final Order order = orderRepository.getBy(request.orderNo);
+
+            // 주문정보에 맞는 상품의 재고가 충분한지 확인하고 충분하지 않으면 예외를 던진다.
+
+            // 출고에 사용할 포장재를 선택해준다.
+
+            // 출고를 생성하고.
+            for (final OrderProduct orderProduct : order.orderProducts) {
+                orderProduct
+            }
+            //출고를 등록한다.
         }
 
         public record Request(
@@ -55,6 +67,8 @@ class RegisterOutboundTest {
     }
 
     private class OrderRepository {
+        private ProductRepository productRepository;
+
         public Order getBy(final Long orderNo) {
             return new Order(
                     orderNo,
@@ -68,7 +82,7 @@ class RegisterOutboundTest {
                     "배송 요구사항",
                     List.of(
                             new OrderProduct(
-                                    1L,
+                                    productRepository.getBy(1L),
                                     1L,
                                     1500L)
                     ));
@@ -116,12 +130,12 @@ class RegisterOutboundTest {
     }
 
     private class OrderProduct {
-        private final Long productNo;
+        private final Product product;
         private final Long orderQuantity;
         private final Long unitPrice;
 
-        public OrderProduct(final Long productNo, final Long orderQuantity, final Long unitPrice) {
-            this.productNo = productNo;
+        public OrderProduct(final Product product, final Long orderQuantity, final Long unitPrice) {
+            this.product = product;
             this.orderQuantity = orderQuantity;
             this.unitPrice = unitPrice;
             throw new UnsupportedOperationException("Unsupported OrderProduct");
