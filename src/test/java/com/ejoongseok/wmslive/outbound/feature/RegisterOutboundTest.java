@@ -53,6 +53,15 @@ class RegisterOutboundTest {
                             orderProduct.orderQuantity,
                             orderProduct.unitPrice))
                     .toList();
+
+            final Outbound outbound = new Outbound(
+                    order.orderNo,
+                    order.orderCustomer,
+                    order.deliveryRequirements,
+                    outboundProducts,
+                    request.isPriorityDelivery,
+                    request.desiredDeliveryAt
+            );
             //출고를 등록한다.
         }
 
@@ -159,6 +168,30 @@ class RegisterOutboundTest {
             this.product = product;
             this.orderQuantity = orderQuantity;
             this.unitPrice = unitPrice;
+        }
+    }
+
+    private class Outbound {
+        private final Long orderNo;
+        private final OrderCustomer orderCustomer;
+        private final String deliveryRequirements;
+        private final List<OutboundProduct> outboundProducts;
+        private final Boolean isPriorityDelivery;
+        private final LocalDate desiredDeliveryAt;
+
+        public Outbound(final Long orderNo, final OrderCustomer orderCustomer, final String deliveryRequirements, final List<OutboundProduct> outboundProducts, final Boolean isPriorityDelivery, final LocalDate desiredDeliveryAt) {
+            Assert.notNull(orderNo, "주문번호는 필수입니다.");
+            Assert.notNull(orderCustomer, "주문고객은 필수입니다.");
+            Assert.notNull(deliveryRequirements, "배송요구사항은 필수입니다.");
+            Assert.notEmpty(outboundProducts, "출고상품은 필수입니다.");
+            Assert.notNull(isPriorityDelivery, "우선출고여부는 필수입니다.");
+            Assert.notNull(desiredDeliveryAt, "희망출고일은 필수입니다.");
+            this.orderNo = orderNo;
+            this.orderCustomer = orderCustomer;
+            this.deliveryRequirements = deliveryRequirements;
+            this.outboundProducts = outboundProducts;
+            this.isPriorityDelivery = isPriorityDelivery;
+            this.desiredDeliveryAt = desiredDeliveryAt;
         }
     }
 }
