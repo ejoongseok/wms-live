@@ -16,12 +16,16 @@ class RegisterOutboundTest {
     @Test
     @DisplayName("출고를 등록한다.")
     void registerOutbound() {
-        registerOutbound.request();
+        final RegisterOutbound.Request request = new RegisterOutbound.Request();
+        registerOutbound.request(request);
     }
 
     private class RegisterOutbound {
-        public void request() {
+        public void request(final Request request) {
 
+        }
+
+        public record Request() {
         }
     }
 }
