@@ -3,7 +3,6 @@ package com.ejoongseok.wmslive.outbound.feature;
 import com.ejoongseok.wmslive.inbound.domain.LPN;
 import com.ejoongseok.wmslive.location.domain.Inventory;
 import com.ejoongseok.wmslive.location.domain.Location;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -14,14 +13,7 @@ import static com.ejoongseok.wmslive.inbound.domain.LPNFixture.anLPN;
 import static com.ejoongseok.wmslive.location.domain.LocationFixture.aLocation;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class RegisterOutboundUnitTest {
-
-    private RegisterOutbound registerOutbound;
-
-    @BeforeEach
-    void setUp() {
-        registerOutbound = new RegisterOutbound(null, null, null);
-    }
+class InventoriesTest {
 
     @Test
     @DisplayName("주문한 상품을 출고할 수 있는 재고가 있는지 확인한다.")
