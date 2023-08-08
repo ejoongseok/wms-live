@@ -51,8 +51,8 @@ public class RegisterOutbound {
     private List<Inventories> inventoriesList(final List<OrderProduct> orderProducts) {
         return orderProducts.stream()
                 .map(orderProduct -> new Inventories(
-                        inventoryRepository.findByProductNo(orderProduct.getProductNo()),
-                        orderProduct.orderQuantity())).
+                        inventoryRepository.findByProductNo(orderProduct.getProductNo())
+                )).
                 toList();
     }
 
@@ -63,18 +63,21 @@ public class RegisterOutbound {
             final Boolean isPriorityDelivery,
             final LocalDate desiredDeliveryAt) {
         for (final OrderProduct orderProduct : order.orderProducts()) {
-            final Inventories inventories = inventoriesList.stream()
-                    .filter(i -> i.equalsProductNo(orderProduct.getProductNo()))
-                    .findFirst()
-                    .orElseThrow();
-//            inventories.validateInventory(orderProduct.orderQuantity());
+            final Inventories inventories = getInventories(inventoriesList, orderProduct);
+            inventories.validateInventory(orderProduct.orderQuantity());
         }
-        inventoriesList.forEach(Inventories::validateInventory);
         return newOutbound(
                 order,
                 packagingMaterials.findOptimalPackagingMaterial(order.totalWeight(), order.totalVolume()).orElse(null),
                 isPriorityDelivery,
                 desiredDeliveryAt);
+    }
+
+    private Inventories getInventories(final List<Inventories> inventoriesList, final OrderProduct orderProduct) {
+        return inventoriesList.stream()
+                .filter(i -> i.equalsProductNo(orderProduct.getProductNo()))
+                .findFirst()
+                .orElseThrow();
     }
 
     private Outbound newOutbound(

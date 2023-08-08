@@ -13,6 +13,7 @@ import static com.ejoongseok.wmslive.inbound.domain.LPNFixture.anLPN;
 import static com.ejoongseok.wmslive.location.domain.InventoriesFixture.anInventories;
 import static com.ejoongseok.wmslive.location.domain.InventoryFixture.anInventory;
 import static com.ejoongseok.wmslive.outbound.domain.OrderFixture.anOrder;
+import static com.ejoongseok.wmslive.outbound.domain.OrderProductFixture.anOrderProduct;
 import static com.ejoongseok.wmslive.outbound.domain.PackagingMaterialDimensionFixture.aPackagingMaterialDimension;
 import static com.ejoongseok.wmslive.outbound.domain.PackagingMaterialFixture.aPackagingMaterial;
 import static com.ejoongseok.wmslive.outbound.feature.PackagingMaterialsFixture.aPackagingMaterials;
@@ -47,9 +48,11 @@ class RegisterOutboundUnitTest {
 
         assertThatThrownBy(() -> {
             registerOutbound.createOutbound(
-                    List.of(anInventories().orderQuantity(2L).build()),
+                    List.of(anInventories().build()),
                     aPackagingMaterials().build(),
-                    anOrder().build(),
+                    anOrder().orderProduct(
+                            anOrderProduct().orderQuantity(2L)
+                    ).build(),
                     false,
                     LocalDate.now());
         }).isInstanceOf(IllegalArgumentException.class)
