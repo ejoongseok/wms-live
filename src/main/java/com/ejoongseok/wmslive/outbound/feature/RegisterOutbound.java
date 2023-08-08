@@ -62,6 +62,13 @@ public class RegisterOutbound {
             final Order order,
             final Boolean isPriorityDelivery,
             final LocalDate desiredDeliveryAt) {
+        for (final OrderProduct orderProduct : order.orderProducts()) {
+            final Inventories inventories = inventoriesList.stream()
+                    .filter(i -> i.equalsProductNo(orderProduct.getProductNo()))
+                    .findFirst()
+                    .orElseThrow();
+//            inventories.validateInventory(orderProduct.orderQuantity());
+        }
         inventoriesList.forEach(Inventories::validateInventory);
         return newOutbound(
                 order,

@@ -22,4 +22,8 @@ public record Inventories(List<Inventory> inventories, Long orderQuantity) {
                 .sum();
     }
 
+    public boolean equalsProductNo(final Long productNo) {
+        return inventories.stream()
+                .anyMatch(inventory -> inventory.getProductNo().equals(productNo));
+    }
 }
