@@ -57,4 +57,12 @@ public class Inventory {
     boolean matchLpnToLocation(final LPN lpn) {
         return this.lpn.equals(lpn);
     }
+
+    public boolean isFresh() {
+        return lpn.isFresh();
+    }
+
+    public boolean hasInventory() {
+        return 0L < inventoryQuantity;
+    }
 }
