@@ -60,15 +60,6 @@ public class RegisterOutbound {
                 toList();
     }
 
-    Outbound createOutbound(
-            final List<Inventories> inventoriesList,
-            final PackagingMaterials packagingMaterials,
-            final Order order,
-            final Boolean isPriorityDelivery,
-            final LocalDate desiredDeliveryAt) {
-        return constructOutbound.create(inventoriesList, packagingMaterials, order, isPriorityDelivery, desiredDeliveryAt);
-    }
-
     public record Request(
             @NotNull(message = "주문번호는 필수입니다.")
             Long orderNo,
