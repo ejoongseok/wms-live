@@ -31,6 +31,7 @@ public class RegisterOutbound {
     private final OutboundRepository outboundRepository;
     private final InventoryRepository inventoryRepository;
     private final PackagingMaterialRepository packagingMaterialRepository;
+    private final ConsturctOutbound consturctOutbound = new ConsturctOutbound();
 
 
     @PostMapping("/outbounds")
@@ -42,7 +43,7 @@ public class RegisterOutbound {
         final List<Inventories> inventoriesList = inventoriesList(order.orderProducts());
         final PackagingMaterials packagingMaterials = new PackagingMaterials(packagingMaterialRepository.findAll());
 
-        final Outbound outbound = createOutbound(inventoriesList, packagingMaterials, order, request.isPriorityDelivery, request.desiredDeliveryAt);
+        final Outbound outbound = consturctOutbound.createOutbound(inventoriesList, packagingMaterials, order, request.isPriorityDelivery, request.desiredDeliveryAt);
 
         //출고를 등록한다.
         outboundRepository.save(outbound);
@@ -62,26 +63,15 @@ public class RegisterOutbound {
             final Order order,
             final Boolean isPriorityDelivery,
             final LocalDate desiredDeliveryAt) {
-        validateInventory(inventoriesList, order.orderProducts());
-        return newOutbound(
-                order,
-                packagingMaterials.findOptimalPackagingMaterial(order.totalWeight(), order.totalVolume()).orElse(null),
-                isPriorityDelivery,
-                desiredDeliveryAt);
+        return consturctOutbound.createOutbound(inventoriesList, packagingMaterials, order, isPriorityDelivery, desiredDeliveryAt);
     }
 
     private void validateInventory(final List<Inventories> inventoriesList, final List<OrderProduct> orderProducts) {
-        for (final OrderProduct orderProduct : orderProducts) {
-            final Inventories inventories = getInventories(inventoriesList, orderProduct);
-            inventories.validateInventory(orderProduct.orderQuantity());
-        }
+        consturctOutbound.validateInventory(inventoriesList, orderProducts);
     }
 
     private Inventories getInventories(final List<Inventories> inventoriesList, final OrderProduct orderProduct) {
-        return inventoriesList.stream()
-                .filter(i -> i.equalsProductNo(orderProduct.getProductNo()))
-                .findFirst()
-                .orElseThrow();
+        return consturctOutbound.getInventories(inventoriesList, orderProduct);
     }
 
     private Outbound newOutbound(
@@ -89,29 +79,16 @@ public class RegisterOutbound {
             final PackagingMaterial packagingMaterial,
             final Boolean isPriorityDelivery,
             final LocalDate desiredDeliveryAt) {
-        return new Outbound(
-                order.orderNo(),
-                order.orderCustomer(),
-                order.deliveryRequirements(),
-                mapToOutboundProducts(order.orderProducts()),
-                isPriorityDelivery,
-                desiredDeliveryAt,
-                packagingMaterial
-        );
+        return consturctOutbound.newOutbound(order, packagingMaterial, isPriorityDelivery, desiredDeliveryAt);
     }
 
     private List<OutboundProduct> mapToOutboundProducts(
             final List<OrderProduct> orderProducts) {
-        return orderProducts.stream()
-                .map(this::newOutboundProduct)
-                .toList();
+        return consturctOutbound.mapToOutboundProducts(orderProducts);
     }
 
     private OutboundProduct newOutboundProduct(final OrderProduct orderProduct) {
-        return new OutboundProduct(
-                orderProduct.product(),
-                orderProduct.orderQuantity(),
-                orderProduct.unitPrice());
+        return consturctOutbound.newOutboundProduct(orderProduct);
     }
 
     public record Request(
