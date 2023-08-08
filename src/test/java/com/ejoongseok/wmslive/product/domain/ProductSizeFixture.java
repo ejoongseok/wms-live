@@ -1,6 +1,4 @@
-package com.ejoongseok.wmslive.product.fixture;
-
-import com.ejoongseok.wmslive.product.domain.ProductSize;
+package com.ejoongseok.wmslive.product.domain;
 
 public class ProductSizeFixture {
     private Long widthInMillimeters = 100L;

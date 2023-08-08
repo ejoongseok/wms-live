@@ -1,6 +1,6 @@
 package com.ejoongseok.wmslive.location.domain;
 
-import com.ejoongseok.wmslive.outbound.feature.Inventories;
+import com.ejoongseok.wmslive.outbound.domain.Inventories;
 
 import java.util.Arrays;
 import java.util.List;
@@ -8,7 +8,6 @@ import java.util.List;
 import static com.ejoongseok.wmslive.location.domain.InventoryFixture.anInventory;
 
 public class InventoriesFixture {
-    private Long orderQuantity = 1L;
     private List<InventoryFixture> inventories = List.of(anInventory());
 
     public static InventoriesFixture anInventories() {
@@ -16,12 +15,7 @@ public class InventoriesFixture {
     }
 
     public Inventories build() {
-        return new Inventories(buildInventories(), orderQuantity);
-    }
-
-    public InventoriesFixture orderQuantity(final Long orderQuantity) {
-        this.orderQuantity = orderQuantity;
-        return this;
+        return new Inventories(buildInventories());
     }
 
     public InventoriesFixture inventories(final InventoryFixture... inventories) {

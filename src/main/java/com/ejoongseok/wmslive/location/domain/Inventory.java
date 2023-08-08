@@ -41,6 +41,7 @@ public class Inventory {
     private Long inventoryQuantity;
     @Column(name = "product_no", nullable = false)
     @Comment("상품 번호")
+    @Getter
     private Long productNo;
 
     public Inventory(final Location location, final LPN lpn) {
@@ -56,5 +57,13 @@ public class Inventory {
 
     boolean matchLpnToLocation(final LPN lpn) {
         return this.lpn.equals(lpn);
+    }
+
+    public boolean isFresh() {
+        return lpn.isFresh();
+    }
+
+    public boolean hasInventory() {
+        return 0L < inventoryQuantity;
     }
 }

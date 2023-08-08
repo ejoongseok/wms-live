@@ -1,6 +1,6 @@
 package com.ejoongseok.wmslive.inbound.domain;
 
-import com.ejoongseok.wmslive.product.fixture.ProductFixture;
+import com.ejoongseok.wmslive.product.domain.ProductFixture;
 
 public class InboundItemFixture {
     private Long inboundItemNo = 1L;

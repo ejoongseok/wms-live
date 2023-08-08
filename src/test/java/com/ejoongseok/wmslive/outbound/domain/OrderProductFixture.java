@@ -1,8 +1,8 @@
 package com.ejoongseok.wmslive.outbound.domain;
 
-import com.ejoongseok.wmslive.product.fixture.ProductFixture;
+import com.ejoongseok.wmslive.product.domain.ProductFixture;
 
-import static com.ejoongseok.wmslive.product.fixture.ProductFixture.aProduct;
+import static com.ejoongseok.wmslive.product.domain.ProductFixture.aProduct;
 
 public class OrderProductFixture {
 
