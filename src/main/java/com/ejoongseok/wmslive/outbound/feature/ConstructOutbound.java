@@ -11,9 +11,7 @@ import com.ejoongseok.wmslive.outbound.domain.PackagingMaterials;
 import java.time.LocalDate;
 import java.util.List;
 
-public class ConsturctOutbound {
-    public ConsturctOutbound() {
-    }
+public class ConstructOutbound {
 
     Outbound create(
             final List<Inventories> inventoriesList,
@@ -29,21 +27,21 @@ public class ConsturctOutbound {
                 desiredDeliveryAt);
     }
 
-    void validateInventory(final List<Inventories> inventoriesList, final List<OrderProduct> orderProducts) {
+    private void validateInventory(final List<Inventories> inventoriesList, final List<OrderProduct> orderProducts) {
         for (final OrderProduct orderProduct : orderProducts) {
             final Inventories inventories = getInventories(inventoriesList, orderProduct);
             inventories.validateInventory(orderProduct.orderQuantity());
         }
     }
 
-    Inventories getInventories(final List<Inventories> inventoriesList, final OrderProduct orderProduct) {
+    private Inventories getInventories(final List<Inventories> inventoriesList, final OrderProduct orderProduct) {
         return inventoriesList.stream()
                 .filter(i -> i.equalsProductNo(orderProduct.getProductNo()))
                 .findFirst()
                 .orElseThrow();
     }
 
-    Outbound newOutbound(
+    private Outbound newOutbound(
             final Order order,
             final PackagingMaterial packagingMaterial,
             final Boolean isPriorityDelivery,
@@ -59,14 +57,14 @@ public class ConsturctOutbound {
         );
     }
 
-    List<OutboundProduct> mapToOutboundProducts(
+    private List<OutboundProduct> mapToOutboundProducts(
             final List<OrderProduct> orderProducts) {
         return orderProducts.stream()
-                .map(null::newOutboundProduct)
+                .map(this::newOutboundProduct)
                 .toList();
     }
 
-    OutboundProduct newOutboundProduct(final OrderProduct orderProduct) {
+    private OutboundProduct newOutboundProduct(final OrderProduct orderProduct) {
         return new OutboundProduct(
                 orderProduct.product(),
                 orderProduct.orderQuantity(),
