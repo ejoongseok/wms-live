@@ -15,7 +15,7 @@ public class ConsturctOutbound {
     public ConsturctOutbound() {
     }
 
-    Outbound createOutbound(
+    Outbound create(
             final List<Inventories> inventoriesList,
             final PackagingMaterials packagingMaterials,
             final Order order,

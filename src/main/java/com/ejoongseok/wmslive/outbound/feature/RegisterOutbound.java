@@ -43,7 +43,12 @@ public class RegisterOutbound {
         final List<Inventories> inventoriesList = inventoriesList(order.orderProducts());
         final PackagingMaterials packagingMaterials = new PackagingMaterials(packagingMaterialRepository.findAll());
 
-        final Outbound outbound = consturctOutbound.createOutbound(inventoriesList, packagingMaterials, order, request.isPriorityDelivery, request.desiredDeliveryAt);
+        final Outbound outbound = consturctOutbound.create(
+                inventoriesList,
+                packagingMaterials,
+                order,
+                request.isPriorityDelivery,
+                request.desiredDeliveryAt);
 
         //출고를 등록한다.
         outboundRepository.save(outbound);
@@ -63,7 +68,7 @@ public class RegisterOutbound {
             final Order order,
             final Boolean isPriorityDelivery,
             final LocalDate desiredDeliveryAt) {
-        return consturctOutbound.createOutbound(inventoriesList, packagingMaterials, order, isPriorityDelivery, desiredDeliveryAt);
+        return consturctOutbound.create(inventoriesList, packagingMaterials, order, isPriorityDelivery, desiredDeliveryAt);
     }
 
     private void validateInventory(final List<Inventories> inventoriesList, final List<OrderProduct> orderProducts) {
