@@ -95,7 +95,18 @@ public class Product {
     }
 
     @VisibleForTesting
-    Product(final Long productNo, final String name, final String code, final String description, final String brand, final String maker, final String origin, final Category category, final TemperatureZone temperatureZone, final Long weightInGrams, final ProductSize productSize) {
+    Product(
+            final Long productNo,
+            final String name,
+            final String code,
+            final String description,
+            final String brand,
+            final String maker,
+            final String origin,
+            final Category category,
+            final TemperatureZone temperatureZone,
+            final Long weightInGrams,
+            final ProductSize productSize) {
         this(name, code, description, brand, maker, origin, category, temperatureZone, weightInGrams, productSize);
         this.productNo = productNo;
     }
