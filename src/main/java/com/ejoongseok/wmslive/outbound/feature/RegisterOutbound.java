@@ -1,6 +1,7 @@
 package com.ejoongseok.wmslive.outbound.feature;
 
 import com.ejoongseok.wmslive.location.domain.InventoryRepository;
+import com.ejoongseok.wmslive.outbound.domain.Inventories;
 import com.ejoongseok.wmslive.outbound.domain.Order;
 import com.ejoongseok.wmslive.outbound.domain.OrderProduct;
 import com.ejoongseok.wmslive.outbound.domain.OrderRepository;
@@ -9,6 +10,7 @@ import com.ejoongseok.wmslive.outbound.domain.OutboundProduct;
 import com.ejoongseok.wmslive.outbound.domain.OutboundRepository;
 import com.ejoongseok.wmslive.outbound.domain.PackagingMaterial;
 import com.ejoongseok.wmslive.outbound.domain.PackagingMaterialRepository;
+import com.ejoongseok.wmslive.outbound.domain.PackagingMaterials;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;

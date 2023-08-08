@@ -2,6 +2,7 @@ package com.ejoongseok.wmslive.outbound.feature;
 
 import com.ejoongseok.wmslive.outbound.domain.PackagingMaterial;
 import com.ejoongseok.wmslive.outbound.domain.PackagingMaterialFixture;
+import com.ejoongseok.wmslive.outbound.domain.PackagingMaterials;
 
 import java.util.Arrays;
 import java.util.List;

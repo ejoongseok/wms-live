@@ -1,6 +1,6 @@
 package com.ejoongseok.wmslive.location.domain;
 
-import com.ejoongseok.wmslive.outbound.feature.Inventories;
+import com.ejoongseok.wmslive.outbound.domain.Inventories;
 
 import java.util.Arrays;
 import java.util.List;
