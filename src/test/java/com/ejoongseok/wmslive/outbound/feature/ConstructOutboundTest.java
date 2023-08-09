@@ -15,7 +15,7 @@ import static com.ejoongseok.wmslive.outbound.domain.OrderFixture.anOrder;
 import static com.ejoongseok.wmslive.outbound.domain.OrderProductFixture.anOrderProduct;
 import static com.ejoongseok.wmslive.outbound.domain.PackagingMaterialDimensionFixture.aPackagingMaterialDimension;
 import static com.ejoongseok.wmslive.outbound.domain.PackagingMaterialFixture.aPackagingMaterial;
-import static com.ejoongseok.wmslive.outbound.feature.PackagingMaterialsFixture.aPackagingMaterials;
+import static com.ejoongseok.wmslive.outbound.domain.PackagingMaterialsFixture.aPackagingMaterials;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 

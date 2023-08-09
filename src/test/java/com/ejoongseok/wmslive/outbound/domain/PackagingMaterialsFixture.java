@@ -1,8 +1,4 @@
-package com.ejoongseok.wmslive.outbound.feature;
-
-import com.ejoongseok.wmslive.outbound.domain.PackagingMaterial;
-import com.ejoongseok.wmslive.outbound.domain.PackagingMaterialFixture;
-import com.ejoongseok.wmslive.outbound.domain.PackagingMaterials;
+package com.ejoongseok.wmslive.outbound.domain;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,7 +18,7 @@ public class PackagingMaterialsFixture {
         return this;
     }
 
-    PackagingMaterials build() {
+    public PackagingMaterials build() {
         return new PackagingMaterials(buildPackagingMaterials());
     }
 
