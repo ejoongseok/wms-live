@@ -1,19 +1,11 @@
-package com.ejoongseok.wmslive.outbound.feature;
-
-import com.ejoongseok.wmslive.outbound.domain.Inventories;
-import com.ejoongseok.wmslive.outbound.domain.Order;
-import com.ejoongseok.wmslive.outbound.domain.OrderProduct;
-import com.ejoongseok.wmslive.outbound.domain.Outbound;
-import com.ejoongseok.wmslive.outbound.domain.OutboundProduct;
-import com.ejoongseok.wmslive.outbound.domain.PackagingMaterial;
-import com.ejoongseok.wmslive.outbound.domain.PackagingMaterials;
+package com.ejoongseok.wmslive.outbound.domain;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public class ConstructOutbound {
 
-    Outbound create(
+    public Outbound create(
             final List<Inventories> inventoriesList,
             final PackagingMaterials packagingMaterials,
             final Order order,

@@ -1,6 +1,5 @@
-package com.ejoongseok.wmslive.outbound.feature;
+package com.ejoongseok.wmslive.outbound.domain;
 
-import com.ejoongseok.wmslive.outbound.domain.Outbound;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

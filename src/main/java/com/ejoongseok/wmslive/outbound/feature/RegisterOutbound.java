@@ -1,6 +1,7 @@
 package com.ejoongseok.wmslive.outbound.feature;
 
 import com.ejoongseok.wmslive.location.domain.InventoryRepository;
+import com.ejoongseok.wmslive.outbound.domain.ConstructOutbound;
 import com.ejoongseok.wmslive.outbound.domain.Inventories;
 import com.ejoongseok.wmslive.outbound.domain.Order;
 import com.ejoongseok.wmslive.outbound.domain.OrderProduct;
