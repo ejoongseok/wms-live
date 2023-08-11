@@ -41,13 +41,13 @@ public final class OutboundProducts {
                 .sum();
     }
 
-    public Long totalWeight() {
+    Long totalWeight() {
         return outboundProducts.stream()
                 .mapToLong(OutboundProduct::calculateOutboundProductWeight)
                 .sum();
     }
 
-    public Long totalVolume() {
+    Long totalVolume() {
         return outboundProducts.stream()
                 .mapToLong(OutboundProduct::calculateOutboundProductVolume)
                 .sum();
