@@ -1,71 +1,119 @@
 package com.ejoongseok.wmslive.outbound.feature;
 
+import com.ejoongseok.wmslive.common.ApiTest;
+import com.ejoongseok.wmslive.common.Scenario;
+import com.ejoongseok.wmslive.inbound.feature.RegisterInbound;
+import com.ejoongseok.wmslive.outbound.domain.Order;
+import com.ejoongseok.wmslive.outbound.domain.OrderCustomer;
+import com.ejoongseok.wmslive.outbound.domain.OrderProduct;
+import com.ejoongseok.wmslive.outbound.domain.OrderRepository;
 import com.ejoongseok.wmslive.outbound.domain.Outbound;
-import com.ejoongseok.wmslive.outbound.domain.OutboundProduct;
 import com.ejoongseok.wmslive.outbound.domain.OutboundRepository;
+import com.ejoongseok.wmslive.product.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.util.Assert;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 
 import java.util.List;
 
-class SplitOutboundTest {
+import static org.assertj.core.api.Assertions.assertThat;
 
-    private SplitOutbound splitOutbound;
+class SplitOutboundTest extends ApiTest {
+
+    @Autowired
+    OutboundRepository outboundRepository;
+
 
     @BeforeEach
-    void setUp() {
-        splitOutbound = new SplitOutbound();
+    void setUpSplitOutbound() {
+        Scenario
+                .registerProduct().request()
+                .registerProduct().code("code2").request()
+                .registerInbound()
+                .inboundItems(
+                        new RegisterInbound.Request.Item(
+                                1L,
+                                1L,
+                                1500L,
+                                "description"
+                        ),
+                        new RegisterInbound.Request.Item(
+                                2L,
+                                1L,
+                                1500L,
+                                "description"
+                        ))
+                .request()
+                .confirmInbound().request()
+                .registerLPN().request()
+                .registerLPN().inboundItemNo(2L).lpnBarcode("A-1-2").request()
+                .registerLocation().request()
+                .registerPackagingMaterial().request()
+                .assignInventory().request()
+                .assignInventory().lpnBarcode("A-1-2").request()
+                .registerOutbound().request();
     }
+
 
     @Test
     @DisplayName("출고를 분할한다.")
     void splitOutbound() {
         final Long outboundNo = 1L;
-        final Long productNo = 1L;
-        final Long quantity = 1L;
-        final SplitOutbound.Request.Product product = new SplitOutbound.Request.Product(
-                productNo,
-                quantity
-        );
-        final List<SplitOutbound.Request.Product> products = List.of(product);
-        final SplitOutbound.Request request = new SplitOutbound.Request(
-                outboundNo,
-                products
-        );
-        splitOutbound.request(request);
+        assertThat(outboundRepository.getBy(outboundNo).getOutboundProducts()).hasSize(2);
+
+        Scenario.splitOutbound().request();
+
+        assertSplit(outboundNo);
     }
 
-    private class SplitOutbound {
-        private OutboundRepository outboundRepository;
+    private void assertSplit(final Long outboundNo) {
+        final Outbound refresh = outboundRepository.getBy(outboundNo);
+        assertThat(refresh.getOutboundProducts()).hasSize(1);
+        assertThat(refresh.getOutboundProducts().get(0).getProductNo()).isEqualTo(2);
+        assertThat(refresh.getRecommendedPackagingMaterial()).isNotNull();
+        final Outbound splitted = outboundRepository.getBy(2L);
+        assertThat(splitted.getOutboundProducts().get(0).getProductNo()).isEqualTo(1L);
+        assertThat(splitted.getOutboundProducts()).hasSize(1);
+        assertThat(splitted.getRecommendedPackagingMaterial()).isNotNull();
+    }
 
-        public void request(final Request request) {
-            final Outbound outbound = outboundRepository.findById(request.outboundNo).orElseThrow();
-            final List<OutboundProduct> splitOutboundProducts = request.products.stream()
-                    .map(product -> outbound.splitOutboundProduct(product.productNo, product.quantity))
-                    .toList();
+    @TestConfiguration
+    static class SplitOutboundTestConfiguration {
+        @Bean
+        @Primary
+        public OrderRepository orderRepository(final ProductRepository productRepository) {
+            return new OrderRepository() {
+                @Override
+                public Order getBy(final Long orderNo) {
+                    return new Order(
+                            orderNo,
+                            new OrderCustomer(
+                                    "name",
+                                    "email",
+                                    "phone",
+                                    "zipNo",
+                                    "address"
+                            ),
+                            "배송 요구사항",
+                            List.of(
+                                    new OrderProduct(
+                                            productRepository.getBy(1L),
+                                            1L,
+                                            1500L),
 
-            final Outbound splitted = outbound.split(splitOutboundProducts);
-            // 기존 출고에 새로운 포장재를 할당.
-            // 분할된 출고에 포장재를 할당.
-
-            // 분할된 출고를 저장.
-        }
-
-        public record Request(Long outboundNo, List<Product> products) {
-            public Request {
-                Assert.notNull(outboundNo, "출고번호가 없습니다.");
-                Assert.notEmpty(products, "상품이 없습니다.");
-            }
-
-            public record Product(Long productNo, Long quantity) {
-                public Product {
-                    Assert.notNull(productNo, "상품번호가 없습니다.");
-                    Assert.notNull(quantity, "수량이 없습니다.");
-                    if (1 > quantity) throw new IllegalArgumentException("수량이 1보다 작습니다.");
+                                    new OrderProduct(
+                                            productRepository.getBy(2L),
+                                            1L,
+                                            1500L)
+                            ));
                 }
-            }
+            };
         }
     }
+
+
 }

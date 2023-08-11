@@ -8,6 +8,7 @@ import com.ejoongseok.wmslive.location.feature.api.AssignInventoryApi;
 import com.ejoongseok.wmslive.location.feature.api.RegisterLocationApi;
 import com.ejoongseok.wmslive.outbound.feature.api.RegisterOutboundApi;
 import com.ejoongseok.wmslive.outbound.feature.api.RegisterPackagingMaterialApi;
+import com.ejoongseok.wmslive.outbound.feature.api.SplitBoundApi;
 import com.ejoongseok.wmslive.product.feature.api.RegisterProductApi;
 
 public class Scenario {
@@ -45,5 +46,9 @@ public class Scenario {
 
     public static RegisterOutboundApi registerOutbound() {
         return new RegisterOutboundApi();
+    }
+
+    public static SplitBoundApi splitOutbound() {
+        return new SplitBoundApi();
     }
 }

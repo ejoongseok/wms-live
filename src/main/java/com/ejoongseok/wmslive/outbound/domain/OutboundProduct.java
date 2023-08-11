@@ -1,6 +1,7 @@
 package com.ejoongseok.wmslive.outbound.domain;
 
 import com.ejoongseok.wmslive.product.domain.Product;
+import com.google.common.annotations.VisibleForTesting;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -26,6 +27,7 @@ public class OutboundProduct {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "outbound_product_no")
     @Comment("출고 상품 번호")
+    @Getter
     private Long outboundProductNo;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_no", nullable = false)
@@ -51,6 +53,16 @@ public class OutboundProduct {
         this.product = product;
         this.orderQuantity = orderQuantity;
         this.unitPrice = unitPrice;
+    }
+
+    @VisibleForTesting
+    OutboundProduct(
+            final Long outboundProductNo,
+            final Product product,
+            final Long orderQuantity,
+            final Long unitPrice) {
+        this(product, orderQuantity, unitPrice);
+        this.outboundProductNo = outboundProductNo;
     }
 
     private void validateConstructor(final Product product, final Long orderQuantity, final Long unitPrice) {
@@ -80,5 +92,28 @@ public class OutboundProduct {
 
     boolean isSameProductNo(final Long productNo) {
         return getProductNo().equals(productNo);
+    }
+
+    public Long calculateOutboundProductWeight() {
+        return product.getWeightInGrams() * orderQuantity;
+    }
+
+    public Long calculateOutboundProductVolume() {
+        return product.getProductSize().getVolume() * orderQuantity;
+    }
+
+    public void decreaseOrderQuantity(final Long quantity) {
+        if (quantity > orderQuantity) {
+            throw new IllegalArgumentException("주문 수량보다 많은 수량을 출고할 수 없습니다.");
+        }
+        orderQuantity -= quantity;
+    }
+
+    boolean isZeroQuantity() {
+        return 0 == getOrderQuantity();
+    }
+
+    public void removeOutbound() {
+        outbound = null;
     }
 }
