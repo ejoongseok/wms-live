@@ -3,12 +3,12 @@ package com.ejoongseok.wmslive.outbound.domain;
 public class OutboundSplitter {
 
     public Outbound splitOutbound(
-            final Outbound from,
-            final OutboundProducts toProducts,
+            final Outbound outbound,
+            final OutboundProducts targetProducts,
             final PackagingMaterials packagingMaterials) {
-        final Outbound splitted = from.split(toProducts);
-        decreaseQuantity(toProducts, from.outboundProducts());
-        from.assignPackagingMaterial(getOptimalPackagingMaterial(packagingMaterials, from));
+        final Outbound splitted = outbound.split(targetProducts);
+        decreaseQuantity(targetProducts, outbound.outboundProducts());
+        outbound.assignPackagingMaterial(getOptimalPackagingMaterial(packagingMaterials, outbound));
         splitted.assignPackagingMaterial(getOptimalPackagingMaterial(packagingMaterials, splitted));
         return splitted;
     }
