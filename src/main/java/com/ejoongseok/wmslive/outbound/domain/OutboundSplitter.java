@@ -27,8 +27,8 @@ public class OutboundSplitter {
     }
 
     private void decreaseOrderQuantity(
-            final OutboundProducts splitOutboundProducts, final Outbound outbound) {
-        for (final OutboundProduct splitProduct : splitOutboundProducts.outboundProducts()) {
+            final OutboundProducts targetProducts, final Outbound outbound) {
+        for (final OutboundProduct splitProduct : targetProducts.outboundProducts()) {
             final OutboundProduct target = outbound.getOutboundProductBy(splitProduct.getProductNo());
             target.decreaseOrderQuantity(splitProduct.getOrderQuantity());
         }
