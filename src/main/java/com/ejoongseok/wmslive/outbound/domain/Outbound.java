@@ -87,9 +87,45 @@ public class Outbound {
         Assert.notNull(desiredDeliveryAt, "희망출고일은 필수입니다.");
     }
 
-    public void assignNo(final Long outboundNo) {
-        this.outboundNo = outboundNo;
+
+    public OutboundProduct splitOutboundProduct(final Long productNo, final Long quantity) {
+        final OutboundProduct outboundProduct = getOutboundProductBy(productNo);
+        return outboundProduct.split(quantity);
     }
 
+    private OutboundProduct getOutboundProductBy(final Long productNo) {
+        return outboundProducts.stream()
+                .filter(o -> o.isSameProductNo(productNo))
+                .findFirst()
+                .orElseThrow();
+    }
 
+    public Outbound split(final List<OutboundProduct> splitOutboundProducts) {
+        // 분할할 상품 목록의 수량이 기존 출고 상품 목록의 수량보다 같거나 많으면 예외를 던진다.
+        final long totalOrderQuantity = calculateTotalOrderQuantity();
+        final long splitTotalQuantity = splitTotalQuantity(splitOutboundProducts);
+        if (totalOrderQuantity <= splitTotalQuantity) throw new IllegalArgumentException("분할할 수량이 출고 수량보다 같거나 많습니다.");
+
+        return new Outbound(
+                orderNo,
+                orderCustomer,
+                deliveryRequirements,
+                splitOutboundProducts,
+                isPriorityDelivery,
+                desiredDeliveryAt,
+                null
+        );
+    }
+
+    private long splitTotalQuantity(final List<OutboundProduct> splitOutboundProducts) {
+        return splitOutboundProducts.stream()
+                .mapToLong(OutboundProduct::getOrderQuantity)
+                .sum();
+    }
+
+    private long calculateTotalOrderQuantity() {
+        return outboundProducts.stream()
+                .mapToLong(OutboundProduct::getOrderQuantity)
+                .sum();
+    }
 }

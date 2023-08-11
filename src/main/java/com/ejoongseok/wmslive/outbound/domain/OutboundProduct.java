@@ -11,6 +11,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 import org.springframework.util.Assert;
@@ -32,6 +33,7 @@ public class OutboundProduct {
     private Product product;
     @Column(name = "order_quantity", nullable = false)
     @Comment("주문 수량")
+    @Getter
     private Long orderQuantity;
     @Column(name = "unit_price", nullable = false)
     @Comment("단가")
@@ -61,5 +63,22 @@ public class OutboundProduct {
 
     public void assignOutbound(final Outbound outbound) {
         this.outbound = outbound;
+    }
+
+    public Long getProductNo() {
+        return product.getProductNo();
+    }
+
+    public OutboundProduct split(final Long splitQuantity) {
+        if (splitQuantity > orderQuantity) throw new IllegalArgumentException("분할 수량은 주문 수량보다 작아야 합니다.");
+        return new OutboundProduct(
+                product,
+                splitQuantity,
+                unitPrice
+        );
+    }
+
+    boolean isSameProductNo(final Long productNo) {
+        return getProductNo().equals(productNo);
     }
 }
