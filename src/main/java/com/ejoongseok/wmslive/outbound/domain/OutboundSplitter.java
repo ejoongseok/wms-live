@@ -7,18 +7,18 @@ public class OutboundSplitter {
             final OutboundProducts targetProducts,
             final PackagingMaterials packagingMaterials) {
         final Outbound splitted = outbound.split(targetProducts);
-        decreaseQuantity(targetProducts, outbound.outboundProducts());
+        final OutboundProducts targets = outbound.outboundProducts();
+
+        decreaseOrderQuantity(targetProducts, targets);
+        targets.removeIfZeroQuantity();
         outbound.assignPackagingMaterial(getOptimalPackagingMaterial(packagingMaterials, outbound));
         splitted.assignPackagingMaterial(getOptimalPackagingMaterial(packagingMaterials, splitted));
+
         return splitted;
     }
 
-    private void decreaseQuantity(final OutboundProducts splitProducts, final OutboundProducts targets) {
-        decreaseOrderQuantity(splitProducts, targets);
-        targets.removeIfZeroQuantity();
-    }
-
-    private void decreaseOrderQuantity(final OutboundProducts splitOutboundProducts, final OutboundProducts targets) {
+    private void decreaseOrderQuantity(
+            final OutboundProducts splitOutboundProducts, final OutboundProducts targets) {
         for (final OutboundProduct splitProduct : splitOutboundProducts.outboundProducts()) {
             final OutboundProduct target = targets.getOutboundProductBy(splitProduct.getProductNo());
             target.decreaseOrderQuantity(splitProduct.getOrderQuantity());
