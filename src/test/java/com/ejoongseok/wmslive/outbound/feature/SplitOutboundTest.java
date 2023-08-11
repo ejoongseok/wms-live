@@ -16,7 +16,16 @@ class SplitOutboundTest {
     @Test
     @DisplayName("출고를 분할한다.")
     void splitOutbound() {
-        final SplitOutbound.Request request = new SplitOutbound.Request();
+        final Long outboundNo = 1L;
+        final Long productNo = 1L;
+        final Long quantity = 1L;
+        final SplitOutbound.Request.Product product = new SplitOutbound.Request.Product(
+                productNo,
+                quantity
+        );
+        final SplitOutbound.Request request = new SplitOutbound.Request(
+                outboundNo
+        );
         splitOutbound.request(request);
     }
 
@@ -25,7 +34,9 @@ class SplitOutboundTest {
 
         }
 
-        public record Request() {
+        public record Request(Long outboundNo) {
+            public record Product(Long productNo, Long quantity) {
+            }
         }
     }
 }
