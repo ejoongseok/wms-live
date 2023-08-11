@@ -103,7 +103,7 @@ public class Outbound {
         if (totalOrderQuantity <= splitTotalQuantity) throw new IllegalArgumentException("분할할 수량이 출고 수량보다 같거나 많습니다.");
     }
 
-    public void assignPackagingMaterial(final PackagingMaterial optimalPackagingMaterial) {
+    void assignPackagingMaterial(final PackagingMaterial optimalPackagingMaterial) {
         recommendedPackagingMaterial = optimalPackagingMaterial;
     }
 
