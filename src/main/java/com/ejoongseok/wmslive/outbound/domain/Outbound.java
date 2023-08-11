@@ -118,4 +118,8 @@ public class Outbound {
     Long totalVolume() {
         return outboundProducts.totalVolume();
     }
+
+    OutboundProduct getOutboundProductBy(final Long productNo) {
+        return outboundProducts.getOutboundProductBy(productNo);
+    }
 }
