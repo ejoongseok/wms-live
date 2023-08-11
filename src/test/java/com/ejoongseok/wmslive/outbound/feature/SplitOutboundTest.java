@@ -16,12 +16,16 @@ class SplitOutboundTest {
     @Test
     @DisplayName("출고를 분할한다.")
     void splitOutbound() {
-        splitOutbound.request();
+        final SplitOutbound.Request request = new SplitOutbound.Request();
+        splitOutbound.request(request);
     }
 
     private class SplitOutbound {
-        public void request() {
+        public void request(final Request request) {
 
+        }
+
+        public record Request() {
         }
     }
 }
