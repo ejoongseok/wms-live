@@ -33,7 +33,7 @@ class OutboundSplitterTest {
 
         final OutboundProducts splitOutboundProducts = anOutboundProducts().build();
         final PackagingMaterials packagingMaterials = aPackagingMaterials().build();
-        final Outbound splittedOutbound = outboundSplitter.splitOutbound(target, splitOutboundProducts, packagingMaterials);
+        final Outbound splittedOutbound = outboundSplitter.execute(target, splitOutboundProducts, packagingMaterials);
 
         assertSplit(target, splittedOutbound);
     }
@@ -64,7 +64,7 @@ class OutboundSplitterTest {
             final OutboundProducts splitOutboundProducts = anOutboundProducts().outboundProducts(
                     anOutboundProduct().orderQuantity(2L)).build();
             final PackagingMaterials packagingMaterials = aPackagingMaterials().build();
-            outboundSplitter.splitOutbound(target, splitOutboundProducts, packagingMaterials);
+            outboundSplitter.execute(target, splitOutboundProducts, packagingMaterials);
         }).isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("분할할 수량이 출고 수량보다 같거나 많습니다.");
     }
@@ -77,7 +77,7 @@ class OutboundSplitterTest {
         assertThatThrownBy(() -> {
             final OutboundProducts splitOutboundProducts = anOutboundProducts().build();
             final PackagingMaterials packagingMaterials = aPackagingMaterials().packagingMaterials(aPackagingMaterial().maxWeightInGrams(1L)).build();
-            outboundSplitter.splitOutbound(target, splitOutboundProducts, packagingMaterials);
+            outboundSplitter.execute(target, splitOutboundProducts, packagingMaterials);
         }).isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("적합한 포장재가 없습니다.");
     }

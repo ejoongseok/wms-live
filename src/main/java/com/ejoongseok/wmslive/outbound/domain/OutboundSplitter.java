@@ -2,33 +2,33 @@ package com.ejoongseok.wmslive.outbound.domain;
 
 public class OutboundSplitter {
 
-    public Outbound splitOutbound(
-            final Outbound outbound,
+    public Outbound execute(
+            final Outbound original,
             final OutboundProducts targetProducts,
             final PackagingMaterials packagingMaterials) {
-        final Outbound splitted = outbound.split(targetProducts);
+        final Outbound splitted = original.split(targetProducts);
 
-        split(outbound, targetProducts, packagingMaterials, splitted);
+        split(original, targetProducts, packagingMaterials, splitted);
 
         return splitted;
     }
 
     private void split(
-            final Outbound outbound,
+            final Outbound original,
             final OutboundProducts targetProducts,
             final PackagingMaterials packagingMaterials,
             final Outbound splitted) {
-        adjustTargetProductQuantities(outbound, targetProducts);
-        outbound.removeEmptyQuantityProducts();
-        outbound.assignPackagingMaterial(getOptimalPackagingMaterial(packagingMaterials, outbound));
+        adjustTargetProductQuantities(original, targetProducts);
+        original.removeEmptyQuantityProducts();
+        original.assignPackagingMaterial(getOptimalPackagingMaterial(packagingMaterials, original));
         splitted.assignPackagingMaterial(getOptimalPackagingMaterial(packagingMaterials, splitted));
     }
 
     private void adjustTargetProductQuantities(
-            final Outbound outbound, final OutboundProducts targetProducts) {
+            final Outbound original, final OutboundProducts targetProducts) {
         for (final OutboundProduct splitProduct : targetProducts.outboundProducts()) {
-            final OutboundProduct target = outbound.getOutboundProductBy(splitProduct.getProductNo());
-            target.decreaseOrderQuantity(splitProduct.getOrderQuantity());
+            final OutboundProduct originalOutboundProduct = original.getOutboundProductBy(splitProduct.getProductNo());
+            originalOutboundProduct.decreaseOrderQuantity(splitProduct.getOrderQuantity());
         }
     }
 

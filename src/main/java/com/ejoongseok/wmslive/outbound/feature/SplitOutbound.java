@@ -27,10 +27,10 @@ public class SplitOutbound {
     @Transactional
     public void request(@RequestBody final Request request) {
         final Outbound outbound = outboundRepository.getBy(request.outboundNo);
-        final OutboundProducts splitOutboundProducts = splitOutboundProducts(outbound, request.products);
+        final OutboundProducts targetProducts = splitOutboundProducts(outbound, request.products);
         final PackagingMaterials packagingMaterials = new PackagingMaterials(packagingMaterialRepository.findAll());
 
-        final Outbound splitted = outboundSplitter.splitOutbound(outbound, splitOutboundProducts, packagingMaterials);
+        final Outbound splitted = outboundSplitter.execute(outbound, targetProducts, packagingMaterials);
 
         // 분할된 출고를 저장.
         outboundRepository.save(splitted);
