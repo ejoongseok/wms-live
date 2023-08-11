@@ -110,4 +110,12 @@ public class Outbound {
     public OutboundProducts outboundProducts() {
         return outboundProducts;
     }
+
+    Long totalWeight() {
+        return outboundProducts.totalWeight();
+    }
+
+    Long totalVolume() {
+        return outboundProducts.totalVolume();
+    }
 }

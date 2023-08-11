@@ -26,15 +26,8 @@ public class OutboundSplitter {
     }
 
     private PackagingMaterial getOptimalPackagingMaterial(final PackagingMaterials packagingMaterials, final Outbound splitted) {
-        return packagingMaterials.findOptimalPackagingMaterial(totalWeight(splitted), totalVolume(splitted))
+        return packagingMaterials.findOptimalPackagingMaterial(splitted.totalWeight(), splitted.totalVolume())
                 .orElseThrow(() -> new IllegalArgumentException("적합한 포장재가 없습니다."));
     }
 
-    private Long totalWeight(final Outbound splitted) {
-        return splitted.outboundProducts().totalWeight();
-    }
-
-    private Long totalVolume(final Outbound splitted) {
-        return splitted.outboundProducts().totalVolume();
-    }
 }
