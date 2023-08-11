@@ -1,7 +1,6 @@
 package com.ejoongseok.wmslive.outbound.feature;
 
 import com.ejoongseok.wmslive.outbound.domain.Outbound;
-import com.ejoongseok.wmslive.outbound.domain.OutboundProduct;
 import com.ejoongseok.wmslive.outbound.domain.OutboundProducts;
 import com.ejoongseok.wmslive.outbound.domain.OutboundRepository;
 import com.ejoongseok.wmslive.outbound.domain.OutboundSplitter;
@@ -42,12 +41,8 @@ public class SplitOutbound {
             final List<Request.Product> products) {
         return new OutboundProducts(
                 products.stream()
-                        .map(product -> createOutboundProductToBeSplit(outbound, product.productNo, product.quantity))
+                        .map(product -> outbound.createOutboundProductToBeSplit(product.productNo, product.quantity))
                         .collect(Collectors.toList()));
-    }
-
-    private OutboundProduct createOutboundProductToBeSplit(final Outbound outbound, final Long productNo, final Long quantity) {
-        return outbound.outboundProducts().createOutboundProductToBeSplit(productNo, quantity);
     }
 
     public record Request(Long outboundNo, List<Request.Product> products) {

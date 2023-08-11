@@ -122,4 +122,8 @@ public class Outbound {
     OutboundProduct getOutboundProductBy(final Long productNo) {
         return outboundProducts.getOutboundProductBy(productNo);
     }
+
+    public OutboundProduct createOutboundProductToBeSplit(final Long productNo, final Long quantity) {
+        return outboundProducts.createOutboundProductToBeSplit(productNo, quantity);
+    }
 }
