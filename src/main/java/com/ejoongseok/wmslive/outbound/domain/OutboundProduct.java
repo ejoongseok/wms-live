@@ -110,10 +110,7 @@ public class OutboundProduct {
     }
 
     boolean isZeroQuantity() {
-        return 0 == getOrderQuantity();
+        return 0 == orderQuantity;
     }
 
-    public void removeOutbound() {
-        outbound = null;
-    }
 }
