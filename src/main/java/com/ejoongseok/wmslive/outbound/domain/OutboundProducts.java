@@ -56,4 +56,9 @@ public final class OutboundProducts {
     void removeIf() {
         outboundProducts.removeIf(OutboundProduct::isZeroQuantity);
     }
+
+    public OutboundProduct splitOutboundProduct(final Long productNo, final Long quantity) {
+        final OutboundProduct outboundProduct = getOutboundProductBy(productNo);
+        return outboundProduct.split(quantity);
+    }
 }

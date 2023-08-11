@@ -41,7 +41,7 @@ public class SplitOutbound {
             final List<Request.Product> products) {
         return new OutboundProducts(
                 products.stream()
-                        .map(product -> outbound.splitOutboundProduct(product.productNo, product.quantity))
+                        .map(product -> outbound.outboundProducts.splitOutboundProduct(product.productNo, product.quantity))
                         .collect(Collectors.toList()));
     }
 
