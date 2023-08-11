@@ -24,7 +24,7 @@ class OutboundSplitterTest {
     @Test
     void split1() {
         final Outbound target = createSuccessOutbound();
-        assertThat(target.getOutboundProducts()).hasSize(2);
+        assertThat(target.getOutboundProducts().outboundProducts()).hasSize(2);
 
         final OutboundProducts splitOutboundProducts = anOutboundProducts().build();
         final PackagingMaterials packagingMaterials = aPackagingMaterials().build();
@@ -42,11 +42,11 @@ class OutboundSplitterTest {
     }
 
     private void assertSplit(final Outbound target, final Outbound splittedOutbound) {
-        assertThat(target.getOutboundProducts()).hasSize(1);
-        assertThat(target.getOutboundProducts().get(0).getProductNo()).isEqualTo(2L);
+        assertThat(target.getOutboundProducts().outboundProducts()).hasSize(1);
+        assertThat(target.getOutboundProducts().outboundProducts().get(0).getProductNo()).isEqualTo(2L);
         assertThat(target.getRecommendedPackagingMaterial()).isNotNull();
-        assertThat(splittedOutbound.getOutboundProducts()).hasSize(1);
-        assertThat(splittedOutbound.getOutboundProducts().get(0).getProductNo()).isEqualTo(1L);
+        assertThat(splittedOutbound.getOutboundProducts().outboundProducts()).hasSize(1);
+        assertThat(splittedOutbound.getOutboundProducts().outboundProducts().get(0).getProductNo()).isEqualTo(1L);
         assertThat(splittedOutbound.getRecommendedPackagingMaterial()).isNotNull();
     }
 

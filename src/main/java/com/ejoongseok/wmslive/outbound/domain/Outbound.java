@@ -1,6 +1,5 @@
 package com.ejoongseok.wmslive.outbound.domain;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -10,7 +9,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -19,7 +17,6 @@ import org.hibernate.annotations.Comment;
 import org.springframework.util.Assert;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -41,8 +38,8 @@ public class Outbound {
     @Column(name = "delivery_requirements", nullable = false)
     @Comment("배송 요구사항")
     private String deliveryRequirements;
-    @OneToMany(mappedBy = "outbound", orphanRemoval = true, cascade = CascadeType.ALL)
-    private List<OutboundProduct> outboundProducts = new ArrayList<>();
+    @Embedded
+    OutboundProducts outboundProducts;
     @Column(name = "is_priority_delivery", nullable = false)
     @Comment("우선 출고 여부")
     private Boolean isPriorityDelivery;
@@ -74,7 +71,7 @@ public class Outbound {
         this.deliveryRequirements = deliveryRequirements;
         this.isPriorityDelivery = isPriorityDelivery;
         this.desiredDeliveryAt = desiredDeliveryAt;
-        this.outboundProducts = outboundProducts;
+        this.outboundProducts = new OutboundProducts(outboundProducts);
         outboundProducts.forEach(outboundProduct -> outboundProduct.assignOutbound(this));
     }
 
@@ -89,15 +86,8 @@ public class Outbound {
 
 
     public OutboundProduct splitOutboundProduct(final Long productNo, final Long quantity) {
-        final OutboundProduct outboundProduct = getOutboundProductBy(productNo);
+        final OutboundProduct outboundProduct = outboundProducts.getOutboundProductBy(productNo);
         return outboundProduct.split(quantity);
-    }
-
-    private OutboundProduct getOutboundProductBy(final Long productNo) {
-        return outboundProducts.stream()
-                .filter(o -> o.isSameProductNo(productNo))
-                .findFirst()
-                .orElseThrow();
     }
 
     public Outbound split(final OutboundProducts splitOutboundProducts) {
@@ -114,55 +104,12 @@ public class Outbound {
     }
 
     private void validateSplit(final OutboundProducts splitOutboundProducts) {
-        final long totalOrderQuantity = calculateTotalOrderQuantity();
+        final long totalOrderQuantity = outboundProducts.calculateTotalOrderQuantity();
         final long splitTotalQuantity = splitOutboundProducts.splitTotalQuantity();
         if (totalOrderQuantity <= splitTotalQuantity) throw new IllegalArgumentException("분할할 수량이 출고 수량보다 같거나 많습니다.");
     }
 
-    private long calculateTotalOrderQuantity() {
-        return outboundProducts.stream()
-                .mapToLong(OutboundProduct::getOrderQuantity)
-                .sum();
-    }
-
-    public Long totalWeight() {
-        return outboundProducts.stream()
-                .mapToLong(OutboundProduct::calculateOutboundProductWeight)
-                .sum();
-    }
-
-    public Long totalVolume() {
-        return outboundProducts.stream()
-                .mapToLong(OutboundProduct::calculateOutboundProductVolume)
-                .sum();
-    }
-
     public void assignPackagingMaterial(final PackagingMaterial optimalPackagingMaterial) {
         recommendedPackagingMaterial = optimalPackagingMaterial;
-    }
-
-    public void decreaseQuantity(final OutboundProducts outboundProducts) {
-        decreaseOrderQuantity(outboundProducts);
-        removeZeroQuantityProducts();
-    }
-
-    private void decreaseOrderQuantity(final OutboundProducts splitOutboundProducts) {
-        for (final OutboundProduct splitProduct : splitOutboundProducts.outboundProducts()) {
-            final OutboundProduct target = getOutboundProductBy(splitProduct.getProductNo());
-            target.decreaseOrderQuantity(splitProduct.getOrderQuantity());
-        }
-    }
-
-    private void removeZeroQuantityProducts() {
-//        final List<OutboundProduct> targetProducts = outboundProducts.stream()
-//                .filter(OutboundProduct::isZeroQuantity)
-//                .map(o -> o)
-//                .collect(Collectors.toList());
-//        for (OutboundProduct targetProduct : targetProducts) {
-//            targetProduct.removeOutbound();
-//            outboundProducts.remove(targetProduct);
-//        }
-        outboundProducts.removeIf(OutboundProduct::isZeroQuantity);
-//        System.out.println();
     }
 }

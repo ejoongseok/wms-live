@@ -12,6 +12,6 @@ public interface OutboundRepository extends JpaRepository<Outbound, Long> {
                         "출고가 존재하지 않습니다. 출고번호: %d".formatted(outboundNo)));
     }
 
-    @Query("select o from Outbound o join fetch o.outboundProducts where o.outboundNo = :outboundNo")
+    @Query("select o from Outbound o join fetch o.outboundProducts.outboundProducts where o.outboundNo = :outboundNo")
     Optional<Outbound> findByIdAndFetchJoin(Long outboundNo);
 }
