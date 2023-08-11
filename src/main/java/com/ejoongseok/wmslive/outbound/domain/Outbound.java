@@ -107,7 +107,7 @@ public class Outbound {
         recommendedPackagingMaterial = optimalPackagingMaterial;
     }
 
-    public OutboundProducts outboundProducts() {
+    OutboundProducts outboundProducts() {
         return outboundProducts;
     }
 
@@ -125,5 +125,9 @@ public class Outbound {
 
     public OutboundProduct createOutboundProductToBeSplit(final Long productNo, final Long quantity) {
         return outboundProducts.createOutboundProductToBeSplit(productNo, quantity);
+    }
+
+    void removeEmptyQuantityProducts() {
+        outboundProducts.removeIfZeroQuantity();
     }
 }

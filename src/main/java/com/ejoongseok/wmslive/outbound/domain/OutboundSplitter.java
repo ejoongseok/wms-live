@@ -7,9 +7,8 @@ public class OutboundSplitter {
             final OutboundProducts targetProducts,
             final PackagingMaterials packagingMaterials) {
         final Outbound splitted = outbound.split(targetProducts);
-        final OutboundProducts targets = outbound.outboundProducts();
 
-        split(outbound, targetProducts, packagingMaterials, targets, splitted);
+        split(outbound, targetProducts, packagingMaterials, splitted);
 
         return splitted;
     }
@@ -18,10 +17,9 @@ public class OutboundSplitter {
             final Outbound outbound,
             final OutboundProducts targetProducts,
             final PackagingMaterials packagingMaterials,
-            final OutboundProducts targets,
             final Outbound splitted) {
         adjustTargetProductQuantities(outbound, targetProducts);
-        targets.removeIfZeroQuantity();
+        outbound.removeEmptyQuantityProducts();
         outbound.assignPackagingMaterial(getOptimalPackagingMaterial(packagingMaterials, outbound));
         splitted.assignPackagingMaterial(getOptimalPackagingMaterial(packagingMaterials, splitted));
     }
