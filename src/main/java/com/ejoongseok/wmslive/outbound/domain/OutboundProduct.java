@@ -1,6 +1,7 @@
 package com.ejoongseok.wmslive.outbound.domain;
 
 import com.ejoongseok.wmslive.product.domain.Product;
+import com.google.common.annotations.VisibleForTesting;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -11,6 +12,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 import org.springframework.util.Assert;
@@ -25,6 +27,7 @@ public class OutboundProduct {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "outbound_product_no")
     @Comment("출고 상품 번호")
+    @Getter
     private Long outboundProductNo;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_no", nullable = false)
@@ -32,6 +35,7 @@ public class OutboundProduct {
     private Product product;
     @Column(name = "order_quantity", nullable = false)
     @Comment("주문 수량")
+    @Getter
     private Long orderQuantity;
     @Column(name = "unit_price", nullable = false)
     @Comment("단가")
@@ -51,6 +55,16 @@ public class OutboundProduct {
         this.unitPrice = unitPrice;
     }
 
+    @VisibleForTesting
+    OutboundProduct(
+            final Long outboundProductNo,
+            final Product product,
+            final Long orderQuantity,
+            final Long unitPrice) {
+        this(product, orderQuantity, unitPrice);
+        this.outboundProductNo = outboundProductNo;
+    }
+
     private void validateConstructor(final Product product, final Long orderQuantity, final Long unitPrice) {
         Assert.notNull(product, "상품은 필수입니다.");
         Assert.notNull(orderQuantity, "주문수량은 필수입니다.");
@@ -62,4 +76,41 @@ public class OutboundProduct {
     public void assignOutbound(final Outbound outbound) {
         this.outbound = outbound;
     }
+
+    public Long getProductNo() {
+        return product.getProductNo();
+    }
+
+    public OutboundProduct split(final Long splitQuantity) {
+        if (splitQuantity > orderQuantity) throw new IllegalArgumentException("분할 수량은 주문 수량보다 작아야 합니다.");
+        return new OutboundProduct(
+                product,
+                splitQuantity,
+                unitPrice
+        );
+    }
+
+    boolean isSameProductNo(final Long productNo) {
+        return getProductNo().equals(productNo);
+    }
+
+    public Long calculateOutboundProductWeight() {
+        return product.getWeightInGrams() * orderQuantity;
+    }
+
+    public Long calculateOutboundProductVolume() {
+        return product.getProductSize().getVolume() * orderQuantity;
+    }
+
+    public void decreaseOrderQuantity(final Long quantity) {
+        if (quantity > orderQuantity) {
+            throw new IllegalArgumentException("주문 수량보다 많은 수량을 출고할 수 없습니다.");
+        }
+        orderQuantity -= quantity;
+    }
+
+    boolean isZeroQuantity() {
+        return 0 == orderQuantity;
+    }
+
 }

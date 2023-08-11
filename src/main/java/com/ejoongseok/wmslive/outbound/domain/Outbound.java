@@ -1,6 +1,5 @@
 package com.ejoongseok.wmslive.outbound.domain;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -10,7 +9,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -19,7 +17,6 @@ import org.hibernate.annotations.Comment;
 import org.springframework.util.Assert;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -41,8 +38,9 @@ public class Outbound {
     @Column(name = "delivery_requirements", nullable = false)
     @Comment("배송 요구사항")
     private String deliveryRequirements;
-    @OneToMany(mappedBy = "outbound", orphanRemoval = true, cascade = CascadeType.ALL)
-    private List<OutboundProduct> outboundProducts = new ArrayList<>();
+    @Embedded
+    public
+    OutboundProducts outboundProducts;
     @Column(name = "is_priority_delivery", nullable = false)
     @Comment("우선 출고 여부")
     private Boolean isPriorityDelivery;
@@ -74,7 +72,7 @@ public class Outbound {
         this.deliveryRequirements = deliveryRequirements;
         this.isPriorityDelivery = isPriorityDelivery;
         this.desiredDeliveryAt = desiredDeliveryAt;
-        this.outboundProducts = outboundProducts;
+        this.outboundProducts = new OutboundProducts(outboundProducts);
         outboundProducts.forEach(outboundProduct -> outboundProduct.assignOutbound(this));
     }
 
@@ -87,9 +85,26 @@ public class Outbound {
         Assert.notNull(desiredDeliveryAt, "희망출고일은 필수입니다.");
     }
 
-    public void assignNo(final Long outboundNo) {
-        this.outboundNo = outboundNo;
+    public Outbound split(final OutboundProducts splitOutboundProducts) {
+        validateSplit(splitOutboundProducts);
+        return new Outbound(
+                orderNo,
+                orderCustomer,
+                deliveryRequirements,
+                splitOutboundProducts.outboundProducts(),
+                isPriorityDelivery,
+                desiredDeliveryAt,
+                null
+        );
     }
 
+    private void validateSplit(final OutboundProducts splitOutboundProducts) {
+        final long totalOrderQuantity = outboundProducts.calculateTotalOrderQuantity();
+        final long splitTotalQuantity = splitOutboundProducts.splitTotalQuantity();
+        if (totalOrderQuantity <= splitTotalQuantity) throw new IllegalArgumentException("분할할 수량이 출고 수량보다 같거나 많습니다.");
+    }
 
+    public void assignPackagingMaterial(final PackagingMaterial optimalPackagingMaterial) {
+        recommendedPackagingMaterial = optimalPackagingMaterial;
+    }
 }
