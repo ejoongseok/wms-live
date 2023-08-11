@@ -9,12 +9,21 @@ public class OutboundSplitter {
         final Outbound splitted = outbound.split(targetProducts);
         final OutboundProducts targets = outbound.outboundProducts();
 
+        split(outbound, targetProducts, packagingMaterials, targets, splitted);
+
+        return splitted;
+    }
+
+    private void split(
+            final Outbound outbound,
+            final OutboundProducts targetProducts,
+            final PackagingMaterials packagingMaterials,
+            final OutboundProducts targets,
+            final Outbound splitted) {
         decreaseOrderQuantity(targetProducts, targets);
         targets.removeIfZeroQuantity();
         outbound.assignPackagingMaterial(getOptimalPackagingMaterial(packagingMaterials, outbound));
         splitted.assignPackagingMaterial(getOptimalPackagingMaterial(packagingMaterials, splitted));
-
-        return splitted;
     }
 
     private void decreaseOrderQuantity(
@@ -25,8 +34,9 @@ public class OutboundSplitter {
         }
     }
 
-    private PackagingMaterial getOptimalPackagingMaterial(final PackagingMaterials packagingMaterials, final Outbound splitted) {
-        return packagingMaterials.findOptimalPackagingMaterial(splitted.totalWeight(), splitted.totalVolume())
+    private PackagingMaterial getOptimalPackagingMaterial(
+            final PackagingMaterials packagingMaterials, final Outbound outbound) {
+        return packagingMaterials.findOptimalPackagingMaterial(outbound.totalWeight(), outbound.totalVolume())
                 .orElseThrow(() -> new IllegalArgumentException("적합한 포장재가 없습니다."));
     }
 
