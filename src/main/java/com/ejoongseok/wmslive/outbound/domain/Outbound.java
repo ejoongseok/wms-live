@@ -39,8 +39,7 @@ public class Outbound {
     @Comment("배송 요구사항")
     private String deliveryRequirements;
     @Embedded
-    public
-    OutboundProducts outboundProducts;
+    private OutboundProducts outboundProducts;
     @Column(name = "is_priority_delivery", nullable = false)
     @Comment("우선 출고 여부")
     private Boolean isPriorityDelivery;
@@ -106,5 +105,9 @@ public class Outbound {
 
     public void assignPackagingMaterial(final PackagingMaterial optimalPackagingMaterial) {
         recommendedPackagingMaterial = optimalPackagingMaterial;
+    }
+
+    public OutboundProducts outboundProducts() {
+        return outboundProducts;
     }
 }
