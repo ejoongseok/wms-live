@@ -53,7 +53,7 @@ public final class OutboundProducts {
                 .sum();
     }
 
-    void removeIf() {
+    void removeIfZeroQuantity() {
         outboundProducts.removeIf(OutboundProduct::isZeroQuantity);
     }
 
