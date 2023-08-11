@@ -3,8 +3,8 @@ package com.ejoongseok.wmslive.outbound.feature;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.util.Assert;
 
-import java.util.Arrays;
 import java.util.List;
 
 class SplitOutboundTest {
@@ -40,7 +40,17 @@ class SplitOutboundTest {
         }
 
         public record Request(Long outboundNo, List<Product> products) {
+            public Request {
+                Assert.notNull(outboundNo, "출고번호가 없습니다.");
+                Assert.notEmpty(products, "상품이 없습니다.");
+            }
+
             public record Product(Long productNo, Long quantity) {
+                public Product {
+                    Assert.notNull(productNo, "상품번호가 없습니다.");
+                    Assert.notNull(quantity, "수량이 없습니다.");
+                    if (1 > quantity) throw new IllegalArgumentException("수량이 1보다 작습니다.");
+                }
             }
         }
     }
