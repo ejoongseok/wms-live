@@ -41,23 +41,23 @@ public final class OutboundProducts {
                 .sum();
     }
 
-    public Long totalWeight() {
+    Long totalWeight() {
         return outboundProducts.stream()
                 .mapToLong(OutboundProduct::calculateOutboundProductWeight)
                 .sum();
     }
 
-    public Long totalVolume() {
+    Long totalVolume() {
         return outboundProducts.stream()
                 .mapToLong(OutboundProduct::calculateOutboundProductVolume)
                 .sum();
     }
 
-    void removeIf() {
+    void removeIfZeroQuantity() {
         outboundProducts.removeIf(OutboundProduct::isZeroQuantity);
     }
 
-    public OutboundProduct splitOutboundProduct(final Long productNo, final Long quantity) {
+    OutboundProduct createOutboundProductToBeSplit(final Long productNo, final Long quantity) {
         final OutboundProduct outboundProduct = getOutboundProductBy(productNo);
         return outboundProduct.split(quantity);
     }

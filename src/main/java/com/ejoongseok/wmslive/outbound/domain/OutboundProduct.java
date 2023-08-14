@@ -73,7 +73,7 @@ public class OutboundProduct {
         if (1 > unitPrice) throw new IllegalArgumentException("단가는 1원 이상이어야 합니다.");
     }
 
-    public void assignOutbound(final Outbound outbound) {
+    void assignOutbound(final Outbound outbound) {
         this.outbound = outbound;
     }
 
@@ -94,15 +94,15 @@ public class OutboundProduct {
         return getProductNo().equals(productNo);
     }
 
-    public Long calculateOutboundProductWeight() {
+    Long calculateOutboundProductWeight() {
         return product.getWeightInGrams() * orderQuantity;
     }
 
-    public Long calculateOutboundProductVolume() {
+    Long calculateOutboundProductVolume() {
         return product.getProductSize().getVolume() * orderQuantity;
     }
 
-    public void decreaseOrderQuantity(final Long quantity) {
+    void decreaseOrderQuantity(final Long quantity) {
         if (quantity > orderQuantity) {
             throw new IllegalArgumentException("주문 수량보다 많은 수량을 출고할 수 없습니다.");
         }

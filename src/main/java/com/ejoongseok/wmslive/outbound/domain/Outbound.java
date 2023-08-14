@@ -39,8 +39,7 @@ public class Outbound {
     @Comment("배송 요구사항")
     private String deliveryRequirements;
     @Embedded
-    public
-    OutboundProducts outboundProducts;
+    private OutboundProducts outboundProducts;
     @Column(name = "is_priority_delivery", nullable = false)
     @Comment("우선 출고 여부")
     private Boolean isPriorityDelivery;
@@ -104,7 +103,31 @@ public class Outbound {
         if (totalOrderQuantity <= splitTotalQuantity) throw new IllegalArgumentException("분할할 수량이 출고 수량보다 같거나 많습니다.");
     }
 
-    public void assignPackagingMaterial(final PackagingMaterial optimalPackagingMaterial) {
+    void assignPackagingMaterial(final PackagingMaterial optimalPackagingMaterial) {
         recommendedPackagingMaterial = optimalPackagingMaterial;
+    }
+
+    OutboundProducts outboundProducts() {
+        return outboundProducts;
+    }
+
+    Long totalWeight() {
+        return outboundProducts.totalWeight();
+    }
+
+    Long totalVolume() {
+        return outboundProducts.totalVolume();
+    }
+
+    OutboundProduct getOutboundProductBy(final Long productNo) {
+        return outboundProducts.getOutboundProductBy(productNo);
+    }
+
+    public OutboundProduct createOutboundProductToBeSplit(final Long productNo, final Long quantity) {
+        return outboundProducts.createOutboundProductToBeSplit(productNo, quantity);
+    }
+
+    void removeEmptyQuantityProducts() {
+        outboundProducts.removeIfZeroQuantity();
     }
 }
