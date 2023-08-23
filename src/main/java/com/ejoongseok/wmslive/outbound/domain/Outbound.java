@@ -1,6 +1,7 @@
 package com.ejoongseok.wmslive.outbound.domain;
 
 import com.ejoongseok.wmslive.location.domain.Location;
+import com.google.common.annotations.VisibleForTesting;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -51,6 +52,27 @@ public class Outbound {
     @JoinColumn(name = "packaging_material_no")
     private PackagingMaterial recommendedPackagingMaterial;
     private Location pickingTote;
+
+    @VisibleForTesting
+    Outbound(
+            final Long orderNo,
+            final OrderCustomer orderCustomer,
+            final String deliveryRequirements,
+            final List<OutboundProduct> outboundProducts,
+            final Boolean isPriorityDelivery,
+            final LocalDate desiredDeliveryAt,
+            final PackagingMaterial recommendedPackagingMaterial,
+            final Location pickingTote) {
+        this(
+                orderNo,
+                orderCustomer,
+                deliveryRequirements,
+                outboundProducts,
+                isPriorityDelivery,
+                desiredDeliveryAt,
+                recommendedPackagingMaterial);
+        this.pickingTote = pickingTote;
+    }
 
     public Outbound(
             final Long orderNo,
@@ -141,6 +163,7 @@ public class Outbound {
         // 3.토트에 상품이 담겨있지는 않은지.
         if (tote.hasAvailableInventory()) throw new IllegalArgumentException("할당하려는 토트에 상품이 존재합니다.");
         // 4.이미 출고에 토트가 할당되어 있는지.
+        if (null != pickingTote) throw new IllegalStateException("이미 출고에 토트가 할당되어 있습니다.");
         // 5.포장재가 할당되어있는지 (포장재가 할당이 되어있지않으면 출고 불가능)
         pickingTote = tote;
     }

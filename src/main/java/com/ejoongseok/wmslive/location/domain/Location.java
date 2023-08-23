@@ -1,6 +1,7 @@
 package com.ejoongseok.wmslive.location.domain;
 
 import com.ejoongseok.wmslive.inbound.domain.LPN;
+import com.google.common.annotations.VisibleForTesting;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -46,7 +47,8 @@ public class Location {
     @OneToMany(mappedBy = "location", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Inventory> inventories = new ArrayList<>();
 
-    public Location(
+    @VisibleForTesting
+    Location(
             final String locationBarcode,
             final StorageType storageType,
             final UsagePurpose usagePurpose,

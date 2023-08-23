@@ -15,7 +15,9 @@ class OutboundTest {
 
     @Test
     void allocatePickingTote() {
-        final Outbound outbound = anOutbound().build();
+        final Outbound outbound = anOutbound()
+                .pickingTote(null)
+                .build();
         final Location tote = aLocation().build();
 
         outbound.allocatePickingTote(tote);
@@ -61,5 +63,17 @@ class OutboundTest {
             outbound.allocatePickingTote(tote);
         }).isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("할당하려는 토트에 상품이 존재합니다.");
+    }
+
+    @Test
+    @DisplayName("이미 출고에 토트가 할당되어 있는지.")
+    void allocatePickingTote5() {
+        final Outbound outbound = anOutbound().build();
+        final Location tote = aLocation().build();
+
+        assertThatThrownBy(() -> {
+            outbound.allocatePickingTote(tote);
+        }).isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("이미 출고에 토트가 할당되어 있습니다.");
     }
 }

@@ -1,10 +1,14 @@
 package com.ejoongseok.wmslive.outbound.domain;
 
+import com.ejoongseok.wmslive.location.domain.Location;
+import com.ejoongseok.wmslive.location.domain.LocationFixture;
+
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.ejoongseok.wmslive.location.domain.LocationFixture.aLocation;
 import static com.ejoongseok.wmslive.outbound.domain.OrderCustomerFixture.anOrderCustomer;
 import static com.ejoongseok.wmslive.outbound.domain.OutboundProductFixture.anOutboundProduct;
 import static com.ejoongseok.wmslive.outbound.domain.PackagingMaterialFixture.aPackagingMaterial;
@@ -17,6 +21,7 @@ public class OutboundFixture {
     private List<OutboundProductFixture> outboundProducts = List.of(anOutboundProduct());
     private OrderCustomerFixture orderCustomer = anOrderCustomer();
     private PackagingMaterialFixture packagingMaterial = aPackagingMaterial();
+    private LocationFixture pickingTote = aLocation();
 
     public static OutboundFixture anOutbound() {
         return new OutboundFixture();
@@ -52,8 +57,14 @@ public class OutboundFixture {
         return this;
     }
 
+
     public OutboundFixture packagingMaterial(final PackagingMaterialFixture packagingMaterial) {
         this.packagingMaterial = packagingMaterial;
+        return this;
+    }
+
+    public OutboundFixture pickingTote(final LocationFixture pickingTote) {
+        this.pickingTote = pickingTote;
         return this;
     }
 
@@ -66,8 +77,13 @@ public class OutboundFixture {
                 buildOutboundProducts(),
                 isPriorityDelivery,
                 desiredDeliveryAt,
-                packagingMaterial.build()
+                packagingMaterial.build(),
+                buildPickingTote()
         );
+    }
+
+    private Location buildPickingTote() {
+        return null == pickingTote ? null : pickingTote.build();
     }
 
     private List<OutboundProduct> buildOutboundProducts() {
