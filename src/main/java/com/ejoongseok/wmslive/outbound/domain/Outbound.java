@@ -134,6 +134,11 @@ public class Outbound {
     }
 
     public void allocatePickingTote(final Location tote) {
+        // 1.null체크
+        // 2.로케이션 토트가 맞는지
+        // 3.토트에 상품이 담겨있지는 않은지.
+        // 4.이미 출고에 토트가 할당되어 있는지.
+        // 5.포장재가 할당되어있는지 (포장재가 할당이 되어있지않으면 출고 불가능)
         pickingTote = tote;
     }
 }
