@@ -44,7 +44,16 @@ public class Location {
     @Comment("보관 목적")
     private UsagePurpose usagePurpose;
     @OneToMany(mappedBy = "location", cascade = CascadeType.ALL, orphanRemoval = true)
-    private final List<Inventory> inventories = new ArrayList<>();
+    private List<Inventory> inventories = new ArrayList<>();
+
+    public Location(
+            final String locationBarcode,
+            final StorageType storageType,
+            final UsagePurpose usagePurpose,
+            final List<Inventory> inventories) {
+        this(locationBarcode, storageType, usagePurpose);
+        this.inventories = inventories;
+    }
 
     public Location(
             final String locationBarcode,
@@ -83,4 +92,13 @@ public class Location {
         return inventories.add(new Inventory(this, lpn));
     }
 
+    public boolean isTote() {
+        return StorageType.TOTE == storageType;
+    }
+
+    public boolean hasAvailableInventory() {
+        return !inventories.isEmpty() &&
+                inventories.stream()
+                        .anyMatch(Inventory::hasAvailableQuantity);
+    }
 }
