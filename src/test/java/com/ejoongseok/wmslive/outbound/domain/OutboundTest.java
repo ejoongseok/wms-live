@@ -14,6 +14,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class OutboundTest {
 
     @Test
+    @DisplayName("출고에 집품할 때 사용할 토트를 할당한다.")
     void allocatePickingTote() {
         final Outbound outbound = anOutbound()
                 .pickingTote(null)
@@ -26,8 +27,8 @@ class OutboundTest {
     }
 
     @Test
-    @DisplayName("null 체크")
-    void allocatePickingTote2() {
+    @DisplayName("출고에 집품할 때 사용할 토트를 null으로 할당하면 예외가 발생한다.")
+    void fail_null_paramter_allocatePickingTote() {
         final Outbound outbound = anOutbound().build();
         final Location tote = null;
 
@@ -38,8 +39,8 @@ class OutboundTest {
     }
 
     @Test
-    @DisplayName("로케이션 토트가 맞는지")
-    void allocatePickingTote3() {
+    @DisplayName("출고에 할당할 로케이션이 토트가 아니면 예외가 발생한다.")
+    void fail_not_tote_allocatePickingTote() {
         final Outbound outbound = anOutbound().build();
         final Location pallet = aLocation()
                 .storageType(StorageType.PALLET)
@@ -52,8 +53,8 @@ class OutboundTest {
     }
 
     @Test
-    @DisplayName("토트에 상품이 담겨있지는 않은지.")
-    void allocatePickingTote4() {
+    @DisplayName("집품에 사용하려는 토트에 상품이 존재하는 경우 예외가 발생한다.")
+    void fail_already_exsists_inventory_allocatePickingTote() {
         final Outbound outbound = anOutbound().build();
         final Location tote = aLocation()
                 .inventories(anInventory())
@@ -66,8 +67,8 @@ class OutboundTest {
     }
 
     @Test
-    @DisplayName("이미 출고에 토트가 할당되어 있는지.")
-    void allocatePickingTote5() {
+    @DisplayName("출고에 이미 토트바구니가 할당된 경우 재 할당하려고 하면 예외가 발생한다.")
+    void fail_already_allocate_tote_allocatePickingTote() {
         final Outbound outbound = anOutbound().build();
         final Location tote = aLocation().build();
 
@@ -78,8 +79,8 @@ class OutboundTest {
     }
 
     @Test
-    @DisplayName("포장재가 할당되어 있지 않습니다.")
-    void allocatePickingTote6() {
+    @DisplayName("출고에 사용할 포장재가 할당되어 있지 않은 상태로 토트 바구니를 할당하면 예외가 발생한다.")
+    void fail_null_pacakagingMaterial_allocatePickingTote() {
         final Outbound outbound = anOutbound()
                 .pickingTote(null)
                 .packagingMaterial(null)
