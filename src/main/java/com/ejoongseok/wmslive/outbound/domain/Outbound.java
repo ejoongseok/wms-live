@@ -156,6 +156,11 @@ public class Outbound {
     }
 
     public void allocatePickingTote(final Location tote) {
+        validateToteAllocation(tote);
+        pickingTote = tote;
+    }
+
+    private void validateToteAllocation(final Location tote) {
         // 1.null체크
         Assert.notNull(tote, "출고에 할당할 토트는 필수 입니다.");
         // 2.로케이션 토트가 맞는지
@@ -165,6 +170,6 @@ public class Outbound {
         // 4.이미 출고에 토트가 할당되어 있는지.
         if (null != pickingTote) throw new IllegalStateException("이미 출고에 토트가 할당되어 있습니다.");
         // 5.포장재가 할당되어있는지 (포장재가 할당이 되어있지않으면 출고 불가능)
-        pickingTote = tote;
+        if (null == recommendedPackagingMaterial) throw new IllegalStateException("포장재가 할당되어 있지 않습니다.");
     }
 }

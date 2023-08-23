@@ -77,9 +77,13 @@ public class OutboundFixture {
                 buildOutboundProducts(),
                 isPriorityDelivery,
                 desiredDeliveryAt,
-                packagingMaterial.build(),
+                buildPackagingMaterial(),
                 buildPickingTote()
         );
+    }
+
+    private PackagingMaterial buildPackagingMaterial() {
+        return null == packagingMaterial ? null : packagingMaterial.build();
     }
 
     private Location buildPickingTote() {

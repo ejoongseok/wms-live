@@ -76,4 +76,19 @@ class OutboundTest {
         }).isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("이미 출고에 토트가 할당되어 있습니다.");
     }
+
+    @Test
+    @DisplayName("포장재가 할당되어 있지 않습니다.")
+    void allocatePickingTote6() {
+        final Outbound outbound = anOutbound()
+                .pickingTote(null)
+                .packagingMaterial(null)
+                .build();
+        final Location tote = aLocation().build();
+
+        assertThatThrownBy(() -> {
+            outbound.allocatePickingTote(tote);
+        }).isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("포장재가 할당되어 있지 않습니다.");
+    }
 }
