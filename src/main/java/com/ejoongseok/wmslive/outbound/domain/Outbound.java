@@ -1,5 +1,6 @@
 package com.ejoongseok.wmslive.outbound.domain;
 
+import com.ejoongseok.wmslive.location.domain.Location;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -49,6 +50,7 @@ public class Outbound {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "packaging_material_no")
     private PackagingMaterial recommendedPackagingMaterial;
+    private Location pickingTote;
 
     public Outbound(
             final Long orderNo,
@@ -129,5 +131,9 @@ public class Outbound {
 
     void removeEmptyQuantityProducts() {
         outboundProducts.removeIfZeroQuantity();
+    }
+
+    public void allocatePickingTote(final Location tote) {
+        pickingTote = tote;
     }
 }

@@ -1,5 +1,9 @@
 package com.ejoongseok.wmslive.outbound.feature;
 
+import com.ejoongseok.wmslive.location.domain.Location;
+import com.ejoongseok.wmslive.location.domain.LocationRepository;
+import com.ejoongseok.wmslive.outbound.domain.Outbound;
+import com.ejoongseok.wmslive.outbound.domain.OutboundRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,11 +27,17 @@ class AllocatePickingToteTest {
                 toteBarcode
         );
         allocatePickingTote.request(request);
+        // 실제로 outbound에 토트 바구니가 할당되었는지 확인하는 코드가 필요함.
     }
 
     private class AllocatePickingTote {
-        public void request(final Request request) {
+        private OutboundRepository outboundRepository;
+        private LocationRepository locationRepository;
 
+        public void request(final Request request) {
+            final Outbound outbound = outboundRepository.getBy(request.outboundNo);
+            final Location tote = locationRepository.getByLocationBarcode(request.toteBarcode);
+            outbound.allocatePickingTote(tote);
         }
 
         public record Request(Long outboundNo, String toteBarcode) {
