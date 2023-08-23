@@ -51,6 +51,9 @@ public class Outbound {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "packaging_material_no")
     private PackagingMaterial recommendedPackagingMaterial;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "picking_tote_no")
+    @Comment("집품할 토트 바구니")
     private Location pickingTote;
 
     @VisibleForTesting
