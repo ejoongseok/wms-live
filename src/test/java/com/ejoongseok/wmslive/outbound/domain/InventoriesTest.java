@@ -17,6 +17,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class InventoriesTest {
 
     @Test
+    @DisplayName("출고를 위한 효율적인 재고 목록을 생성한다.")
     void makeEfficientInventoriesForPicking() {
         final Inventories inventories = createInventories();
 
