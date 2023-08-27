@@ -16,6 +16,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "inventory")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -76,5 +78,9 @@ public class Inventory {
 
     public boolean hasAvailableQuantity() {
         return 0L < inventoryQuantity;
+    }
+
+    public LocalDateTime getExpirationAt() {
+        return lpn.getExpirationAt();
     }
 }

@@ -2,6 +2,7 @@ package com.ejoongseok.wmslive.outbound.domain;
 
 import com.ejoongseok.wmslive.location.domain.Inventory;
 
+import java.util.Comparator;
 import java.util.List;
 
 public final class Inventories {
@@ -36,7 +37,15 @@ public final class Inventories {
     public Inventories makeEfficientInventoriesForPicking(final Long productNo, final Long orderQuantity) {
         final List<Inventory> inventories = filterAvailableInventories(productNo);
         checkInventoryAvailability(orderQuantity, inventories);
-        return new Inventories(inventories);
+        return new Inventories(sortEfficientInventoriesForPicking(inventories));
+    }
+
+    private List<Inventory> filterAvailableInventories(final Long productNo) {
+        return inventories.stream()
+                .filter(i -> i.getProductNo().equals(productNo))
+                .filter(Inventory::hasInventory)
+                .filter(Inventory::isFresh)
+                .toList();
     }
 
     private void checkInventoryAvailability(final Long orderQuantity, final List<Inventory> inventories) {
@@ -48,11 +57,9 @@ public final class Inventories {
         }
     }
 
-    private List<Inventory> filterAvailableInventories(final Long productNo) {
+    private List<Inventory> sortEfficientInventoriesForPicking(final List<Inventory> inventories) {
         return inventories.stream()
-                .filter(i -> i.getProductNo().equals(productNo))
-                .filter(Inventory::hasInventory)
-                .filter(Inventory::isFresh)
+                .sorted(Comparator.comparing(Inventory::getExpirationAt).reversed())
                 .toList();
     }
 
