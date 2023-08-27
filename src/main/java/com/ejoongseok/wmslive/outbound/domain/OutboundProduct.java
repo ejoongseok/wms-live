@@ -1,5 +1,6 @@
 package com.ejoongseok.wmslive.outbound.domain;
 
+import com.ejoongseok.wmslive.location.domain.Inventory;
 import com.ejoongseok.wmslive.product.domain.Product;
 import com.google.common.annotations.VisibleForTesting;
 import jakarta.persistence.Column;
@@ -122,7 +123,10 @@ public class OutboundProduct {
     }
 
     List<Picking> createPickings(final Inventories inventories) {
-
+        final Inventory firstInventory = inventories.toList().get(0);
+        if (orderQuantity <= firstInventory.getInventoryQuantity()) {
+            return List.of(new Picking());
+        }
         return null;
     }
 }

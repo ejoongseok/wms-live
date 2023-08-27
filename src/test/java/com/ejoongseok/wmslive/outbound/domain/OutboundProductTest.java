@@ -6,6 +6,7 @@ import java.util.List;
 
 import static com.ejoongseok.wmslive.location.domain.InventoriesFixture.anInventories;
 import static com.ejoongseok.wmslive.outbound.domain.OutboundProductFixture.anOutboundProduct;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class OutboundProductTest {
 
@@ -25,5 +26,7 @@ class OutboundProductTest {
         final Inventories inventories = anInventories().build();
 
         final List<Picking> pickings = outboundProduct.createPickings(inventories);
+
+        assertThat(pickings).hasSize(1);
     }
 }
