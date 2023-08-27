@@ -8,11 +8,11 @@ import java.util.List;
 
 public interface InventoryRepository extends JpaRepository<Inventory, Long> {
     @Query("SELECT i FROM Inventory i WHERE i.productNo = :productNo")
-    List<Inventory> findByProductNo(Long productNo);
+    List<Inventory> listBy(Long productNo);
 
     default Inventories inventoriesBy(final Long productNo) {
         return new Inventories(
-                findByProductNo(productNo)
+                listBy(productNo)
         );
     }
 }
