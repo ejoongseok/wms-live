@@ -1,5 +1,6 @@
 package com.ejoongseok.wmslive.outbound.domain;
 
+import com.ejoongseok.wmslive.location.domain.Inventory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,7 +30,9 @@ class PickingAllocatorTest {
     @DisplayName("출고 상품에 대한 집품 목록을 할당한다.")
     void allocatePicking() {
         final Inventories inventories = createInventories();
-        final Outbound outbound = anOutbound().outboundProducts(anOutboundProduct().orderQuantity(10L)).build();
+        final Outbound outbound = anOutbound()
+                .outboundProducts(anOutboundProduct().orderQuantity(10L))
+                .build();
 
         pickingAllocator.allocatePicking(outbound, inventories);
 
@@ -72,16 +75,22 @@ class PickingAllocatorTest {
 
     private void assertAllocatePickings(final Outbound outbound, final Inventories inventories) {
         final List<Picking> pickings = outbound.getPickings();
+        final Picking picking1 = pickings.get(0);
+        final Picking picking2 = pickings.get(1);
+        final Picking picking3 = pickings.get(2);
+        final Inventory inventory1 = inventories.getBy(picking1.getInventory());
+        final Inventory inventory2 = inventories.getBy(picking2.getInventory());
+        final Inventory inventory3 = inventories.getBy(picking3.getInventory());
         assertThat(pickings).hasSize(3);
-        assertThat(pickings.get(0).getQuantityRequiredForPick()).isEqualTo(4L);
-        assertThat(pickings.get(1).getQuantityRequiredForPick()).isEqualTo(4L);
-        assertThat(pickings.get(2).getQuantityRequiredForPick()).isEqualTo(2L);
-        assertThat(inventories.getBy(pickings.get(0).getInventory()).getInventoryQuantity()).isEqualTo(0L);
-        assertThat(inventories.getBy(pickings.get(0).getInventory()).getLocationBarcode()).isEqualTo("A1-1");
-        assertThat(inventories.getBy(pickings.get(1).getInventory()).getInventoryQuantity()).isEqualTo(0L);
-        assertThat(inventories.getBy(pickings.get(1).getInventory()).getLocationBarcode()).isEqualTo("A3");
-        assertThat(inventories.getBy(pickings.get(2).getInventory()).getInventoryQuantity()).isEqualTo(1L);
-        assertThat(inventories.getBy(pickings.get(2).getInventory()).getLocationBarcode()).isEqualTo("A2");
+        assertThat(picking1.getQuantityRequiredForPick()).isEqualTo(4L);
+        assertThat(picking2.getQuantityRequiredForPick()).isEqualTo(4L);
+        assertThat(picking3.getQuantityRequiredForPick()).isEqualTo(2L);
+        assertThat(inventory1.getInventoryQuantity()).isEqualTo(0L);
+        assertThat(inventory1.getLocationBarcode()).isEqualTo("A1-1");
+        assertThat(inventory2.getInventoryQuantity()).isEqualTo(0L);
+        assertThat(inventory2.getLocationBarcode()).isEqualTo("A3");
+        assertThat(inventory3.getInventoryQuantity()).isEqualTo(1L);
+        assertThat(inventory3.getLocationBarcode()).isEqualTo("A2");
     }
 
 
