@@ -1,5 +1,7 @@
 package com.ejoongseok.wmslive.outbound.feature;
 
+import com.ejoongseok.wmslive.outbound.domain.Outbound;
+import com.ejoongseok.wmslive.outbound.domain.OutboundRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,8 +23,10 @@ class AllocatePickingTest {
     }
 
     private class AllocatePicking {
+        private OutboundRepository outboundRepository;
+
         public void request(final Long outboundNo) {
-            throw new UnsupportedOperationException("Unsupported request");
+            final Outbound outbound = outboundRepository.getBy(outboundNo);
         }
     }
 }
