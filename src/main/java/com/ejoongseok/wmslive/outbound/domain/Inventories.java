@@ -69,4 +69,11 @@ public final class Inventories {
     public List<Inventory> toList() {
         return inventories;
     }
+
+    public Inventory getBy(final Inventory inventory) {
+        return inventories.stream()
+                .filter(i -> i.equals(inventory))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("해당 재고가 존재하지 않습니다."));
+    }
 }

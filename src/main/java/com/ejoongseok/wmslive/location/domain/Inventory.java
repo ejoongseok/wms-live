@@ -12,6 +12,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
@@ -22,6 +23,7 @@ import java.time.LocalDateTime;
 @Table(name = "inventory")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Comment("재고")
+@EqualsAndHashCode(of = "inventoryNo", callSuper = false)
 public class Inventory {
 
     @Id
@@ -86,5 +88,11 @@ public class Inventory {
 
     public String getLocationBarcode() {
         return location.getLocationBarcode();
+    }
+
+    public void decreaseInventory(final Long quantity) {
+        if (inventoryQuantity < quantity)
+            throw new IllegalArgumentException("차감하려는 재고 수량이 충분하지 않습니다.");
+        inventoryQuantity -= quantity;
     }
 }

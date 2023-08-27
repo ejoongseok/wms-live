@@ -11,6 +11,7 @@ public class Picking {
     private OutboundProduct outboundProduct;
 
     public Picking(final Inventory inventory, final Long quantityRequiredForPick) {
+
         this.inventory = inventory;
         this.quantityRequiredForPick = quantityRequiredForPick;
     }
