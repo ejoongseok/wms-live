@@ -1,5 +1,6 @@
 package com.ejoongseok.wmslive.outbound.domain;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -13,6 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class PickingAllocatorTest {
 
     @Test
+    @DisplayName("출고 상품에 대한 집품 목록을 할당한다.")
     void allocatePicking() {
         final Inventories inventories = anInventories()
                 .inventories(
