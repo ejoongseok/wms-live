@@ -8,6 +8,7 @@ import com.ejoongseok.wmslive.outbound.domain.Outbound;
 import com.ejoongseok.wmslive.outbound.domain.OutboundProduct;
 import com.ejoongseok.wmslive.outbound.domain.OutboundRepository;
 import com.ejoongseok.wmslive.outbound.domain.Picking;
+import com.ejoongseok.wmslive.outbound.domain.PickingAllocator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -61,7 +62,7 @@ class AllocatePickingTest {
                 .build();
 
         final Outbound outbound = anOutbound().outboundProducts(anOutboundProduct().orderQuantity(10L)).build();
-        allocatePicking.allocatePicking(outbound, inventories);
+        new PickingAllocator().allocatePicking(outbound, inventories);
 
         final List<Picking> pickings = outbound.getPickings();
         assertThat(pickings).hasSize(3);
@@ -74,6 +75,7 @@ class AllocatePickingTest {
     }
 
     private class AllocatePicking {
+        private final PickingAllocator pickingAllocator = new PickingAllocator();
         private OutboundRepository outboundRepository;
         private InventoryRepository inventoryRepository;
 
@@ -84,22 +86,14 @@ class AllocatePickingTest {
                     .flatMap(op -> inventoryRepository.listBy(op.getProductNo()).stream())
                     .collect(Collectors.toList()));
 
-            allocatePicking(outbound, inventories);
-        }
-
-        private void allocatePicking(final Outbound outbound, final Inventories inventories) {
-            outbound.allocatePicking(inventories);
-            deductAllocatedInventory(outbound.getPickings(), inventories);
+            pickingAllocator.allocatePicking(outbound, inventories);
         }
 
 
         void deductAllocatedInventory(
                 final List<Picking> pickings,
                 final Inventories inventories) {
-            for (final Picking picking : pickings) {
-                final Inventory inventory = inventories.getBy(picking.getInventory());
-                inventory.decreaseInventory(picking.getQuantityRequiredForPick());
-            }
+            pickingAllocator.deductAllocatedInventory(pickings, inventories);
         }
 
     }
