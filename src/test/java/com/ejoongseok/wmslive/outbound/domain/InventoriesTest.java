@@ -50,8 +50,8 @@ class InventoriesTest {
 
         final List<Inventory> resultList = result.toList();
         assertThat(resultList).hasSize(4);
-        assertThat(resultList.get(0).getLocationBarcode()).isEqualTo("A3");
-        assertThat(resultList.get(1).getLocationBarcode()).isEqualTo("A1-1");
+        assertThat(resultList.get(0).getLocationBarcode()).isEqualTo("A1-1");
+        assertThat(resultList.get(1).getLocationBarcode()).isEqualTo("A3");
         assertThat(resultList.get(2).getLocationBarcode()).isEqualTo("A2");
         assertThat(resultList.get(3).getLocationBarcode()).isEqualTo("A1");
     }

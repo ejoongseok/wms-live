@@ -61,6 +61,7 @@ public final class Inventories {
         return inventories.stream()
                 .sorted(Comparator.comparing(Inventory::getExpirationAt)
                         .thenComparing(Inventory::getInventoryQuantity, Comparator.reverseOrder())
+                        .thenComparing(Inventory::getLocationBarcode)
                 )
                 .toList();
     }
