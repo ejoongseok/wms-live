@@ -12,9 +12,7 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long> {
     List<Inventory> listBy(Long productNo);
 
     default Inventories inventoriesBy(final Long productNo) {
-        return new Inventories(
-                listBy(productNo)
-        );
+        return new Inventories(listBy(productNo));
     }
 
     @Query("SELECT i FROM Inventory i WHERE i.productNo IN :productNos")
