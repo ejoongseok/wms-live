@@ -1,5 +1,6 @@
 package com.ejoongseok.wmslive.outbound.domain;
 
+import com.ejoongseok.wmslive.location.domain.Inventory;
 import com.ejoongseok.wmslive.location.domain.Location;
 import com.ejoongseok.wmslive.location.domain.StorageType;
 import org.junit.jupiter.api.DisplayName;
@@ -101,6 +102,11 @@ class OutboundTest {
         final Inventories inventories = anInventories().build();
 
         outbound.allocatePicking(inventories);
+
+        for (final Picking picking : outbound.getPickings()) {
+            final Inventory inventory = inventories.getBy(picking.getInventory());
+            inventory.decreaseInventory(picking.getQuantity());
+        }
 
 //        outbound.getOutboundProductList().get(0).getPickings();
     }

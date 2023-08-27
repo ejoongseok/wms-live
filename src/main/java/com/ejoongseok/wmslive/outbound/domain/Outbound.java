@@ -188,4 +188,8 @@ public class Outbound {
             outboundProduct.allocatePicking(inventories);
         }
     }
+
+    public List<Picking> getPickings() {
+        return outboundProducts.getPickings();
+    }
 }

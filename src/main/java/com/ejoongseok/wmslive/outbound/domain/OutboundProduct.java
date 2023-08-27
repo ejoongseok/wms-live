@@ -130,7 +130,7 @@ public class OutboundProduct {
     List<Picking> createPickings(final Inventories inventories) {
         final Inventory firstInventory = inventories.toList().get(0);
         if (orderQuantity <= firstInventory.getInventoryQuantity()) {
-            return List.of(new Picking(orderQuantity));
+            return List.of(new Picking(firstInventory, orderQuantity));
         }
 
         Long remainingQuantity = orderQuantity;
@@ -143,7 +143,7 @@ public class OutboundProduct {
                     inventory.getInventoryQuantity(),
                     remainingQuantity);
             remainingQuantity -= quantityToAllocate;
-            pickings.add(new Picking(quantityToAllocate));
+            pickings.add(new Picking(inventory, quantityToAllocate));
         }
         return pickings;
     }
