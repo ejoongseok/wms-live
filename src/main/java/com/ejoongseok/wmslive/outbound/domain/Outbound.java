@@ -178,4 +178,8 @@ public class Outbound {
             throw new IllegalStateException("포장재가 할당되어 있지 않습니다.");
         }
     }
+
+    public List<OutboundProduct> getOutboundProductList() {
+        return outboundProducts.toList();
+    }
 }
