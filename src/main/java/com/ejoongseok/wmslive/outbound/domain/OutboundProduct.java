@@ -114,6 +114,12 @@ public class OutboundProduct {
     }
 
     public void allocatePicking(final Inventories inventories) {
-        inventories.makeEfficientInventoriesForPicking(getProductNo(), orderQuantity);
+        final Inventories pickingInventories = inventories.makeEfficientInventoriesForPicking(getProductNo(), orderQuantity);
+        createPickings(pickingInventories);
+
+    }
+
+    private void createPickings(final Inventories inventories) {
+
     }
 }
