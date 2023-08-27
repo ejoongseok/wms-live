@@ -1,13 +1,13 @@
 package com.ejoongseok.wmslive.outbound.feature;
 
 import com.ejoongseok.wmslive.location.domain.Inventory;
+import com.ejoongseok.wmslive.location.domain.InventoryFixture;
 import com.ejoongseok.wmslive.location.domain.InventoryRepository;
 import com.ejoongseok.wmslive.outbound.domain.Inventories;
 import com.ejoongseok.wmslive.outbound.domain.Outbound;
 import com.ejoongseok.wmslive.outbound.domain.OutboundProduct;
 import com.ejoongseok.wmslive.outbound.domain.OutboundRepository;
 import com.ejoongseok.wmslive.outbound.domain.Picking;
-import com.ejoongseok.wmslive.outbound.domain.PickingFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.ejoongseok.wmslive.location.domain.InventoryFixture.anInventory;
+import static com.ejoongseok.wmslive.outbound.domain.PickingFixture.aPicking;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class AllocatePickingTest {
@@ -36,8 +37,12 @@ class AllocatePickingTest {
 
     @Test
     void deductAllocatedInventories() {
-        final Inventory inventory = anInventory().build();
-        final Picking picking = PickingFixture.createPicking(inventory);
+        final InventoryFixture inventoryFixture = anInventory();
+        final Picking picking = aPicking()
+                .inventory(inventoryFixture)
+                .build();
+        final Inventory inventory = inventoryFixture.build();
+
         allocatePicking.deductAllocatedInventory(List.of(picking), new Inventories(List.of(inventory)));
 
         assertThat(inventory.getInventoryQuantity()).isEqualTo(0L);
