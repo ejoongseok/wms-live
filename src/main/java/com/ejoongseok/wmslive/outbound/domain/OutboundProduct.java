@@ -126,11 +126,6 @@ public class OutboundProduct {
         allocatePickings(pickings);
     }
 
-    private void allocatePickings(final List<Picking> pickings) {
-        this.pickings = pickings;
-        this.pickings.forEach(picking -> picking.assignOutboundProduct(this));
-    }
-
     List<Picking> createPickings(final Inventories inventories) {
         final Inventory firstInventory = inventories.toList().get(0);
         if (orderQuantity <= firstInventory.getInventoryQuantity()) {
@@ -154,5 +149,10 @@ public class OutboundProduct {
 
     private boolean isAllocationComplete(final Long remainingQuantity) {
         return 0 == remainingQuantity;
+    }
+
+    private void allocatePickings(final List<Picking> pickings) {
+        this.pickings = pickings;
+        this.pickings.forEach(picking -> picking.assignOutboundProduct(this));
     }
 }
