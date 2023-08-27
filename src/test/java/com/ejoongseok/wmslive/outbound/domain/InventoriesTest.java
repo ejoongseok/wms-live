@@ -36,6 +36,11 @@ class InventoriesTest {
                                 .lpn(anLPN().expirationAt(now.plusDays(1L)))
                                 .location(aLocation().locationBarcode("A3"))
                         ,
+                        anInventory()
+                                .inventoryQuantity(3L)
+                                .lpn(anLPN().expirationAt(now.plusDays(1L)))
+                                .location(aLocation().locationBarcode("A1-1"))
+                        ,
                         anInventory().lpn(anLPN().expirationAt(now.minusDays(1L))),
                         anInventory().inventoryQuantity(0L)
                 )
@@ -44,10 +49,11 @@ class InventoriesTest {
         final Inventories result = inventories.makeEfficientInventoriesForPicking(1L, 3L);
 
         final List<Inventory> resultList = result.toList();
-        assertThat(resultList).hasSize(3);
+        assertThat(resultList).hasSize(4);
         assertThat(resultList.get(0).getLocationBarcode()).isEqualTo("A3");
-        assertThat(resultList.get(1).getLocationBarcode()).isEqualTo("A2");
-        assertThat(resultList.get(2).getLocationBarcode()).isEqualTo("A1");
+        assertThat(resultList.get(1).getLocationBarcode()).isEqualTo("A1-1");
+        assertThat(resultList.get(2).getLocationBarcode()).isEqualTo("A2");
+        assertThat(resultList.get(3).getLocationBarcode()).isEqualTo("A1");
     }
 
     @Test
