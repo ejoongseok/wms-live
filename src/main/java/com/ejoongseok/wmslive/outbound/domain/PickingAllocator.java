@@ -5,8 +5,6 @@ import com.ejoongseok.wmslive.location.domain.Inventory;
 import java.util.List;
 
 public class PickingAllocator {
-    public PickingAllocator() {
-    }
 
     public void allocatePicking(final Outbound outbound, final Inventories inventories) {
         outbound.allocatePicking(inventories);
