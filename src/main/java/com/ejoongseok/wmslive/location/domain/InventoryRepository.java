@@ -19,4 +19,8 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long> {
 
     @Query("SELECT i FROM Inventory i WHERE i.productNo IN :productNos")
     List<Inventory> listBy(Set<Long> productNos);
+
+    default Inventories inventoriesBy(final Set<Long> productNos) {
+        return new Inventories(listBy(productNos));
+    }
 }

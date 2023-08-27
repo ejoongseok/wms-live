@@ -9,8 +9,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.Set;
-
 class AllocatePickingTest {
 
     private AllocatePicking allocatePicking;
@@ -35,13 +33,9 @@ class AllocatePickingTest {
 
         public void request(final Long outboundNo) {
             final Outbound outbound = outboundRepository.getBy(outboundNo);
-            final Inventories inventories = getInventories(outbound.getProductNos());
+            final Inventories inventories = inventoryRepository.inventoriesBy(outbound.getProductNos());
 
             pickingAllocator.allocatePicking(outbound, inventories);
-        }
-
-        private Inventories getInventories(final Set<Long> productNos) {
-            return new Inventories(inventoryRepository.listBy(productNos));
         }
 
 
