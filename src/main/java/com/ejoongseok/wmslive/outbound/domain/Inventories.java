@@ -39,10 +39,10 @@ public final class Inventories {
     public Inventories makeEfficientInventoriesForPicking(
             final Long productNo, final Long orderQuantity) {
         validate(productNo, orderQuantity);
-        final List<Inventory> inventories = filterAvailableInventories(productNo);
+        final List<Inventory> filteredInventories = filterAvailableInventories(productNo);
 
-        checkInventoryAvailability(orderQuantity, inventories);
-        final List<Inventory> sortedEfficientInventories = sortEfficientInventoriesForPicking(inventories);
+        checkInventoryAvailability(orderQuantity, filteredInventories);
+        final List<Inventory> sortedEfficientInventories = sortEfficientInventoriesForPicking(filteredInventories);
 
         return new Inventories(sortedEfficientInventories);
     }
