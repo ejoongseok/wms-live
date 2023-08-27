@@ -7,6 +7,8 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -66,5 +68,11 @@ public final class OutboundProducts {
         return outboundProducts.stream()
                 .flatMap(o -> o.getPickings().stream())
                 .toList();
+    }
+
+    public Set<Long> getProductNos() {
+        return outboundProducts.stream()
+                .map(OutboundProduct::getProductNo)
+                .collect(Collectors.toUnmodifiableSet());
     }
 }

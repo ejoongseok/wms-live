@@ -3,15 +3,13 @@ package com.ejoongseok.wmslive.outbound.feature;
 import com.ejoongseok.wmslive.location.domain.InventoryRepository;
 import com.ejoongseok.wmslive.outbound.domain.Inventories;
 import com.ejoongseok.wmslive.outbound.domain.Outbound;
-import com.ejoongseok.wmslive.outbound.domain.OutboundProduct;
 import com.ejoongseok.wmslive.outbound.domain.OutboundRepository;
 import com.ejoongseok.wmslive.outbound.domain.PickingAllocator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 class AllocatePickingTest {
 
@@ -37,15 +35,13 @@ class AllocatePickingTest {
 
         public void request(final Long outboundNo) {
             final Outbound outbound = outboundRepository.getBy(outboundNo);
-            final Inventories inventories = getInventories(outbound.getOutboundProductList());
+            final Inventories inventories = getInventories(outbound.getProductNos());
 
             pickingAllocator.allocatePicking(outbound, inventories);
         }
 
-        private Inventories getInventories(final List<OutboundProduct> outboundProducts) {
-            return new Inventories(outboundProducts.stream()
-                    .flatMap(op -> inventoryRepository.listBy(op.getProductNo()).stream())
-                    .collect(Collectors.toList()));
+        private Inventories getInventories(final Set<Long> productNos) {
+            return new Inventories(inventoryRepository.listBy(productNos));
         }
 
 
