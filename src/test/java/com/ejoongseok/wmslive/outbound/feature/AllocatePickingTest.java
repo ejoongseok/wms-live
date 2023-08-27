@@ -1,10 +1,13 @@
 package com.ejoongseok.wmslive.outbound.feature;
 
 import com.ejoongseok.wmslive.outbound.domain.Outbound;
+import com.ejoongseok.wmslive.outbound.domain.OutboundProduct;
 import com.ejoongseok.wmslive.outbound.domain.OutboundRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 class AllocatePickingTest {
 
@@ -27,6 +30,7 @@ class AllocatePickingTest {
 
         public void request(final Long outboundNo) {
             final Outbound outbound = outboundRepository.getBy(outboundNo);
+            final List<OutboundProduct> outboundProducts = outbound.getOutboundProducts().outboundProducts();
         }
     }
 }
