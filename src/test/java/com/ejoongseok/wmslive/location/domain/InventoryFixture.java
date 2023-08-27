@@ -9,9 +9,15 @@ public class InventoryFixture {
     private LocationFixture location = aLocation();
     private LPNFixture lpn = anLPN();
     private Long inventoryQuantity = 1L;
+    private Long inventoryNo = 1L;
 
     public static InventoryFixture anInventory() {
         return new InventoryFixture();
+    }
+
+    public InventoryFixture inventoryNo(final Long inventoryNo) {
+        this.inventoryNo = inventoryNo;
+        return this;
     }
 
     public InventoryFixture location(final LocationFixture location) {
@@ -30,6 +36,10 @@ public class InventoryFixture {
     }
 
     public Inventory build() {
-        return new Inventory(location.build(), lpn.build(), inventoryQuantity);
+        return new Inventory(
+                inventoryNo,
+                location.build(),
+                lpn.build(),
+                inventoryQuantity);
     }
 }

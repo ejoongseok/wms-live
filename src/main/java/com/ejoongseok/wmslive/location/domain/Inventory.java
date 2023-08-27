@@ -57,8 +57,12 @@ public class Inventory {
     }
 
     @VisibleForTesting
-    Inventory(final Location location, final LPN lpn, final Long inventoryQuantity) {
+    Inventory(final Long inventoryNo,
+              final Location location,
+              final LPN lpn,
+              final Long inventoryQuantity) {
         this(location, lpn);
+        this.inventoryNo = inventoryNo;
         this.inventoryQuantity = inventoryQuantity;
     }
 
@@ -92,7 +96,7 @@ public class Inventory {
 
     public void decreaseInventory(final Long quantity) {
         if (inventoryQuantity < quantity)
-            throw new IllegalArgumentException("차감하려는 재고 수량이 충분하지 않습니다.");
+            throw new IllegalArgumentException("차감하려는 재고 수량이 충분하지 않습니다. 재고 수량:%d, 차감 수량:%d".formatted(inventoryQuantity, quantity));
         inventoryQuantity -= quantity;
     }
 }
