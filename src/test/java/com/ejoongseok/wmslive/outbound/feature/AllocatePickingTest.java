@@ -48,6 +48,11 @@ class AllocatePickingTest {
         assertThat(inventory.getInventoryQuantity()).isEqualTo(0L);
     }
 
+    @Test
+    void allocatePicking_() {
+
+    }
+
     private class AllocatePicking {
         private OutboundRepository outboundRepository;
         private InventoryRepository inventoryRepository;
@@ -59,6 +64,10 @@ class AllocatePickingTest {
                     .flatMap(op -> inventoryRepository.listBy(op.getProductNo()).stream())
                     .collect(Collectors.toList()));
 
+            allocatePicking(outbound, inventories);
+        }
+
+        private void allocatePicking(final Outbound outbound, final Inventories inventories) {
             outbound.allocatePicking(inventories);
             deductAllocatedInventory(outbound.getPickings(), inventories);
         }

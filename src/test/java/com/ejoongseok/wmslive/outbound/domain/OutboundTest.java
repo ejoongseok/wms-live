@@ -101,5 +101,7 @@ class OutboundTest {
         final Inventories inventories = anInventories().build();
 
         outbound.allocatePicking(inventories);
+
+        assertThat(outbound.getPickings()).isNotEmpty();
     }
 }
