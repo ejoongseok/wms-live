@@ -74,11 +74,5 @@ class AllocatePickingTest {
         }
 
 
-        void deductAllocatedInventory(
-                final List<Picking> pickings,
-                final Inventories inventories) {
-            pickingAllocator.deductAllocatedInventory(pickings, inventories);
-        }
-
     }
 }
