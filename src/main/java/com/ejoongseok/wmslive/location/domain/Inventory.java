@@ -1,6 +1,7 @@
 package com.ejoongseok.wmslive.location.domain;
 
 import com.ejoongseok.wmslive.inbound.domain.LPN;
+import com.google.common.annotations.VisibleForTesting;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -11,14 +12,18 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "inventory")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Comment("재고")
+@EqualsAndHashCode(of = "inventoryNo", callSuper = false)
 public class Inventory {
 
     @Id
@@ -51,6 +56,16 @@ public class Inventory {
         productNo = lpn.getProductNo();
     }
 
+    @VisibleForTesting
+    Inventory(final Long inventoryNo,
+              final Location location,
+              final LPN lpn,
+              final Long inventoryQuantity) {
+        this(location, lpn);
+        this.inventoryNo = inventoryNo;
+        this.inventoryQuantity = inventoryQuantity;
+    }
+
     void increaseQuantity() {
         inventoryQuantity++;
     }
@@ -69,5 +84,22 @@ public class Inventory {
 
     public boolean hasAvailableQuantity() {
         return 0L < inventoryQuantity;
+    }
+
+    public LocalDateTime getExpirationAt() {
+        return lpn.getExpirationAt();
+    }
+
+    public String getLocationBarcode() {
+        return location.getLocationBarcode();
+    }
+
+    public void decreaseInventory(final Long quantity) {
+        if (inventoryQuantity < quantity) {
+            throw new IllegalArgumentException(
+                    "차감하려는 재고 수량이 충분하지 않습니다. 재고 수량:%d, 차감 수량:%d"
+                            .formatted(inventoryQuantity, quantity));
+        }
+        inventoryQuantity -= quantity;
     }
 }

@@ -5,6 +5,7 @@ import com.ejoongseok.wmslive.location.domain.StorageType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static com.ejoongseok.wmslive.location.domain.InventoriesFixture.anInventories;
 import static com.ejoongseok.wmslive.location.domain.InventoryFixture.anInventory;
 import static com.ejoongseok.wmslive.location.domain.LocationFixture.aLocation;
 import static com.ejoongseok.wmslive.outbound.domain.OutboundFixture.anOutbound;
@@ -91,5 +92,16 @@ class OutboundTest {
             outbound.allocatePickingTote(tote);
         }).isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("포장재가 할당되어 있지 않습니다.");
+    }
+
+    @Test
+    @DisplayName("출고 상품에 대한 집품 목록을 할당한다.")
+    void allocatePicking() {
+        final Outbound outbound = anOutbound().build();
+        final Inventories inventories = anInventories().build();
+
+        outbound.allocatePicking(inventories);
+
+        assertThat(outbound.getPickings()).isNotEmpty();
     }
 }

@@ -20,6 +20,7 @@ import org.springframework.util.Assert;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Entity
@@ -117,7 +118,7 @@ public class Outbound {
                 orderNo,
                 orderCustomer,
                 deliveryRequirements,
-                splitOutboundProducts.outboundProducts(),
+                splitOutboundProducts.toList(),
                 isPriorityDelivery,
                 desiredDeliveryAt,
                 null
@@ -177,5 +178,24 @@ public class Outbound {
         if (null == recommendedPackagingMaterial) {
             throw new IllegalStateException("포장재가 할당되어 있지 않습니다.");
         }
+    }
+
+    public List<OutboundProduct> getOutboundProductList() {
+        return outboundProducts.toList();
+    }
+
+    public void allocatePicking(final Inventories inventories) {
+        Assert.notNull(inventories, "집품을 할당하려는 재고 정보가 없습니다.");
+        for (final OutboundProduct outboundProduct : getOutboundProductList()) {
+            outboundProduct.allocatePicking(inventories);
+        }
+    }
+
+    public List<Picking> getPickings() {
+        return outboundProducts.getPickings();
+    }
+
+    public Set<Long> getProductNos() {
+        return outboundProducts.getProductNos();
     }
 }

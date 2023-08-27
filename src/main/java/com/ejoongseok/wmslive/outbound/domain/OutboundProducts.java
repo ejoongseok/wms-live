@@ -7,6 +7,8 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -19,12 +21,12 @@ public final class OutboundProducts {
     }
 
     long splitTotalQuantity() {
-        return outboundProducts().stream()
+        return toList().stream()
                 .mapToLong(OutboundProduct::getOrderQuantity)
                 .sum();
     }
 
-    public List<OutboundProduct> outboundProducts() {
+    public List<OutboundProduct> toList() {
         return outboundProducts;
     }
 
@@ -60,5 +62,17 @@ public final class OutboundProducts {
     OutboundProduct createOutboundProductToBeSplit(final Long productNo, final Long quantity) {
         final OutboundProduct outboundProduct = getOutboundProductBy(productNo);
         return outboundProduct.split(quantity);
+    }
+
+    public List<Picking> getPickings() {
+        return outboundProducts.stream()
+                .flatMap(o -> o.getPickings().stream())
+                .toList();
+    }
+
+    public Set<Long> getProductNos() {
+        return outboundProducts.stream()
+                .map(OutboundProduct::getProductNo)
+                .collect(Collectors.toUnmodifiableSet());
     }
 }
