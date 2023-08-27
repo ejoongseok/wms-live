@@ -11,7 +11,7 @@ public class PickingAllocator {
         deductAllocatedInventory(outbound.getPickings(), inventories);
     }
 
-    public void deductAllocatedInventory(
+    private void deductAllocatedInventory(
             final List<Picking> pickings,
             final Inventories inventories) {
         for (final Picking picking : pickings) {
