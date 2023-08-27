@@ -35,7 +35,7 @@ class AllocatePickingTest {
             final Outbound outbound = outboundRepository.getBy(outboundNo);
             final List<OutboundProduct> outboundProducts = outbound.getOutboundProductList();
             final List<Inventory> inventories = outboundProducts.stream()
-                    .flatMap(op -> inventoryRepository.findByProductNo(op.getProductNo()).stream())
+                    .flatMap(op -> inventoryRepository.listBy(op.getProductNo()).stream())
                     .toList();
 
         }
