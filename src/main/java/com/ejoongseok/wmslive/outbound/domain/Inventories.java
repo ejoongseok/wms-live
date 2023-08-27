@@ -34,6 +34,15 @@ public final class Inventories {
     }
 
     public Inventories makeEfficientInventoriesForPicking(final Long productNo, final Long orderQuantity) {
-        throw new UnsupportedOperationException("Unsupported makeEfficientInventoriesForPicking");
+        final List<Inventory> inventories = filterAvailableInventories(productNo);
+        return new Inventories(inventories);
+    }
+
+    private List<Inventory> filterAvailableInventories(final Long productNo) {
+        return inventories.stream()
+                .filter(i -> i.getProductNo().equals(productNo))
+                .filter(Inventory::hasInventory)
+                .filter(Inventory::isFresh)
+                .toList();
     }
 }
