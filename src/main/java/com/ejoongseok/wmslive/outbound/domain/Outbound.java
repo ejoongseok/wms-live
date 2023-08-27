@@ -184,6 +184,8 @@ public class Outbound {
     }
 
     public void allocatePicking(final Inventories inventories) {
-        throw new UnsupportedOperationException("Unsupported allocatePicking");
+        for (final OutboundProduct outboundProduct : getOutboundProductList()) {
+            outboundProduct.allocatePicking(inventories);
+        }
     }
 }

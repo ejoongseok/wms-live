@@ -113,4 +113,7 @@ public class OutboundProduct {
         return 0 == orderQuantity;
     }
 
+    public void allocatePicking(final Inventories inventories) {
+        throw new UnsupportedOperationException("Unsupported allocatePicking");
+    }
 }
