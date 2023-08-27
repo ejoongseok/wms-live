@@ -1,5 +1,7 @@
 package com.ejoongseok.wmslive.outbound.feature;
 
+import com.ejoongseok.wmslive.location.domain.Inventory;
+import com.ejoongseok.wmslive.location.domain.InventoryRepository;
 import com.ejoongseok.wmslive.outbound.domain.Outbound;
 import com.ejoongseok.wmslive.outbound.domain.OutboundProduct;
 import com.ejoongseok.wmslive.outbound.domain.OutboundRepository;
@@ -27,10 +29,15 @@ class AllocatePickingTest {
 
     private class AllocatePicking {
         private OutboundRepository outboundRepository;
+        private InventoryRepository inventoryRepository;
 
         public void request(final Long outboundNo) {
             final Outbound outbound = outboundRepository.getBy(outboundNo);
             final List<OutboundProduct> outboundProducts = outbound.getOutboundProductList();
+            final List<Inventory> inventories = outboundProducts.stream()
+                    .flatMap(op -> inventoryRepository.findByProductNo(op.getProductNo()).stream())
+                    .toList();
+
         }
 
     }
