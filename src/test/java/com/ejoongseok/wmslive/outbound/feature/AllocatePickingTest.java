@@ -30,7 +30,11 @@ class AllocatePickingTest {
 
         public void request(final Long outboundNo) {
             final Outbound outbound = outboundRepository.getBy(outboundNo);
-            final List<OutboundProduct> outboundProducts = outbound.getOutboundProducts().toList();
+            final List<OutboundProduct> outboundProducts = getOutboundProductList(outbound);
+        }
+
+        private List<OutboundProduct> getOutboundProductList(final Outbound outbound) {
+            return outbound.getOutboundProducts().toList();
         }
     }
 }
