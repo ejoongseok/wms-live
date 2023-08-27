@@ -1,6 +1,7 @@
 package com.ejoongseok.wmslive.location.domain;
 
 import com.ejoongseok.wmslive.inbound.domain.LPN;
+import com.google.common.annotations.VisibleForTesting;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -49,6 +50,12 @@ public class Inventory {
         this.lpn = lpn;
         inventoryQuantity = 1L;
         productNo = lpn.getProductNo();
+    }
+
+    @VisibleForTesting
+    Inventory(final Location location, final LPN lpn, final Long inventoryQuantity) {
+        this(location, lpn);
+        this.inventoryQuantity = inventoryQuantity;
     }
 
     void increaseQuantity() {
