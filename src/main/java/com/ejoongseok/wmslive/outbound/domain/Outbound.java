@@ -1,6 +1,5 @@
 package com.ejoongseok.wmslive.outbound.domain;
 
-import com.ejoongseok.wmslive.location.domain.Inventory;
 import com.ejoongseok.wmslive.location.domain.Location;
 import com.google.common.annotations.VisibleForTesting;
 import jakarta.persistence.Column;
@@ -184,7 +183,7 @@ public class Outbound {
         return outboundProducts.toList();
     }
 
-    public void allocatePicking(final List<Inventory> inventories) {
+    public void allocatePicking(final Inventories inventories) {
         throw new UnsupportedOperationException("Unsupported allocatePicking");
     }
 }
