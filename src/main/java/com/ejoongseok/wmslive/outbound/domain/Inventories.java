@@ -40,8 +40,11 @@ public final class Inventories {
             final Long productNo, final Long orderQuantity) {
         validate(productNo, orderQuantity);
         final List<Inventory> inventories = filterAvailableInventories(productNo);
+
         checkInventoryAvailability(orderQuantity, inventories);
-        return new Inventories(sortEfficientInventoriesForPicking(inventories));
+        final List<Inventory> sortedEfficientInventories = sortEfficientInventoriesForPicking(inventories);
+
+        return new Inventories(sortedEfficientInventories);
     }
 
     private void validate(final Long productNo, final Long orderQuantity) {
