@@ -95,8 +95,11 @@ public class Inventory {
     }
 
     public void decreaseInventory(final Long quantity) {
-        if (inventoryQuantity < quantity)
-            throw new IllegalArgumentException("차감하려는 재고 수량이 충분하지 않습니다. 재고 수량:%d, 차감 수량:%d".formatted(inventoryQuantity, quantity));
+        if (inventoryQuantity < quantity) {
+            throw new IllegalArgumentException(
+                    "차감하려는 재고 수량이 충분하지 않습니다. 재고 수량:%d, 차감 수량:%d"
+                            .formatted(inventoryQuantity, quantity));
+        }
         inventoryQuantity -= quantity;
     }
 }
