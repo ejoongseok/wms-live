@@ -36,7 +36,8 @@ public final class Inventories {
                 .anyMatch(inventory -> inventory.getProductNo().equals(productNo));
     }
 
-    public Inventories makeEfficientInventoriesForPicking(final Long productNo, final Long orderQuantity) {
+    public Inventories makeEfficientInventoriesForPicking(
+            final Long productNo, final Long orderQuantity) {
         validate(productNo, orderQuantity);
         final List<Inventory> inventories = filterAvailableInventories(productNo);
         checkInventoryAvailability(orderQuantity, inventories);
@@ -57,16 +58,20 @@ public final class Inventories {
                 .toList();
     }
 
-    private void checkInventoryAvailability(final Long orderQuantity, final List<Inventory> inventories) {
+    private void checkInventoryAvailability(
+            final Long orderQuantity, final List<Inventory> inventories) {
         final long totalQuantity = inventories.stream()
                 .mapToLong(Inventory::getInventoryQuantity)
                 .sum();
         if (totalQuantity < orderQuantity) {
-            throw new IllegalArgumentException("재고가 부족합니다. 재고 수량:%d, 주문 수량:%d".formatted(totalQuantity, orderQuantity));
+            throw new IllegalArgumentException(
+                    "재고가 부족합니다. 재고 수량:%d, 주문 수량:%d"
+                            .formatted(totalQuantity, orderQuantity));
         }
     }
 
-    private List<Inventory> sortEfficientInventoriesForPicking(final List<Inventory> inventories) {
+    private List<Inventory> sortEfficientInventoriesForPicking(
+            final List<Inventory> inventories) {
         return inventories.stream()
                 .sorted(Comparator.comparing(Inventory::getExpirationAt)
                         .thenComparing(Inventory::getInventoryQuantity, Comparator.reverseOrder())

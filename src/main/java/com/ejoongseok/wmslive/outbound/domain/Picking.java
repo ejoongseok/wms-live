@@ -48,7 +48,9 @@ public class Picking {
         this.quantityRequiredForPick = quantityRequiredForPick;
     }
 
-    private void validateConstructor(final Inventory inventory, final Long quantityRequiredForPick) {
+    private void validateConstructor(
+            final Inventory inventory,
+            final Long quantityRequiredForPick) {
         Assert.notNull(inventory, "집품이 할당된 재고는 필수입니다.");
         Assert.notNull(quantityRequiredForPick, "집품해야할 수량은 필수입니다.");
         Assert.isTrue(1 <= quantityRequiredForPick, "집품할 수량은 1개 이상이어야 합니다.");

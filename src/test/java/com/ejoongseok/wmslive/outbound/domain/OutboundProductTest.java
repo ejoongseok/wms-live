@@ -15,16 +15,24 @@ class OutboundProductTest {
     @Test
     void allocatePicking() {
         final OutboundProduct outboundProduct = anOutboundProduct().orderQuantity(10L).build();
-        final Inventories inventories = anInventories()
+        final Inventories inventories = createInventories();
+
+        outboundProduct.allocatePicking(inventories);
+
+        assertAllocatePicking(outboundProduct.getPickings());
+    }
+
+    private Inventories createInventories() {
+        return anInventories()
                 .inventories(
                         anInventory().inventoryQuantity(4L),
                         anInventory().inventoryQuantity(4L),
                         anInventory().inventoryQuantity(4L))
                 .build();
+    }
 
-        outboundProduct.allocatePicking(inventories);
-
-        final List<Picking> pickings = outboundProduct.getPickings();
+    private void assertAllocatePicking(final List<Picking> outboundProduct) {
+        final List<Picking> pickings = outboundProduct;
         assertThat(pickings).hasSize(3);
         assertThat(pickings.get(0).getQuantityRequiredForPick()).isEqualTo(4L);
         assertThat(pickings.get(1).getQuantityRequiredForPick()).isEqualTo(4L);
@@ -46,18 +54,10 @@ class OutboundProductTest {
     @DisplayName("출고 상품에 대한 집품 목록을 할당한다.")
     void createPickings() {
         final OutboundProduct outboundProduct = anOutboundProduct().orderQuantity(10L).build();
-        final Inventories inventories = anInventories()
-                .inventories(
-                        anInventory().inventoryQuantity(4L),
-                        anInventory().inventoryQuantity(4L),
-                        anInventory().inventoryQuantity(4L))
-                .build();
+        final Inventories inventories = createInventories();
 
         final List<Picking> pickings = outboundProduct.createPickings(inventories);
 
-        assertThat(pickings).hasSize(3);
-        assertThat(pickings.get(0).getQuantityRequiredForPick()).isEqualTo(4L);
-        assertThat(pickings.get(1).getQuantityRequiredForPick()).isEqualTo(4L);
-        assertThat(pickings.get(2).getQuantityRequiredForPick()).isEqualTo(2L);
+        assertAllocatePicking(pickings);
     }
 }
