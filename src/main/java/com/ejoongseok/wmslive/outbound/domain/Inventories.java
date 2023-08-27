@@ -45,4 +45,8 @@ public final class Inventories {
                 .filter(Inventory::isFresh)
                 .toList();
     }
+
+    public List<Inventory> toList() {
+        return inventories;
+    }
 }
