@@ -59,7 +59,9 @@ public final class Inventories {
 
     private List<Inventory> sortEfficientInventoriesForPicking(final List<Inventory> inventories) {
         return inventories.stream()
-                .sorted(Comparator.comparing(Inventory::getExpirationAt).reversed())
+                .sorted(Comparator.comparing(Inventory::getExpirationAt)
+                        .thenComparing(Inventory::getInventoryQuantity, Comparator.reverseOrder())
+                )
                 .toList();
     }
 
