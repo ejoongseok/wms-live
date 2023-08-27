@@ -27,7 +27,13 @@ class PickingAllocatorTest {
     }
 
     @Test
-    @DisplayName("출고 상품에 대한 집품 목록을 할당한다.")
+    @DisplayName(
+            "출고 상품에 대한 집품 목록을 할당한다." +
+                    "1. 재고는 유통기한이 가장 빠른 순서대로 할당한다." +
+                    "2. 유통기한이 같으면 재고 수량이 가장 많은 순서대로 할당한다. " +
+                    "3. 유통기한과 재고 수량이 같으면 로케이션 순서대로 할당한다." +
+                    "재고가 충분하지 않을 경우 예외가 발생한다."
+    )
     void allocatePicking() {
         final Inventories inventories = createInventories();
         final Outbound outbound = anOutbound()
