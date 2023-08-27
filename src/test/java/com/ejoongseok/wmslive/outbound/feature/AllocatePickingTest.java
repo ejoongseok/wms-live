@@ -37,12 +37,15 @@ class AllocatePickingTest {
 
         public void request(final Long outboundNo) {
             final Outbound outbound = outboundRepository.getBy(outboundNo);
-            final List<OutboundProduct> outboundProducts = outbound.getOutboundProductList();
-            final Inventories inventories = new Inventories(outboundProducts.stream()
-                    .flatMap(op -> inventoryRepository.listBy(op.getProductNo()).stream())
-                    .collect(Collectors.toList()));
+            final Inventories inventories = getInventories(outbound.getOutboundProductList());
 
             pickingAllocator.allocatePicking(outbound, inventories);
+        }
+
+        private Inventories getInventories(final List<OutboundProduct> outboundProducts) {
+            return new Inventories(outboundProducts.stream()
+                    .flatMap(op -> inventoryRepository.listBy(op.getProductNo()).stream())
+                    .collect(Collectors.toList()));
         }
 
 
