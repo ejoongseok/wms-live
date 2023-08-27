@@ -52,7 +52,7 @@ public class OutboundProduct {
     private Outbound outbound;
     @Getter
     @OneToMany(mappedBy = "outboundProduct", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Picking> pickings = new ArrayList<>();
+    private final List<Picking> pickings = new ArrayList<>();
 
     public OutboundProduct(
             final Product product,
@@ -157,7 +157,8 @@ public class OutboundProduct {
     }
 
     private void allocatePickings(final List<Picking> pickings) {
-        this.pickings = pickings;
-        this.pickings.forEach(picking -> picking.assignOutboundProduct(this));
+        this.pickings.clear();
+        this.pickings.addAll(pickings);
+        pickings.forEach(picking -> picking.assignOutboundProduct(this));
     }
 }
