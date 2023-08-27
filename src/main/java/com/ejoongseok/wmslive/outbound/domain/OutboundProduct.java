@@ -114,6 +114,6 @@ public class OutboundProduct {
     }
 
     public void allocatePicking(final Inventories inventories) {
-        throw new UnsupportedOperationException("Unsupported allocatePicking");
+        inventories.makeEfficientInventoriesForPicking(getProductNo(), orderQuantity);
     }
 }

@@ -33,4 +33,7 @@ public final class Inventories {
                 .anyMatch(inventory -> inventory.getProductNo().equals(productNo));
     }
 
+    public Inventories makeEfficientInventoriesForPicking(final Long productNo, final Long orderQuantity) {
+        throw new UnsupportedOperationException("Unsupported makeEfficientInventoriesForPicking");
+    }
 }
