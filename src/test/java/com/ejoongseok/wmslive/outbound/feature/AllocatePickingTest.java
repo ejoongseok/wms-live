@@ -38,6 +38,8 @@ class AllocatePickingTest {
                     .flatMap(op -> inventoryRepository.listBy(op.getProductNo()).stream())
                     .toList();
 
+            outbound.allocatePicking(inventories);
+
         }
 
     }
