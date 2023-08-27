@@ -117,7 +117,7 @@ public class Outbound {
                 orderNo,
                 orderCustomer,
                 deliveryRequirements,
-                splitOutboundProducts.outboundProducts(),
+                splitOutboundProducts.toList(),
                 isPriorityDelivery,
                 desiredDeliveryAt,
                 null

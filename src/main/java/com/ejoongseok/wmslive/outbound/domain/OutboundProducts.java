@@ -19,12 +19,12 @@ public final class OutboundProducts {
     }
 
     long splitTotalQuantity() {
-        return outboundProducts().stream()
+        return toList().stream()
                 .mapToLong(OutboundProduct::getOrderQuantity)
                 .sum();
     }
 
-    public List<OutboundProduct> outboundProducts() {
+    public List<OutboundProduct> toList() {
         return outboundProducts;
     }
 
