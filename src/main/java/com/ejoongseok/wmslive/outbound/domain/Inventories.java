@@ -1,6 +1,7 @@
 package com.ejoongseok.wmslive.outbound.domain;
 
 import com.ejoongseok.wmslive.location.domain.Inventory;
+import org.springframework.util.Assert;
 
 import java.util.Comparator;
 import java.util.List;
@@ -9,6 +10,7 @@ public final class Inventories {
     private final List<Inventory> inventories;
 
     public Inventories(final List<Inventory> inventories) {
+        Assert.notEmpty(inventories, "재고 정보가 없습니다.");
         this.inventories = inventories;
     }
 
@@ -35,9 +37,16 @@ public final class Inventories {
     }
 
     public Inventories makeEfficientInventoriesForPicking(final Long productNo, final Long orderQuantity) {
+        validate(productNo, orderQuantity);
         final List<Inventory> inventories = filterAvailableInventories(productNo);
         checkInventoryAvailability(orderQuantity, inventories);
         return new Inventories(sortEfficientInventoriesForPicking(inventories));
+    }
+
+    private void validate(final Long productNo, final Long orderQuantity) {
+        Assert.notNull(productNo, "상품 번호가 없습니다.");
+        Assert.notNull(orderQuantity, "주문 수량이 없습니다.");
+        if (0 >= orderQuantity) throw new IllegalArgumentException("주문 수량은 0보다 커야 합니다.");
     }
 
     private List<Inventory> filterAvailableInventories(final Long productNo) {

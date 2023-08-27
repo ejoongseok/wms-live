@@ -184,6 +184,7 @@ public class Outbound {
     }
 
     public void allocatePicking(final Inventories inventories) {
+        Assert.notNull(inventories, "집품을 할당하려는 재고 정보가 없습니다.");
         for (final OutboundProduct outboundProduct : getOutboundProductList()) {
             outboundProduct.allocatePicking(inventories);
         }
