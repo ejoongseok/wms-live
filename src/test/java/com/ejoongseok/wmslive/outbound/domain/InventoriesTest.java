@@ -18,8 +18,16 @@ class InventoriesTest {
 
     @Test
     void makeEfficientInventoriesForPicking() {
+        final Inventories inventories = createInventories();
+
+        final Inventories result = inventories.makeEfficientInventoriesForPicking(1L, 3L);
+
+        assertEfficientForPicking(result);
+    }
+
+    private Inventories createInventories() {
         final LocalDateTime now = LocalDateTime.now();
-        final Inventories inventories = anInventories()
+        return anInventories()
                 .inventories(
                         anInventory()
                                 .inventoryQuantity(3L)
@@ -45,9 +53,9 @@ class InventoriesTest {
                         anInventory().inventoryQuantity(0L)
                 )
                 .build();
+    }
 
-        final Inventories result = inventories.makeEfficientInventoriesForPicking(1L, 3L);
-
+    private void assertEfficientForPicking(final Inventories result) {
         final List<Inventory> resultList = result.toList();
         assertThat(resultList).hasSize(4);
         assertThat(resultList.get(0).getLocationBarcode()).isEqualTo("A1-1");
