@@ -14,12 +14,21 @@ class OutboundProductTest {
 
     @Test
     void allocatePicking() {
-        final OutboundProduct outboundProduct = anOutboundProduct().build();
-        final Inventories inventories = anInventories().build();
+        final OutboundProduct outboundProduct = anOutboundProduct().orderQuantity(10L).build();
+        final Inventories inventories = anInventories()
+                .inventories(
+                        anInventory().inventoryQuantity(4L),
+                        anInventory().inventoryQuantity(4L),
+                        anInventory().inventoryQuantity(4L))
+                .build();
 
         outboundProduct.allocatePicking(inventories);
 
-//        outboundProduct.getPickings();
+        final List<Picking> pickings = outboundProduct.getPickings();
+        assertThat(pickings).hasSize(3);
+        assertThat(pickings.get(0).getQuantityRequiredForPick()).isEqualTo(4L);
+        assertThat(pickings.get(1).getQuantityRequiredForPick()).isEqualTo(4L);
+        assertThat(pickings.get(2).getQuantityRequiredForPick()).isEqualTo(2L);
     }
 
     @Test

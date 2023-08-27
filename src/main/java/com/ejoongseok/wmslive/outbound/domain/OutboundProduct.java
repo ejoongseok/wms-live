@@ -48,6 +48,7 @@ public class OutboundProduct {
     @JoinColumn(name = "outbound_no", nullable = false)
     @Comment("출고 번호")
     private Outbound outbound;
+    @Getter
     private List<Picking> pickings = new ArrayList<>();
 
     public OutboundProduct(
