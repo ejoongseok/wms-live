@@ -35,7 +35,17 @@ public final class Inventories {
 
     public Inventories makeEfficientInventoriesForPicking(final Long productNo, final Long orderQuantity) {
         final List<Inventory> inventories = filterAvailableInventories(productNo);
+        checkInventoryAvailability(orderQuantity, inventories);
         return new Inventories(inventories);
+    }
+
+    private void checkInventoryAvailability(final Long orderQuantity, final List<Inventory> inventories) {
+        final long totalQuantity = inventories.stream()
+                .mapToLong(Inventory::getInventoryQuantity)
+                .sum();
+        if (totalQuantity < orderQuantity) {
+            throw new IllegalArgumentException("재고가 부족합니다.");
+        }
     }
 
     private List<Inventory> filterAvailableInventories(final Long productNo) {
