@@ -7,6 +7,7 @@ import com.ejoongseok.wmslive.outbound.domain.Outbound;
 import com.ejoongseok.wmslive.outbound.domain.OutboundProduct;
 import com.ejoongseok.wmslive.outbound.domain.OutboundRepository;
 import com.ejoongseok.wmslive.outbound.domain.Picking;
+import com.ejoongseok.wmslive.outbound.domain.PickingFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -36,7 +37,7 @@ class AllocatePickingTest {
     @Test
     void deductAllocatedInventories() {
         final Inventory inventory = anInventory().build();
-        final Picking picking = new Picking(inventory, 1L);
+        final Picking picking = PickingFixture.createPicking(inventory);
         allocatePicking.deductAllocatedInventory(List.of(picking), new Inventories(List.of(inventory)));
 
         assertThat(inventory.getInventoryQuantity()).isEqualTo(0L);
