@@ -98,7 +98,10 @@ class PickingAllocatorTest {
     @DisplayName("재고가 충분하지 않을 경우 예외가 발생한다.")
     void fail_over_order_quantity_allocatePicking() {
         final Inventories inventories = createInventories();
-        final Outbound outbound = anOutbound().outboundProducts(anOutboundProduct().orderQuantity(16L)).build();
+        final long overQuantity = 16L;
+        final Outbound outbound = anOutbound()
+                .outboundProducts(anOutboundProduct().orderQuantity(overQuantity))
+                .build();
 
         assertThatThrownBy(() -> {
             pickingAllocator.allocatePicking(outbound, inventories);
