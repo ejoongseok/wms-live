@@ -119,7 +119,7 @@ public class OutboundProduct {
 
     }
 
-    private void createPickings(final Inventories inventories) {
+    void createPickings(final Inventories inventories) {
 
     }
 }
