@@ -120,8 +120,15 @@ public class OutboundProduct {
 
     public void allocatePicking(final Inventories inventories) {
         final Inventories pickingInventories = inventories.makeEfficientInventoriesForPicking(getProductNo(), orderQuantity);
+
         final List<Picking> pickings = createPickings(pickingInventories);
+
+        allocatePickings(pickings);
+    }
+
+    private void allocatePickings(final List<Picking> pickings) {
         this.pickings = pickings;
+        this.pickings.forEach(picking -> picking.assignOutboundProduct(this));
     }
 
     List<Picking> createPickings(final Inventories inventories) {
