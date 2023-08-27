@@ -6,6 +6,7 @@ import com.ejoongseok.wmslive.inbound.feature.api.RegisterLPNApi;
 import com.ejoongseok.wmslive.inbound.feature.api.RejectInboundApi;
 import com.ejoongseok.wmslive.location.feature.api.AssignInventoryApi;
 import com.ejoongseok.wmslive.location.feature.api.RegisterLocationApi;
+import com.ejoongseok.wmslive.outbound.feature.api.AllocatePickingApi;
 import com.ejoongseok.wmslive.outbound.feature.api.AllocatePickingToteApi;
 import com.ejoongseok.wmslive.outbound.feature.api.RegisterOutboundApi;
 import com.ejoongseok.wmslive.outbound.feature.api.RegisterPackagingMaterialApi;
@@ -55,5 +56,9 @@ public class Scenario {
 
     public static AllocatePickingToteApi allocatePickingTote() {
         return new AllocatePickingToteApi();
+    }
+
+    public static AllocatePickingApi allocatePicking() {
+        return new AllocatePickingApi();
     }
 }

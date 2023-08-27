@@ -15,8 +15,6 @@ class AllocatePickingTest extends ApiTest {
 
     @Autowired
     OutboundRepository outboundRepository;
-    @Autowired
-    private AllocatePicking allocatePicking;
 
     @BeforeEach
     void setUpAllocatePicking() {
@@ -37,11 +35,10 @@ class AllocatePickingTest extends ApiTest {
     @DisplayName("출고 상품에 대한 집품 목록을 할당한다.")
     @Transactional
     void allocatePicking() {
-        final Long outboundNo = 1L;
+        Scenario
+                .allocatePicking().request();
 
-        allocatePicking.request(outboundNo);
-
-        assertThat(outboundRepository.getBy(outboundNo).getPickings()).hasSize(1);
+        assertThat(outboundRepository.getBy(1L).getPickings()).hasSize(1);
     }
 
 

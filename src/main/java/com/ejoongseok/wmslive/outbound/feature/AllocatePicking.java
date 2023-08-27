@@ -6,18 +6,21 @@ import com.ejoongseok.wmslive.outbound.domain.Outbound;
 import com.ejoongseok.wmslive.outbound.domain.OutboundRepository;
 import com.ejoongseok.wmslive.outbound.domain.PickingAllocator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Component
+@RestController
 @RequiredArgsConstructor
 class AllocatePicking {
     private final PickingAllocator pickingAllocator = new PickingAllocator();
     private final OutboundRepository outboundRepository;
     private final InventoryRepository inventoryRepository;
 
+    @PostMapping("/outbounds/{outboundNo}/allocate-picking")
     @Transactional
-    public void request(final Long outboundNo) {
+    public void request(@PathVariable final Long outboundNo) {
         final Outbound outbound = outboundRepository.getBy(outboundNo);
         final Inventories inventories = inventoryRepository.inventoriesBy(outbound.getProductNos());
 
