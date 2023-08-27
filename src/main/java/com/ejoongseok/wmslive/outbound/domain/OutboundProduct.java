@@ -18,6 +18,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 import org.springframework.util.Assert;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -47,6 +48,7 @@ public class OutboundProduct {
     @JoinColumn(name = "outbound_no", nullable = false)
     @Comment("출고 번호")
     private Outbound outbound;
+    private List<Picking> pickings = new ArrayList<>();
 
     public OutboundProduct(
             final Product product,
@@ -118,15 +120,32 @@ public class OutboundProduct {
 
     public void allocatePicking(final Inventories inventories) {
         final Inventories pickingInventories = inventories.makeEfficientInventoriesForPicking(getProductNo(), orderQuantity);
-        createPickings(pickingInventories);
-
+        final List<Picking> pickings = createPickings(pickingInventories);
+        this.pickings = pickings;
     }
 
     List<Picking> createPickings(final Inventories inventories) {
         final Inventory firstInventory = inventories.toList().get(0);
         if (orderQuantity <= firstInventory.getInventoryQuantity()) {
-            return List.of(new Picking());
+            return List.of(new Picking(orderQuantity));
         }
-        return null;
+
+        Long remainingQuantity = orderQuantity;
+        final List<Picking> pickings = new ArrayList<>();
+        for (final Inventory inventory : inventories.toList()) {
+            if (isAllocationComplete(remainingQuantity)) {
+                return pickings;
+            }
+            final Long quantityToAllocate = Math.min(
+                    inventory.getInventoryQuantity(),
+                    remainingQuantity);
+            remainingQuantity -= quantityToAllocate;
+            pickings.add(new Picking(quantityToAllocate));
+        }
+        return pickings;
+    }
+
+    private boolean isAllocationComplete(final Long remainingQuantity) {
+        return 0 == remainingQuantity;
     }
 }
