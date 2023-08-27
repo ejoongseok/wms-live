@@ -17,6 +17,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 import org.springframework.util.Assert;
 
+import java.util.List;
+
 @Entity
 @Table(name = "outbound_product")
 @Comment("출고 상품")
@@ -119,7 +121,8 @@ public class OutboundProduct {
 
     }
 
-    void createPickings(final Inventories inventories) {
+    List<Picking> createPickings(final Inventories inventories) {
 
+        return null;
     }
 }
