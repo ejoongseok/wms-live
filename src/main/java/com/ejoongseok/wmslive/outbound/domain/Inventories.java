@@ -53,7 +53,7 @@ public final class Inventories {
                 .mapToLong(Inventory::getInventoryQuantity)
                 .sum();
         if (totalQuantity < orderQuantity) {
-            throw new IllegalArgumentException("재고가 부족합니다.");
+            throw new IllegalArgumentException("재고가 부족합니다. 재고 수량:%d, 주문 수량:%d".formatted(totalQuantity, orderQuantity));
         }
     }
 
