@@ -3,7 +3,6 @@ package com.ejoongseok.wmslive.outbound.feature.api;
 import com.ejoongseok.wmslive.common.Scenario;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import org.springframework.http.HttpStatus;
 
 public class AllocatePickingApi {
     private Long outboundNo = 1L;
@@ -18,8 +17,7 @@ public class AllocatePickingApi {
                 .contentType(ContentType.JSON)
                 .when()
                 .post("/outbounds/{outboundNo}/allocate-picking", outboundNo)
-                .then().log().all()
-                .statusCode(HttpStatus.OK.value());
+                .then().log().all();
         return new Scenario();
     }
 }

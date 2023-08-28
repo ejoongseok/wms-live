@@ -1,5 +1,6 @@
 package com.ejoongseok.wmslive.outbound.feature;
 
+import com.ejoongseok.wmslive.location.RetryOnOptimisticLockingFailure;
 import com.ejoongseok.wmslive.location.domain.InventoryRepository;
 import com.ejoongseok.wmslive.outbound.domain.Inventories;
 import com.ejoongseok.wmslive.outbound.domain.Outbound;
@@ -20,6 +21,7 @@ class AllocatePicking {
 
     @PostMapping("/outbounds/{outboundNo}/allocate-picking")
     @Transactional
+    @RetryOnOptimisticLockingFailure
     public void request(@PathVariable final Long outboundNo) {
         final Outbound outbound = outboundRepository.getBy(outboundNo);
         final Inventories inventories = inventoryRepository.inventoriesBy(outbound.getProductNos());
